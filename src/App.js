@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTable, useSortBy } from 'react-table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -33,6 +33,8 @@ const columns = [
 ];
 
 function App() {
+  const [selectedRow, setSelectedRow] = useState(null);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -40,6 +42,10 @@ function App() {
     rows,
     prepareRow,
   } = useTable({ columns, data }, useSortBy);
+
+  const handleRowClick = (rowId) => {
+    setSelectedRow(rowId === selectedRow ? null : rowId); // Toggle selection
+  };
 
   return (
     <div className="container mt-5">
@@ -63,10 +69,21 @@ function App() {
           <tbody {...getTableBodyProps()}>
             {rows.map(row => {
               prepareRow(row);
+              const isSelected = row.id === selectedRow;
               return (
-                <tr {...row.getRowProps()}>
+                <tr
+                  {...row.getRowProps()}
+                  className={isSelected ? 'selected-row' : ''}
+                  onClick={() => handleRowClick(row.id)}
+                  onTouchStart={() => handleRowClick(row.id)} // For mobile touch
+                >
                   {row.cells.map(cell => (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td
+                      {...cell.getCellProps()}
+                      className={isSelected ? 'selected-cell' : ''}
+                    >
+                      {cell.render('Cell')}
+                    </td>
                   ))}
                 </tr>
               );
