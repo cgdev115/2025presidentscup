@@ -52,7 +52,7 @@ h1 {
 
 /* Styling for selected row */
 .selected-row {
-  background-color: #e0f7fa !important; /* Light cyan background for selected row */
+  background-color: #fff3cd !important; /* Light yellow background for selected row */
   cursor: pointer;
 }
 
