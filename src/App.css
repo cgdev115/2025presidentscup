@@ -54,16 +54,7 @@ h2 {
 .table-responsive {
   margin-top: 20px;
   overflow-x: auto; /* Ensure horizontal scrolling if needed */
-}
-
-/* Styling for selected row */
-.selected-row {
-  background-color: #fff3cd !important; /* Light yellow background for selected row */
-  cursor: pointer;
-}
-
-.selected-cell {
-  font-weight: bold; /* Make text bold in selected row */
+  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
 }
 
 /* Styling for semifinalist rows */
@@ -71,7 +62,29 @@ h2 {
   font-weight: bold; /* Make text bold for semifinalist rows */
 }
 
-/* Media queries for mobile devices */
+/* Styling for sticky Team column */
+.sticky-column {
+  position: sticky;
+  left: 0;
+  background-color: #ffffff; /* Ensure background matches table */
+  z-index: 1; /* Ensure it stays above other columns */
+  border-right: 2px solid #dee2e6; /* Add a border to separate from other columns */
+}
+
+/* Ensure sticky column in header has the same dark background */
+.thead-dark th.sticky-column {
+  background-color: #343a40;
+  color: #ffffff;
+  z-index: 2; /* Higher z-index for header to stay above body cells */
+}
+
+/* Ensure sticky column works in table body */
+.table tbody td.sticky-column {
+  background-color: inherit; /* Inherit background to match row (e.g., striped rows) */
+  z-index: 1;
+}
+
+/* Ensure sticky behavior is enforced on mobile */
 @media (max-width: 768px) {
   h1 {
     font-size: 1.5rem; /* Even smaller font size for mobile */
@@ -104,6 +117,20 @@ h2 {
   .table th, .table td {
     max-width: 150px; /* Limit column width to prevent excessive stretching */
   }
+
+  /* Ensure sticky column works on mobile */
+  .sticky-column {
+    position: sticky;
+    left: 0;
+    min-width: 150px; /* Ensure Team column has enough width */
+    background-color: inherit; /* Match row background */
+    border-right: 2px solid #dee2e6;
+  }
+
+  .thead-dark th.sticky-column {
+    background-color: #343a40;
+    color: #ffffff;
+  }
 }
 
 @media (max-width: 576px) {
@@ -127,5 +154,9 @@ h2 {
 
   .table th, .table td {
     max-width: 120px; /* Further reduce column width on very small screens */
+  }
+
+  .sticky-column {
+    min-width: 120px; /* Adjust for smaller screens */
   }
 }
