@@ -3,6 +3,30 @@ import { useTable, useSortBy } from 'react-table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+// Standings data
+const standingsData = [
+  { Team: "HTX Kingwood 14G Gold (Bracket A)", MP: 1, W: 1, L: 0, D: 0, GF: 2, GA: 0, GD: 2, PTS: 3, PPG: "3.0" },
+  { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5" },
+  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0" },
+  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 2, GD: -2, PTS: 0, PPG: "0.0" },
+  { Team: "HTX City 15 W (Bracket B)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5" },
+  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", MP: 2, W: 0, L: 0, D: 2, GF: 1, GA: 1, GD: 0, PTS: 2, PPG: "1.0" },
+  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0" },
+  { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0" },
+  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 1, W: 0, L: 0, D: 1, GF: 1, GA: 1, GD: 0, PTS: 1, PPG: "1.0" },
+  { Team: "HTX Tomball 14G Gold (Bracket C)", MP: 2, W: 0, L: 1, D: 1, GF: 0, GA: 1, GD: -1, PTS: 1, PPG: "0.5" },
+];
+
+// Game results data
+const gameResultsData = [
+  { Match: "HTX Woodlands 14G Black 2-0 Inwood SC PSG South (Bracket A, April 5)" },
+  { Match: "HTX City 15 W 1-0 HTX Tomball 14G Gold (Bracket B/C, April 5)" },
+  { Match: "Inwood SC PSG East 1-1 GFI Academy (Bracket B/C, April 5)" },
+  { Match: "HTX West 14G Gold 1-0 HTX City 15 W (Bracket B/C, April 12)" },
+  { Match: "HTX Tomball 14G Gold 0-0 GFI Academy (Bracket B/C, April 12)" },
+  { Match: "HTX Kingwood 14G Gold 2-0 HTX Woodlands 14G Black (Bracket A, April 12)" },
+];
+
 // Odds data (same as before)
 const oddsData = [
   { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "A1" },
@@ -31,6 +55,25 @@ const pointsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", ProjectedPoints: "0.7" },
 ];
 
+// Columns for standings table
+const standingsColumns = [
+  { Header: 'Team', accessor: 'Team' },
+  { Header: 'MP', accessor: 'MP' },
+  { Header: 'W', accessor: 'W' },
+  { Header: 'L', accessor: 'L' },
+  { Header: 'D', accessor: 'D' },
+  { Header: 'GF', accessor: 'GF' },
+  { Header: 'GA', accessor: 'GA' },
+  { Header: 'GD', accessor: 'GD' },
+  { Header: 'PTS', accessor: 'PTS' },
+  { Header: 'PPG', accessor: 'PPG' },
+];
+
+// Columns for game results list
+const gameResultsColumns = [
+  { Header: 'Match', accessor: 'Match' },
+];
+
 // Columns for odds table
 const oddsColumns = [
   { Header: 'Team', accessor: 'Team' },
@@ -54,6 +97,39 @@ const pointsColumns = [
 
 function App() {
   const [selectedRow, setSelectedRow] = useState(null);
+
+  // Standings table instance
+  const standingsTableInstance = useTable(
+    {
+      columns: standingsColumns,
+      data: standingsData,
+    },
+    useSortBy
+  );
+
+  const {
+    getTableProps: getStandingsTableProps,
+    getTableBodyProps: getStandingsTableBodyProps,
+    headerGroups: standingsHeaderGroups,
+    rows: standingsRows,
+    prepareRow: prepareStandingsRow,
+  } = standingsTableInstance;
+
+  // Game results table instance
+  const gameResultsTableInstance = useTable(
+    {
+      columns: gameResultsColumns,
+      data: gameResultsData,
+    }
+  );
+
+  const {
+    getTableProps: getGameResultsTableProps,
+    getTableBodyProps: getGameResultsTableBodyProps,
+    headerGroups: gameResultsHeaderGroups,
+    rows: gameResultsRows,
+    prepareRow: prepareGameResultsRow,
+  } = gameResultsTableInstance;
 
   // Odds table instance
   const oddsTableInstance = useTable(
@@ -97,8 +173,93 @@ function App() {
     <div className="container mt-5">
       <h1 className="text-center mb-4">2025 President's Cup Tournament Odds</h1>
 
+      {/* Standings Table */}
+      <h2 className="text-center mb-3">Current Standings</h2>
+      <div className="table-responsive">
+        <table {...getStandingsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {standingsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getStandingsTableBodyProps()}>
+            {standingsRows.map(row => {
+              prepareStandingsRow(row);
+              const isSelected = row.id === selectedRow;
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className={isSelected ? 'selected-row' : ''}
+                  onClick={() => handleRowClick(row.id)}
+                  onTouchEnd={() => handleRowClick(row.id)}
+                >
+                  {row.cells.map(cell => (
+                    <td
+                      {...cell.getCellProps()}
+                      className={isSelected ? 'selected-cell' : ''}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Game Results Table */}
+      <h2 className="text-center mb-3 mt-5">Game Results</h2>
+      <div className="table-responsive">
+        <table {...getGameResultsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {gameResultsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getGameResultsTableBodyProps()}>
+            {gameResultsRows.map(row => {
+              prepareGameResultsRow(row);
+              const isSelected = row.id === selectedRow;
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className={isSelected ? 'selected-row' : ''}
+                  onClick={() => handleRowClick(row.id)}
+                  onTouchEnd={() => handleRowClick(row.id)}
+                >
+                  {row.cells.map(cell => (
+                    <td
+                      {...cell.getCellProps()}
+                      className={isSelected ? 'selected-cell' : ''}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
       {/* Odds Table */}
-      <h2 className="text-center mb-3">Tournament Odds</h2>
+      <h2 className="text-center mb-3 mt-5">Tournament Odds</h2>
       <div className="table-responsive">
         <table {...getOddsTableProps()} className="table table-striped table-bordered">
           <thead className="thead-dark">
