@@ -9,6 +9,12 @@ h1 {
   font-size: 1.8rem; /* Smaller font size for mobile */
 }
 
+h2 {
+  color: #343a40;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
 .table {
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -52,7 +58,7 @@ h1 {
 
 /* Styling for selected row */
 .selected-row {
-  background-color: #e0f7fa !important; /* Light cyan background for selected row */
+  background-color: #fff3cd !important; /* Light yellow background for selected row */
   cursor: pointer;
 }
 
@@ -60,10 +66,19 @@ h1 {
   font-weight: bold; /* Make text bold in selected row */
 }
 
+/* Styling for semifinalist rows */
+.semifinalist-row {
+  font-weight: bold; /* Make text bold for semifinalist rows */
+}
+
 /* Media queries for mobile devices */
 @media (max-width: 768px) {
   h1 {
     font-size: 1.5rem; /* Even smaller font size for mobile */
+  }
+
+  h2 {
+    font-size: 1.2rem;
   }
 
   .table td, .table th {
@@ -94,6 +109,10 @@ h1 {
 @media (max-width: 576px) {
   h1 {
     font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
   }
 
   .table td, .table th {
