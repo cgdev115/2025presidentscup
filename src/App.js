@@ -28,4 +28,79 @@ const columns = [
   { Header: 'Current Odds to Advance (%)', accessor: 'CurrentOddsToAdvancePercent' },
   { Header: 'Current Odds to Be Wildcard 1 (American)', accessor: 'CurrentOddsToBeWildcard1' },
   { Header: 'Current Odds to Be Wildcard 1 (%)', accessor: 'CurrentOddsToBeWildcard1Percent' },
-  { Header: 'Chance to Win Semifinal and Advance to State (%)', accesso
+  { Header: 'Chance to Win Semifinal and Advance to State (%)', accessor: 'ChanceToWinSemifinalAndAdvanceToState' },
+  { Header: 'Semifinal Position', accessor: 'SemifinalPosition' },
+];
+
+function App() {
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
+    },
+    useSortBy
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = tableInstance;
+
+  const handleRowClick = (rowId) => {
+    setSelectedRow(rowId === selectedRow ? null : rowId); // Toggle selection
+  };
+
+  return (
+    <div className="container mt-5">
+      <h1 className="text-center mb-4">2025 President's Cup Tournament Odds</h1>
+      <div className="table-responsive">
+        <table {...getTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map(row => {
+              prepareRow(row);
+              const isSelected = row.id === selectedRow;
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className={isSelected ? 'selected-row' : ''}
+                  onClick={() => handleRowClick(row.id)} // For desktop click
+                  onTouchEnd={() => handleRowClick(row.id)} // For mobile touch
+                >
+                  {row.cells.map(cell => (
+                    <td
+                      {...cell.getCellProps()}
+                      className={isSelected ? 'selected-cell' : ''}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+export default App;
