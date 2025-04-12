@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTable, useSortBy } from 'react-table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -57,7 +57,7 @@ const pointsData = [
 
 // Columns for standings table
 const standingsColumns = [
-  { Header: 'Team', accessor: 'Team' },
+  { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'MP', accessor: 'MP' },
   { Header: 'W', accessor: 'W' },
   { Header: 'L', accessor: 'L' },
@@ -72,12 +72,12 @@ const standingsColumns = [
 
 // Columns for game results list
 const gameResultsColumns = [
-  { Header: 'Match', accessor: 'Match' },
+  { Header: 'Match', accessor: 'Match', className: 'sticky-column' },
 ];
 
 // Columns for odds table
 const oddsColumns = [
-  { Header: 'Team', accessor: 'Team' },
+  { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Pre-Tournament Odds to Advance (American)', accessor: 'PreTournamentOddsToAdvance' },
   { Header: 'Pre-Tournament Odds to Advance (%)', accessor: 'PreTournamentOddsToAdvancePercent' },
   { Header: 'Pre-Tournament Odds to Be Wildcard 1 (American)', accessor: 'PreTournamentOddsToBeWildcard1' },
@@ -92,13 +92,11 @@ const oddsColumns = [
 
 // Columns for projected points table
 const pointsColumns = [
-  { Header: 'Team', accessor: 'Team' },
+  { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Projected Points', accessor: 'ProjectedPoints' },
 ];
 
 function App() {
-  const [selectedRow, setSelectedRow] = useState(null);
-
   // Standings table instance (no sorting for users)
   const standingsTableInstance = useTable({
     columns: standingsColumns,
@@ -144,14 +142,11 @@ function App() {
     prepareRow: prepareOddsRow,
   } = oddsTableInstance;
 
-  // Points table instance (with sorting)
-  const pointsTableInstance = useTable(
-    {
-      columns: pointsColumns,
-      data: pointsData,
-    },
-    useSortBy
-  );
+  // Points table instance (no sorting for users)
+  const pointsTableInstance = useTable({
+    columns: pointsColumns,
+    data: pointsData,
+  });
 
   const {
     getTableProps: getPointsTableProps,
@@ -160,10 +155,6 @@ function App() {
     rows: pointsRows,
     prepareRow: preparePointsRow,
   } = pointsTableInstance;
-
-  const handleRowClick = (rowId) => {
-    setSelectedRow(rowId === selectedRow ? null : rowId); // Toggle selection
-  };
 
   return (
     <div className="container mt-5">
@@ -177,7 +168,7 @@ function App() {
             {standingsHeaderGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps()} className={column.className}>
                     {column.render('Header')}
                   </th>
                 ))}
@@ -187,19 +178,16 @@ function App() {
           <tbody {...getStandingsTableBodyProps()}>
             {standingsRows.map(row => {
               prepareStandingsRow(row);
-              const isSelected = row.id === selectedRow;
               const isSemifinalist = row.original.SemifinalPosition !== ""; // Check if team is a semifinalist
               return (
                 <tr
                   {...row.getRowProps()}
-                  className={`${isSelected ? 'selected-row' : ''} ${isSemifinalist ? 'semifinalist-row' : ''}`}
-                  onClick={() => handleRowClick(row.id)}
-                  onTouchEnd={() => handleRowClick(row.id)}
+                  className={isSemifinalist ? 'semifinalist-row' : ''}
                 >
                   {row.cells.map(cell => (
                     <td
                       {...cell.getCellProps()}
-                      className={isSelected ? 'selected-cell' : ''}
+                      className={cell.column.className}
                     >
                       {cell.render('Cell')}
                     </td>
@@ -219,7 +207,7 @@ function App() {
             {gameResultsHeaderGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()}>
+                  <th {...column.getHeaderProps()} className={column.className}>
                     {column.render('Header')}
                   </th>
                 ))}
@@ -229,18 +217,12 @@ function App() {
           <tbody {...getGameResultsTableBodyProps()}>
             {gameResultsRows.map(row => {
               prepareGameResultsRow(row);
-              const isSelected = row.id === selectedRow;
               return (
-                <tr
-                  {...row.getRowProps()}
-                  className={isSelected ? 'selected-row' : ''}
-                  onClick={() => handleRowClick(row.id)}
-                  onTouchEnd={() => handleRowClick(row.id)}
-                >
+                <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
                     <td
                       {...cell.getCellProps()}
-                      className={isSelected ? 'selected-cell' : ''}
+                      className={cell.column.className}
                     >
                       {cell.render('Cell')}
                     </td>
@@ -260,7 +242,7 @@ function App() {
             {oddsHeaderGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())} className={column.className}>
                     {column.render('Header')}
                     <span>
                       {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
@@ -273,18 +255,12 @@ function App() {
           <tbody {...getOddsTableBodyProps()}>
             {oddsRows.map(row => {
               prepareOddsRow(row);
-              const isSelected = row.id === selectedRow;
               return (
-                <tr
-                  {...row.getRowProps()}
-                  className={isSelected ? 'selected-row' : ''}
-                  onClick={() => handleRowClick(row.id)}
-                  onTouchEnd={() => handleRowClick(row.id)}
-                >
+                <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
                     <td
                       {...cell.getCellProps()}
-                      className={isSelected ? 'selected-cell' : ''}
+                      className={cell.column.className}
                     >
                       {cell.render('Cell')}
                     </td>
@@ -304,11 +280,8 @@ function App() {
             {pointsHeaderGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th {...column.getHeaderProps()} className={column.className}>
                     {column.render('Header')}
-                    <span>
-                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                    </span>
                   </th>
                 ))}
               </tr>
@@ -317,18 +290,12 @@ function App() {
           <tbody {...getPointsTableBodyProps()}>
             {pointsRows.map(row => {
               preparePointsRow(row);
-              const isSelected = row.id === selectedRow;
               return (
-                <tr
-                  {...row.getRowProps()}
-                  className={isSelected ? 'selected-row' : ''}
-                  onClick={() => handleRowClick(row.id)}
-                  onTouchEnd={() => handleRowClick(row.id)}
-                >
+                <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
                     <td
                       {...cell.getCellProps()}
-                      className={isSelected ? 'selected-cell' : ''}
+                      className={cell.column.className}
                     >
                       {cell.render('Cell')}
                     </td>
