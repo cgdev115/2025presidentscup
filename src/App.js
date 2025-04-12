@@ -3,18 +3,18 @@ import { useTable, useSortBy } from 'react-table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-// Standings data
+// Standings data (sorted by PTS, then GD, with Semifinal Position)
 const standingsData = [
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", MP: 1, W: 1, L: 0, D: 0, GF: 2, GA: 0, GD: 2, PTS: 3, PPG: "3.0" },
-  { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5" },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0" },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 2, GD: -2, PTS: 0, PPG: "0.0" },
-  { Team: "HTX City 15 W (Bracket B)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5" },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", MP: 2, W: 0, L: 0, D: 2, GF: 1, GA: 1, GD: 0, PTS: 2, PPG: "1.0" },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0" },
-  { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0" },
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 1, W: 0, L: 0, D: 1, GF: 1, GA: 1, GD: 0, PTS: 1, PPG: "1.0" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", MP: 2, W: 0, L: 1, D: 1, GF: 0, GA: 1, GD: -1, PTS: 1, PPG: "0.5" },
+  { Team: "HTX Kingwood 14G Gold (Bracket A)", MP: 1, W: 1, L: 0, D: 0, GF: 2, GA: 0, GD: 2, PTS: 3, PPG: "3.0", SemifinalPosition: "A1" },
+  { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0", SemifinalPosition: "W1" },
+  { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "" },
+  { Team: "HTX City 15 W (Bracket B)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "W2" },
+  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", MP: 2, W: 0, L: 0, D: 2, GF: 1, GA: 1, GD: 0, PTS: 2, PPG: "1.0", SemifinalPosition: "" },
+  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 1, W: 0, L: 0, D: 1, GF: 1, GA: 1, GD: 0, PTS: 1, PPG: "1.0", SemifinalPosition: "" },
+  { Team: "HTX Tomball 14G Gold (Bracket C)", MP: 2, W: 0, L: 1, D: 1, GF: 0, GA: 1, GD: -1, PTS: 1, PPG: "0.5", SemifinalPosition: "" },
+  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0", SemifinalPosition: "W3" },
+  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
+  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 2, GD: -2, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
 ];
 
 // Game results data
@@ -27,7 +27,7 @@ const gameResultsData = [
   { Match: "HTX Kingwood 14G Gold 2-0 HTX Woodlands 14G Black (Bracket A, April 12)" },
 ];
 
-// Odds data (same as before)
+// Odds data
 const oddsData = [
   { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "A1" },
   { Team: "HTX West 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-233", PreTournamentOddsToAdvancePercent: "70%", PreTournamentOddsToBeWildcard1: "+567", PreTournamentOddsToBeWildcard1Percent: "15%", CurrentOddsToAdvance: "-9900", CurrentOddsToAdvancePercent: "99%", CurrentOddsToBeWildcard1: "-1150", CurrentOddsToBeWildcard1Percent: "92%", ChanceToWinSemifinalAndAdvanceToState: "34.65%", SemifinalPosition: "WC1" },
@@ -67,6 +67,7 @@ const standingsColumns = [
   { Header: 'GD', accessor: 'GD' },
   { Header: 'PTS', accessor: 'PTS' },
   { Header: 'PPG', accessor: 'PPG' },
+  { Header: 'Semifinal Position', accessor: 'SemifinalPosition' },
 ];
 
 // Columns for game results list
@@ -98,14 +99,11 @@ const pointsColumns = [
 function App() {
   const [selectedRow, setSelectedRow] = useState(null);
 
-  // Standings table instance
-  const standingsTableInstance = useTable(
-    {
-      columns: standingsColumns,
-      data: standingsData,
-    },
-    useSortBy
-  );
+  // Standings table instance (no sorting for users)
+  const standingsTableInstance = useTable({
+    columns: standingsColumns,
+    data: standingsData,
+  });
 
   const {
     getTableProps: getStandingsTableProps,
@@ -115,13 +113,11 @@ function App() {
     prepareRow: prepareStandingsRow,
   } = standingsTableInstance;
 
-  // Game results table instance
-  const gameResultsTableInstance = useTable(
-    {
-      columns: gameResultsColumns,
-      data: gameResultsData,
-    }
-  );
+  // Game results table instance (no sorting for users)
+  const gameResultsTableInstance = useTable({
+    columns: gameResultsColumns,
+    data: gameResultsData,
+  });
 
   const {
     getTableProps: getGameResultsTableProps,
@@ -131,7 +127,7 @@ function App() {
     prepareRow: prepareGameResultsRow,
   } = gameResultsTableInstance;
 
-  // Odds table instance
+  // Odds table instance (with sorting)
   const oddsTableInstance = useTable(
     {
       columns: oddsColumns,
@@ -148,7 +144,7 @@ function App() {
     prepareRow: prepareOddsRow,
   } = oddsTableInstance;
 
-  // Points table instance
+  // Points table instance (with sorting)
   const pointsTableInstance = useTable(
     {
       columns: pointsColumns,
@@ -181,11 +177,8 @@ function App() {
             {standingsHeaderGroups.map(headerGroup => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th {...column.getHeaderProps()}>
                     {column.render('Header')}
-                    <span>
-                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                    </span>
                   </th>
                 ))}
               </tr>
@@ -195,10 +188,11 @@ function App() {
             {standingsRows.map(row => {
               prepareStandingsRow(row);
               const isSelected = row.id === selectedRow;
+              const isSemifinalist = row.original.SemifinalPosition !== ""; // Check if team is a semifinalist
               return (
                 <tr
                   {...row.getRowProps()}
-                  className={isSelected ? 'selected-row' : ''}
+                  className={`${isSelected ? 'selected-row' : ''} ${isSemifinalist ? 'semifinalist-row' : ''}`}
                   onClick={() => handleRowClick(row.id)}
                   onTouchEnd={() => handleRowClick(row.id)}
                 >
