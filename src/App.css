@@ -1,0 +1,41 @@
+body {
+  background-color: #f8f9fa;
+  font-family: 'Arial', sans-serif;
+}
+
+h1 {
+  color: #343a40;
+  font-weight: bold;
+}
+
+.table {
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.thead-dark th {
+  background-color: #343a40;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f2f2f2;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+  text-align: center;
+  padding: 12px;
+}
+
+.table th:hover {
+  background-color: #495057;
+  cursor: pointer;
+}
+
+.table-responsive {
+  margin-top: 20px;
+}
