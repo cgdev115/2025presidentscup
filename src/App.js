@@ -3,28 +3,32 @@ import { useTable, useSortBy } from 'react-table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-// Data from the CSV
+// Updated data with separate columns for odds and percentages
 const data = [
-  { Team: "HTX Woodlands 14G Black (Bracket A)", PreTournamentOddsToAdvance: "N/A (Bracket A Winner)", PreTournamentOddsToBeWildcard1: "N/A (Bracket A Winner)", CurrentOddsToAdvance: "100% (100%)", CurrentOddsToBeWildcard1: "N/A (Bracket A Winner)", ChanceToWinSemifinalAndAdvanceToState: "65%", SemifinalPosition: "A1" },
-  { Team: "HTX West 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-233 (70%)", PreTournamentOddsToBeWildcard1: "+567 (15%)", CurrentOddsToAdvance: "-9900 (99%)", CurrentOddsToBeWildcard1: "-1150 (92%)", ChanceToWinSemifinalAndAdvanceToState: "34.65%", SemifinalPosition: "WC1" },
-  { Team: "HTX City 15 W (Bracket B)", PreTournamentOddsToAdvance: "-900 (90%)", PreTournamentOddsToBeWildcard1: "+122 (45%)", CurrentOddsToAdvance: "-1900 (95%)", CurrentOddsToBeWildcard1: "+1900 (5%)", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "WC2" },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", PreTournamentOddsToAdvance: "+300 (25%)", PreTournamentOddsToBeWildcard1: "0% (0%)", CurrentOddsToAdvance: "-150 (60%)", CurrentOddsToBeWildcard1: "+4900 (2%)", ChanceToWinSemifinalAndAdvanceToState: "21%", SemifinalPosition: "WC3" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-567 (85%)", PreTournamentOddsToBeWildcard1: "+233 (30%)", CurrentOddsToAdvance: "+150 (40%)", CurrentOddsToBeWildcard1: "0% (0%)", ChanceToWinSemifinalAndAdvanceToState: "22%", SemifinalPosition: "" },
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300 (25%)", PreTournamentOddsToBeWildcard1: "0% (0%)", CurrentOddsToAdvance: "+400 (20%)", CurrentOddsToBeWildcard1: "0% (0%)", ChanceToWinSemifinalAndAdvanceToState: "8%", SemifinalPosition: "" },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", PreTournamentOddsToAdvance: "+300 (25%)", PreTournamentOddsToBeWildcard1: "+1900 (5%)", CurrentOddsToAdvance: "+1900 (5%)", CurrentOddsToBeWildcard1: "0% (0%)", ChanceToWinSemifinalAndAdvanceToState: "1%", SemifinalPosition: "" },
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", PreTournamentOddsToAdvance: "+1900 (5%)", PreTournamentOddsToBeWildcard1: "+3900 (2.5%)", CurrentOddsToAdvance: "+9900 (1%)", CurrentOddsToBeWildcard1: "0% (0%)", ChanceToWinSemifinalAndAdvanceToState: "0.15%", SemifinalPosition: "" },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", PreTournamentOddsToAdvance: "+900 (10%)", PreTournamentOddsToBeWildcard1: "+3900 (2.5%)", CurrentOddsToAdvance: "+19900 (0.5%)", CurrentOddsToBeWildcard1: "0% (0%)", ChanceToWinSemifinalAndAdvanceToState: "0.075%", SemifinalPosition: "" },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", PreTournamentOddsToAdvance: "+1900 (5%)", PreTournamentOddsToBeWildcard1: "0% (0%)", CurrentOddsToAdvance: "+19900 (0.5%)", CurrentOddsToBeWildcard1: "0% (0%)", ChanceToWinSemifinalAndAdvanceToState: "0.05%", SemifinalPosition: "" },
+  { Team: "HTX Woodlands 14G Black (Bracket A)", PreTournamentOddsToAdvance: "-3233", PreTournamentOddsToAdvancePercent: "97%", PreTournamentOddsToBeWildcard1: "+270", PreTournamentOddsToBeWildcard1Percent: "27%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "A1" },
+  { Team: "HTX West 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-233", PreTournamentOddsToAdvancePercent: "70%", PreTournamentOddsToBeWildcard1: "+567", PreTournamentOddsToBeWildcard1Percent: "15%", CurrentOddsToAdvance: "-9900", CurrentOddsToAdvancePercent: "99%", CurrentOddsToBeWildcard1: "-1150", CurrentOddsToBeWildcard1Percent: "92%", ChanceToWinSemifinalAndAdvanceToState: "34.65%", SemifinalPosition: "WC1" },
+  { Team: "HTX City 15 W (Bracket B)", PreTournamentOddsToAdvance: "-900", PreTournamentOddsToAdvancePercent: "90%", PreTournamentOddsToBeWildcard1: "+122", PreTournamentOddsToBeWildcard1Percent: "45%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "+1900", CurrentOddsToBeWildcard1Percent: "5%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "WC2" },
+  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "-150", CurrentOddsToAdvancePercent: "60%", CurrentOddsToBeWildcard1: "+4900", CurrentOddsToBeWildcard1Percent: "2%", ChanceToWinSemifinalAndAdvanceToState: "21%", SemifinalPosition: "WC3" },
+  { Team: "HTX Tomball 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-567", PreTournamentOddsToAdvancePercent: "85%", PreTournamentOddsToBeWildcard1: "+233", PreTournamentOddsToBeWildcard1Percent: "30%", CurrentOddsToAdvance: "+150", CurrentOddsToAdvancePercent: "40%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "22%", SemifinalPosition: "" },
+  { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "+400", CurrentOddsToAdvancePercent: "20%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "8%", SemifinalPosition: "" },
+  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "+1900", PreTournamentOddsToBeWildcard1Percent: "5%", CurrentOddsToAdvance: "+1900", CurrentOddsToAdvancePercent: "5%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "1%", SemifinalPosition: "" },
+  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", PreTournamentOddsToAdvance: "+1900", PreTournamentOddsToAdvancePercent: "5%", PreTournamentOddsToBeWildcard1: "+3900", PreTournamentOddsToBeWildcard1Percent: "2.5%", CurrentOddsToAdvance: "+9900", CurrentOddsToAdvancePercent: "1%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "0.15%", SemifinalPosition: "" },
+  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", PreTournamentOddsToAdvance: "+900", PreTournamentOddsToAdvancePercent: "10%", PreTournamentOddsToBeWildcard1: "+3900", PreTournamentOddsToBeWildcard1Percent: "2.5%", CurrentOddsToAdvance: "+19900", CurrentOddsToAdvancePercent: "0.5%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "0.075%", SemifinalPosition: "" },
+  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", PreTournamentOddsToAdvance: "+1900", PreTournamentOddsToAdvancePercent: "5%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "+19900", CurrentOddsToAdvancePercent: "0.5%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "0.05%", SemifinalPosition: "" },
 ];
 
-// Define columns
+// Define columns with separate odds and percent columns
 const columns = [
   { Header: 'Team', accessor: 'Team' },
-  { Header: 'Pre-Tournament Odds to Advance', accessor: 'PreTournamentOddsToAdvance' },
-  { Header: 'Pre-Tournament Odds to Be Wildcard 1', accessor: 'PreTournamentOddsToBeWildcard1' },
-  { Header: 'Current Odds to Advance', accessor: 'CurrentOddsToAdvance' },
-  { Header: 'Current Odds to Be Wildcard 1', accessor: 'CurrentOddsToBeWildcard1' },
-  { Header: 'Chance to Win Semifinal and Advance to State', accessor: 'ChanceToWinSemifinalAndAdvanceToState' },
+  { Header: 'Pre-Tournament Odds to Advance (American)', accessor: 'PreTournamentOddsToAdvance' },
+  { Header: 'Pre-Tournament Odds to Advance (%)', accessor: 'PreTournamentOddsToAdvancePercent' },
+  { Header: 'Pre-Tournament Odds to Be Wildcard 1 (American)', accessor: 'PreTournamentOddsToBeWildcard1' },
+  { Header: 'Pre-Tournament Odds to Be Wildcard 1 (%)', accessor: 'PreTournamentOddsToBeWildcard1Percent' },
+  { Header: 'Current Odds to Advance (American)', accessor: 'CurrentOddsToAdvance' },
+  { Header: 'Current Odds to Advance (%)', accessor: 'CurrentOddsToAdvancePercent' },
+  { Header: 'Current Odds to Be Wildcard 1 (American)', accessor: 'CurrentOddsToBeWildcard1' },
+  { Header: 'Current Odds to Be Wildcard 1 (%)', accessor: 'CurrentOddsToBeWildcard1Percent' },
+  { Header: 'Chance to Win Semifinal and Advance to State (%)', accessor: 'ChanceToWinSemifinalAndAdvanceToState' },
   { Header: 'Semifinal Position', accessor: 'SemifinalPosition' },
 ];
 
