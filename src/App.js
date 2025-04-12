@@ -35,6 +35,20 @@ const columns = [
 function App() {
   const [selectedRow, setSelectedRow] = useState(null);
 
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable(
+    {
+      columns,
+      data,
+    },
+    useSortBy
+  );
+
   const handleRowClick = (rowId) => {
     setSelectedRow(rowId === selectedRow ? null : rowId); // Toggle selection
   };
