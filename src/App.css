@@ -66,25 +66,24 @@ h2 {
 .sticky-column {
   position: sticky;
   left: 0;
-  background-color: #ffffff; /* Ensure background matches table */
   z-index: 1; /* Ensure it stays above other columns */
   border-right: 2px solid #dee2e6; /* Add a border to separate from other columns */
 }
 
-/* Ensure sticky column in header has the same dark background */
+/* Ensure sticky column in header has the dark background */
 .thead-dark th.sticky-column {
   background-color: #343a40;
   color: #ffffff;
   z-index: 2; /* Higher z-index for header to stay above body cells */
 }
 
-/* Ensure sticky column works in table body */
+/* Ensure sticky column in table body has a solid white background */
 .table tbody td.sticky-column {
-  background-color: inherit; /* Inherit background to match row (e.g., striped rows) */
+  background-color: #ffffff; /* Solid white background to prevent scrolling text from showing through */
   z-index: 1;
 }
 
-/* Ensure sticky behavior is enforced on mobile */
+/* Ensure sticky behavior and background are enforced on mobile */
 @media (max-width: 768px) {
   h1 {
     font-size: 1.5rem; /* Even smaller font size for mobile */
@@ -123,13 +122,16 @@ h2 {
     position: sticky;
     left: 0;
     min-width: 150px; /* Ensure Team column has enough width */
-    background-color: inherit; /* Match row background */
     border-right: 2px solid #dee2e6;
   }
 
   .thead-dark th.sticky-column {
     background-color: #343a40;
     color: #ffffff;
+  }
+
+  .table tbody td.sticky-column {
+    background-color: #ffffff; /* Solid white background on mobile */
   }
 }
 
