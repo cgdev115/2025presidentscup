@@ -35,21 +35,13 @@ const columns = [
 function App() {
   const [selectedRow, setSelectedRow] = useState(null);
 
-  const tableInstance = useTable(
-    {
-      columns,
-      data,
-    },
-    useSortBy
-  );
-
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = tableInstance;
+  } = useTable({ columns, data }, useSortBy);
 
   const handleRowClick = (rowId) => {
     setSelectedRow(rowId === selectedRow ? null : rowId); // Toggle selection
@@ -82,8 +74,8 @@ function App() {
                 <tr
                   {...row.getRowProps()}
                   className={isSelected ? 'selected-row' : ''}
-                  onClick={() => handleRowClick(row.id)} // For desktop click
-                  onTouchEnd={() => handleRowClick(row.id)} // For mobile touch
+                  onClick={() => handleRowClick(row.id)}
+                  onTouchStart={() => handleRowClick(row.id)} // For mobile touch
                 >
                   {row.cells.map(cell => (
                     <td
