@@ -3,14 +3,14 @@ import { useTable, useSortBy } from 'react-table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-// Updated data with separate columns for odds and percentages
+// Updated data with latest results
 const data = [
-  { Team: "HTX Woodlands 14G Black (Bracket A)", PreTournamentOddsToAdvance: "-3233", PreTournamentOddsToAdvancePercent: "97%", PreTournamentOddsToBeWildcard1: "+270", PreTournamentOddsToBeWildcard1Percent: "27%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "A1" },
+  { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "A1" },
   { Team: "HTX West 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-233", PreTournamentOddsToAdvancePercent: "70%", PreTournamentOddsToBeWildcard1: "+567", PreTournamentOddsToBeWildcard1Percent: "15%", CurrentOddsToAdvance: "-9900", CurrentOddsToAdvancePercent: "99%", CurrentOddsToBeWildcard1: "-1150", CurrentOddsToBeWildcard1Percent: "92%", ChanceToWinSemifinalAndAdvanceToState: "34.65%", SemifinalPosition: "WC1" },
   { Team: "HTX City 15 W (Bracket B)", PreTournamentOddsToAdvance: "-900", PreTournamentOddsToAdvancePercent: "90%", PreTournamentOddsToBeWildcard1: "+122", PreTournamentOddsToBeWildcard1Percent: "45%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", CurrentOddsToBeWildcard1: "+1900", CurrentOddsToBeWildcard1Percent: "5%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "WC2" },
   { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "-150", CurrentOddsToAdvancePercent: "60%", CurrentOddsToBeWildcard1: "+4900", CurrentOddsToBeWildcard1Percent: "2%", ChanceToWinSemifinalAndAdvanceToState: "21%", SemifinalPosition: "WC3" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-567", PreTournamentOddsToAdvancePercent: "85%", PreTournamentOddsToBeWildcard1: "+233", PreTournamentOddsToBeWildcard1Percent: "30%", CurrentOddsToAdvance: "+150", CurrentOddsToAdvancePercent: "40%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "22%", SemifinalPosition: "" },
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "0%", PreTournamentOddsToBeWildcard1Percent: "0%", CurrentOddsToAdvance: "+400", CurrentOddsToAdvancePercent: "20%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "8%", SemifinalPosition: "" },
+  { Team: "HTX Woodlands 14G Black (Bracket A)", PreTournamentOddsToAdvance: "-3233", PreTournamentOddsToAdvancePercent: "97%", PreTournamentOddsToBeWildcard1: "+270", PreTournamentOddsToBeWildcard1Percent: "27%", CurrentOddsToAdvance: "+150", CurrentOddsToAdvancePercent: "40%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "18%", SemifinalPosition: "" },
+  { Team: "HTX Tomball 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-567", PreTournamentOddsToAdvancePercent: "85%", PreTournamentOddsToBeWildcard1: "+233", PreTournamentOddsToBeWildcard1Percent: "30%", CurrentOddsToAdvance: "+400", CurrentOddsToAdvancePercent: "20%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "9%", SemifinalPosition: "" },
   { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", PreTournamentOddsToBeWildcard1: "+1900", PreTournamentOddsToBeWildcard1Percent: "5%", CurrentOddsToAdvance: "+1900", CurrentOddsToAdvancePercent: "5%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "1%", SemifinalPosition: "" },
   { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", PreTournamentOddsToAdvance: "+1900", PreTournamentOddsToAdvancePercent: "5%", PreTournamentOddsToBeWildcard1: "+3900", PreTournamentOddsToBeWildcard1Percent: "2.5%", CurrentOddsToAdvance: "+9900", CurrentOddsToAdvancePercent: "1%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "0.15%", SemifinalPosition: "" },
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", PreTournamentOddsToAdvance: "+900", PreTournamentOddsToAdvancePercent: "10%", PreTournamentOddsToBeWildcard1: "+3900", PreTournamentOddsToBeWildcard1Percent: "2.5%", CurrentOddsToAdvance: "+19900", CurrentOddsToAdvancePercent: "0.5%", CurrentOddsToBeWildcard1: "0%", CurrentOddsToBeWildcard1Percent: "0%", ChanceToWinSemifinalAndAdvanceToState: "0.075%", SemifinalPosition: "" },
@@ -35,13 +35,21 @@ const columns = [
 function App() {
   const [selectedRow, setSelectedRow] = useState(null);
 
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
+    },
+    useSortBy
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data }, useSortBy);
+  } = tableInstance;
 
   const handleRowClick = (rowId) => {
     setSelectedRow(rowId === selectedRow ? null : rowId); // Toggle selection
@@ -74,8 +82,8 @@ function App() {
                 <tr
                   {...row.getRowProps()}
                   className={isSelected ? 'selected-row' : ''}
-                  onClick={() => handleRowClick(row.id)}
-                  onTouchStart={() => handleRowClick(row.id)} // For mobile touch
+                  onClick={() => handleRowClick(row.id)} // For desktop click
+                  onTouchEnd={() => handleRowClick(row.id)} // For mobile touch
                 >
                   {row.cells.map(cell => (
                     <td
