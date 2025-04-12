@@ -50,6 +50,16 @@ h1 {
   overflow-x: auto; /* Ensure horizontal scrolling if needed */
 }
 
+/* Styling for selected row */
+.selected-row {
+  background-color: #e0f7fa !important; /* Light cyan background for selected row */
+  cursor: pointer;
+}
+
+.selected-cell {
+  font-weight: bold; /* Make text bold in selected row */
+}
+
 /* Media queries for mobile devices */
 @media (max-width: 768px) {
   h1 {
