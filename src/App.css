@@ -6,12 +6,15 @@ body {
 h1 {
   color: #343a40;
   font-weight: bold;
+  font-size: 1.8rem; /* Smaller font size for mobile */
 }
 
 .table {
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  width: 100%;
+  table-layout: auto; /* Allow table to adjust column widths */
 }
 
 .thead-dark th {
@@ -19,6 +22,9 @@ h1 {
   color: #ffffff;
   font-weight: bold;
   text-align: center;
+  white-space: normal; /* Allow header text to wrap */
+  padding: 8px; /* Reduced padding for mobile */
+  font-size: 0.9rem; /* Smaller font size for headers */
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
@@ -28,7 +34,10 @@ h1 {
 .table td, .table th {
   vertical-align: middle;
   text-align: center;
-  padding: 12px;
+  padding: 6px; /* Reduced padding for mobile */
+  font-size: 0.85rem; /* Smaller font size for cells */
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Ensure long words break */
 }
 
 .table th:hover {
@@ -38,4 +47,56 @@ h1 {
 
 .table-responsive {
   margin-top: 20px;
+  overflow-x: auto; /* Ensure horizontal scrolling if needed */
+}
+
+/* Media queries for mobile devices */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem; /* Even smaller font size for mobile */
+  }
+
+  .table td, .table th {
+    font-size: 0.75rem; /* Further reduce font size on mobile */
+    padding: 4px; /* Further reduce padding */
+  }
+
+  .thead-dark th {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  .container {
+    padding: 10px; /* Reduce padding on mobile */
+  }
+
+  /* Ensure table fits within the screen width */
+  .table {
+    min-width: 100%;
+  }
+
+  /* Adjust column widths for better readability */
+  .table th, .table td {
+    max-width: 150px; /* Limit column width to prevent excessive stretching */
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  .table td, .table th {
+    font-size: 0.65rem;
+    padding: 3px;
+  }
+
+  .thead-dark th {
+    font-size: 0.7rem;
+    padding: 5px;
+  }
+
+  .table th, .table td {
+    max-width: 120px; /* Further reduce column width on very small screens */
+  }
 }
