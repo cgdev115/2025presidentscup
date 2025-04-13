@@ -1,6 +1,7 @@
 body {
   background-color: #f8f9fa;
   font-family: 'Arial', sans-serif;
+  min-height: 100vh; /* Ensure the body takes up the full viewport height */
 }
 
 h1 {
@@ -106,6 +107,7 @@ h3.subtitle {
   font-size: 0.9rem; /* Smaller font size */
   padding: 20px 0; /* Add padding for spacing */
   border-top: 1px solid #dee2e6; /* Add a subtle separator line */
+  visibility: visible !important; /* Ensure the disclaimer is visible */
 }
 
 /* Ensure sticky behavior and background are enforced on mobile */
