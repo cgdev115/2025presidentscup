@@ -15,6 +15,12 @@ h2 {
   font-size: 1.5rem;
 }
 
+h3.subtitle {
+  color: #6c757d; /* Lighter gray color to differentiate from the main title */
+  font-weight: normal;
+  font-size: 1.2rem; /* Smaller than the main title */
+}
+
 .table {
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -104,6 +110,10 @@ h2 {
     font-size: 1.2rem;
   }
 
+  h3.subtitle {
+    font-size: 1rem; /* Smaller subtitle on mobile */
+  }
+
   .table td, .table th {
     font-size: 0.75rem; /* Further reduce font size on mobile */
     padding: 4px; /* Further reduce padding */
@@ -158,6 +168,10 @@ h2 {
 
   h2 {
     font-size: 1rem;
+  }
+
+  h3.subtitle {
+    font-size: 0.9rem; /* Even smaller subtitle on very small screens */
   }
 
   .table td, .table th {
