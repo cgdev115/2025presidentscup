@@ -89,13 +89,6 @@ const teamRecordsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", TotalGames: 10, Wins: 1, Losses: 7, Draws: 2, GoalsFor: 5, GoalsAgainst: 16 },
 ];
 
-// Mapping of full team names to shortened names used in gameResultsData
-const teamNameMapping = {
-  "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)": "Inwood SC PSG South",
-  "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)": "Inwood SC PSG East",
-  "GFI Academy GFI 2014 Girls DPL Next (Bracket B)": "GFI Academy",
-};
-
 // Historical games data (Fall 2024 and Spring 2025, updated with actual team names)
 const historicalGamesData = {
   "HTX Kingwood 14G Gold (Bracket A)": {
@@ -317,7 +310,7 @@ const teamRecordsColumns = [
   { Header: 'Goals Against', accessor: 'GoalsAgainst' },
 ];
 
-// Columns for detailed games table (Fall 2024, Spring 2025, Current Tournament, Remaining Matchups)
+// Columns for detailed games table (Fall 2024, Spring 2025)
 const detailedGamesColumns = [
   { Header: 'Match', accessor: 'Match', className: 'sticky-column' },
 ];
@@ -417,19 +410,10 @@ function App() {
   const getTeamGames = (teamName) => {
     const fall2024Games = historicalGamesData[teamName]?.fall2024 || [];
     const spring2025Games = historicalGamesData[teamName]?.spring2025 || [];
-    
-    // Use the shortened name if it exists in the mapping, otherwise use the full teamName
-    const searchName = teamNameMapping[teamName] || teamName;
-    const currentTournamentGames = gameResultsData.filter(game => game.Match.includes(searchName));
-    const remainingMatchups = playoffData.filter(matchup => matchup.Team1 === teamName || matchup.Team2 === teamName);
 
     return {
       fall2024: fall2024Games,
       spring2025: spring2025Games,
-      currentTournament: currentTournamentGames,
-      remainingMatchups: remainingMatchups.map(matchup => ({
-        Match: `${matchup.Matchup} (${matchup.Team1 === teamName ? matchup.Team1Chance : matchup.Team2Chance} chance to win)`,
-      })),
     };
   };
 
@@ -704,50 +688,6 @@ function App() {
                                     <td className="sticky-column">{game.Match}</td>
                                   </tr>
                                 ))}
-                              </tbody>
-                            </table>
-
-                            <h4 className="text-center mb-3 mt-4">Current Tournament Results</h4>
-                            <table className="table table-striped table-bordered">
-                              <thead className="thead-dark">
-                                <tr>
-                                  <th className="sticky-column">Match</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {teamGames.currentTournament.length > 0 ? (
-                                  teamGames.currentTournament.map((game, index) => (
-                                    <tr key={index}>
-                                      <td className="sticky-column">{game.Match}</td>
-                                    </tr>
-                                  ))
-                                ) : (
-                                  <tr>
-                                    <td className="sticky-column">No current tournament results available.</td>
-                                  </tr>
-                                )}
-                              </tbody>
-                            </table>
-
-                            <h4 className="text-center mb-3 mt-4">Remaining Matchups</h4>
-                            <table className="table table-striped table-bordered">
-                              <thead className="thead-dark">
-                                <tr>
-                                  <th className="sticky-column">Match</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {teamGames.remainingMatchups.length > 0 ? (
-                                  teamGames.remainingMatchups.map((game, index) => (
-                                    <tr key={index}>
-                                      <td className="sticky-column">{game.Match}</td>
-                                    </tr>
-                                  ))
-                                ) : (
-                                  <tr>
-                                    <td className="sticky-column">No remaining matchups available.</td>
-                                  </tr>
-                                )}
                               </tbody>
                             </table>
                           </div>
