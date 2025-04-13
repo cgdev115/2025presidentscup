@@ -100,6 +100,14 @@ h3.subtitle {
   height: auto;
 }
 
+/* Styling for the disclaimer footer */
+.disclaimer {
+  color: #6c757d; /* Lighter gray color for a subtle look */
+  font-size: 0.9rem; /* Smaller font size */
+  padding: 20px 0; /* Add padding for spacing */
+  border-top: 1px solid #dee2e6; /* Add a subtle separator line */
+}
+
 /* Ensure sticky behavior and background are enforced on mobile */
 @media (max-width: 768px) {
   h1 {
@@ -159,6 +167,11 @@ h3.subtitle {
   .header-image img {
     max-width: 200px; /* Smaller size for mobile */
   }
+
+  /* Adjust disclaimer font size for mobile */
+  .disclaimer {
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -195,5 +208,10 @@ h3.subtitle {
   /* Further adjust header image size for very small screens */
   .header-image img {
     max-width: 150px; /* Even smaller for very small screens */
+  }
+
+  /* Further adjust disclaimer font size for very small screens */
+  .disclaimer {
+    font-size: 0.7rem;
   }
 }
