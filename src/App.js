@@ -55,6 +55,24 @@ const pointsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", ProjectedPoints: "0.7" },
 ];
 
+// Projected playoffs data
+const playoffData = [
+  {
+    Matchup: "A1 vs. Wildcard #3",
+    Team1: "HTX Kingwood 14G Gold (Bracket A)",
+    Team1Chance: "61.75%",
+    Team2: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)",
+    Team2Chance: "21%",
+  },
+  {
+    Matchup: "Wildcard #1 vs. Wildcard #2",
+    Team1: "HTX West 14G Gold (Bracket C)",
+    Team1Chance: "34.65%",
+    Team2: "HTX City 15 W (Bracket B)",
+    Team2Chance: "61.75%",
+  },
+];
+
 // Columns for standings table
 const standingsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
@@ -94,6 +112,15 @@ const oddsColumns = [
 const pointsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Projected Points', accessor: 'ProjectedPoints' },
+];
+
+// Columns for projected playoffs table
+const playoffColumns = [
+  { Header: 'Matchup', accessor: 'Matchup', className: 'sticky-column' },
+  { Header: 'Team 1', accessor: 'Team1' },
+  { Header: 'Team 1 Chance to Win (%)', accessor: 'Team1Chance' },
+  { Header: 'Team 2', accessor: 'Team2' },
+  { Header: 'Team 2 Chance to Win (%)', accessor: 'Team2Chance' },
 ];
 
 function App() {
@@ -156,6 +183,20 @@ function App() {
     prepareRow: preparePointsRow,
   } = pointsTableInstance;
 
+  // Playoff table instance (no sorting for users)
+  const playoffTableInstance = useTable({
+    columns: playoffColumns,
+    data: playoffData,
+  });
+
+  const {
+    getTableProps: getPlayoffTableProps,
+    getTableBodyProps: getPlayoffTableBodyProps,
+    headerGroups: playoffHeaderGroups,
+    rows: playoffRows,
+    prepareRow: preparePlayoffRow,
+  } = playoffTableInstance;
+
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">2025 President's Cup Tournament Odds</h1>
@@ -178,7 +219,7 @@ function App() {
           <tbody {...getStandingsTableBodyProps()}>
             {standingsRows.map(row => {
               prepareStandingsRow(row);
-              const isSemifinalist = row.original.SemifinalPosition !== ""; // Check if team is a semifinalist
+              const isSemifinalist = row.original.SemifinalPosition !== "";
               return (
                 <tr
                   {...row.getRowProps()}
@@ -290,6 +331,41 @@ function App() {
           <tbody {...getPointsTableBodyProps()}>
             {pointsRows.map(row => {
               preparePointsRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td
+                      {...cell.getCellProps()}
+                      className={cell.column.className}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Projected District Playoffs Table */}
+      <h2 className="text-center mb-3 mt-5">Projected District Playoffs</h2>
+      <div className="table-responsive">
+        <table {...getPlayoffTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {playoffHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()} className={column.className}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getPlayoffTableBodyProps()}>
+            {playoffRows.map(row => {
+              preparePlayoffRow(row);
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
