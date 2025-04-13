@@ -28,7 +28,7 @@ const gameResultsData = [
   { Match: "Inwood SC PSG South 1-0 Legacy Soccer 2015 Girls Green (Bracket A, April 12)" },
 ];
 
-// Odds data (removed WC1 odds)
+// Odds data
 const oddsData = [
   { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", ChanceToWinSemifinalAndAdvanceToState: "71.25%", SemifinalPosition: "A1" },
   { Team: "HTX West 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-233", PreTournamentOddsToAdvancePercent: "70%", CurrentOddsToAdvance: "-9900", CurrentOddsToAdvancePercent: "99%", ChanceToWinSemifinalAndAdvanceToState: "34.65%", SemifinalPosition: "WC1" },
@@ -94,7 +94,7 @@ const gameResultsColumns = [
   { Header: 'Match', accessor: 'Match', className: 'sticky-column' },
 ];
 
-// Columns for odds table (removed WC1 columns)
+// Columns for odds table
 const oddsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Pre-Tournament Odds to Advance (American)', accessor: 'PreTournamentOddsToAdvance' },
@@ -199,7 +199,8 @@ function App() {
       <div className="header-image">
         <img src="/presidents-cup-2025.png" alt="2025 President's Cup Logo" />
       </div>
-      <h1 className="text-center mb-4">2025 President's Cup Tournament Odds</h1>
+      <h1 className="text-center mb-2">2025 President's Cup Tournament Odds</h1>
+      <h3 className="text-center subtitle mb-4">Female U11 - Eastern District Playoffs</h3>
 
       {/* Standings Table */}
       <h2 className="text-center mb-3">Current Standings</h2>
