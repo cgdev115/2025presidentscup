@@ -126,6 +126,15 @@ h4 {
   max-width: 100%;
 }
 
+/* Highlighting for match results */
+.win-row {
+  background-color: #e6f4e6 !important; /* Light green for wins */
+}
+
+.loss-row {
+  background-color: #f4e6e6 !important; /* Light red for losses */
+}
+
 /* Ensure sticky behavior and background are enforced on mobile */
 @media (max-width: 768px) {
   h1 {
