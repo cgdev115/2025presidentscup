@@ -75,18 +75,18 @@ const playoffData = [
   },
 ];
 
-// Team records data (summary for main table, updated with actual stats from PDFs)
+// Team records data (summary for main table, updated with actual stats from PDFs and added GD)
 const teamRecordsData = [
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", TotalGames: 15, Wins: 5, Losses: 8, Draws: 2, GoalsFor: 29, GoalsAgainst: 22 },
-  { Team: "HTX West 14G Gold (Bracket C)", TotalGames: 16, Wins: 9, Losses: 4, Draws: 3, GoalsFor: 37, GoalsAgainst: 16 },
-  { Team: "HTX Woodlands 14G Black (Bracket A)", TotalGames: 16, Wins: 9, Losses: 4, Draws: 3, GoalsFor: 31, GoalsAgainst: 23 },
-  { Team: "HTX City 15 W (Bracket B)", TotalGames: 15, Wins: 12, Losses: 2, Draws: 1, GoalsFor: 54, GoalsAgainst: 19 },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", TotalGames: 15, Wins: 4, Losses: 8, Draws: 3, GoalsFor: 18, GoalsAgainst: 23 },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", TotalGames: 13, Wins: 4, Losses: 8, Draws: 1, GoalsFor: 19, GoalsAgainst: 37 },
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", TotalGames: 14, Wins: 1, Losses: 12, Draws: 1, GoalsFor: 12, GoalsAgainst: 47 },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", TotalGames: 14, Wins: 9, Losses: 2, Draws: 3, GoalsFor: 35, GoalsAgainst: 14 },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", TotalGames: 16, Wins: 7, Losses: 4, Draws: 5, GoalsFor: 24, GoalsAgainst: 18 },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", TotalGames: 15, Wins: 3, Losses: 9, Draws: 3, GoalsFor: 15, GoalsAgainst: 34 },
+  { Team: "HTX Kingwood 14G Gold (Bracket A)", TotalGames: 15, Wins: 5, Losses: 8, Draws: 2, GoalsFor: 29, GoalsAgainst: 22, GD: 7 },
+  { Team: "HTX West 14G Gold (Bracket C)", TotalGames: 16, Wins: 9, Losses: 4, Draws: 3, GoalsFor: 37, GoalsAgainst: 16, GD: 21 },
+  { Team: "HTX Woodlands 14G Black (Bracket A)", TotalGames: 16, Wins: 9, Losses: 4, Draws: 3, GoalsFor: 31, GoalsAgainst: 23, GD: 8 },
+  { Team: "HTX City 15 W (Bracket B)", TotalGames: 15, Wins: 12, Losses: 2, Draws: 1, GoalsFor: 54, GoalsAgainst: 19, GD: 35 },
+  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", TotalGames: 15, Wins: 4, Losses: 8, Draws: 3, GoalsFor: 18, GoalsAgainst: 23, GD: -5 },
+  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", TotalGames: 13, Wins: 4, Losses: 8, Draws: 1, GoalsFor: 19, GoalsAgainst: 37, GD: -18 },
+  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", TotalGames: 14, Wins: 1, Losses: 12, Draws: 1, GoalsFor: 12, GoalsAgainst: 47, GD: -35 },
+  { Team: "HTX Tomball 14G Gold (Bracket C)", TotalGames: 14, Wins: 9, Losses: 2, Draws: 3, GoalsFor: 35, GoalsAgainst: 14, GD: 21 },
+  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", TotalGames: 16, Wins: 7, Losses: 4, Draws: 5, GoalsFor: 24, GoalsAgainst: 18, GD: 6 },
+  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", TotalGames: 15, Wins: 3, Losses: 9, Draws: 3, GoalsFor: 15, GoalsAgainst: 34, GD: -19 },
 ];
 
 // Historical games data (Fall 2024 and Spring 2025, updated with actual data from PDFs)
@@ -348,7 +348,7 @@ const playoffColumns = [
   { Header: 'Team 2 Chance to Win (%)', accessor: 'Team2Chance' },
 ];
 
-// Columns for team records table (summary)
+// Columns for team records table (summary, added GD column)
 const teamRecordsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Total Games', accessor: 'TotalGames' },
@@ -357,6 +357,7 @@ const teamRecordsColumns = [
   { Header: 'Draws', accessor: 'Draws' },
   { Header: 'Goals For', accessor: 'GoalsFor' },
   { Header: 'Goals Against', accessor: 'GoalsAgainst' },
+  { Header: 'GD', accessor: 'GD' }, // New GD column
 ];
 
 // Columns for detailed games table (Fall 2024, Spring 2025)
