@@ -55,17 +55,17 @@ const pointsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", ProjectedPoints: "0.7" },
 ];
 
-// Projected playoffs data
+// Projected playoffs data (with date and location)
 const playoffData = [
   {
-    Matchup: "A1 vs. Wildcard #3",
+    Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
     Team1: "HTX Kingwood 14G Gold (Bracket A)",
     Team1Chance: "61.75%",
     Team2: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)",
     Team2Chance: "21%",
   },
   {
-    Matchup: "Wildcard #1 vs. Wildcard #2",
+    Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
     Team1: "HTX West 14G Gold (Bracket C)",
     Team1Chance: "34.65%",
     Team2: "HTX City 15 W (Bracket B)",
