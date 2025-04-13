@@ -126,12 +126,12 @@ h4 {
   max-width: 100%;
 }
 
-/* Highlighting for match results */
-.win-row {
+/* Highlighting for match results with increased specificity */
+.expanded-section .table tbody tr.win-row {
   background-color: #e6f4e6 !important; /* Light green for wins */
 }
 
-.loss-row {
+.expanded-section .table tbody tr.loss-row {
   background-color: #f4e6e6 !important; /* Light red for losses */
 }
 
