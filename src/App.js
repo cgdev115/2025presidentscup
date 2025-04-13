@@ -200,6 +200,9 @@ function App() {
 
   return (
     <div className="container mt-5">
+      <div className="header-image">
+        <img src="/presidents-cup-2025.png" alt="2025 President's Cup Logo" />
+      </div>
       <h1 className="text-center mb-4">2025 President's Cup Tournament Odds</h1>
 
       {/* Standings Table */}
