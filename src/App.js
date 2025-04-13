@@ -1,390 +1,217 @@
-import React from 'react';
-import { useTable, useSortBy } from 'react-table';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-
-// Standings data (sorted by PTS, then GD, with actual current Semifinal Position)
-const standingsData = [
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", MP: 1, W: 1, L: 0, D: 0, GF: 2, GA: 0, GD: 2, PTS: 3, PPG: "3.0", SemifinalPosition: "A1" },
-  { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0", SemifinalPosition: "W1" },
-  { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "W2" },
-  { Team: "HTX City 15 W (Bracket B)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "W3" },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 2, GD: -1, PTS: 3, PPG: "1.5", SemifinalPosition: "" },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", MP: 2, W: 0, L: 0, D: 2, GF: 1, GA: 1, GD: 0, PTS: 2, PPG: "1.0", SemifinalPosition: "" },
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 1, W: 0, L: 0, D: 1, GF: 1, GA: 1, GD: 0, PTS: 1, PPG: "1.0", SemifinalPosition: "" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", MP: 2, W: 0, L: 1, D: 1, GF: 0, GA: 1, GD: -1, PTS: 1, PPG: "0.5", SemifinalPosition: "" },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 1, GD: -1, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
-];
-
-// Game results data
-const gameResultsData = [
-  { Match: "HTX Woodlands 14G Black 2-0 Inwood SC PSG South (Bracket A, April 5)" },
-  { Match: "HTX City 15 W 1-0 HTX Tomball 14G Gold (Bracket B/C, April 5)" },
-  { Match: "Inwood SC PSG East 1-1 GFI Academy (Bracket B/C, April 5)" },
-  { Match: "HTX West 14G Gold 1-0 HTX City 15 W (Bracket B/C, April 12)" },
-  { Match: "HTX Tomball 14G Gold 0-0 GFI Academy (Bracket B/C, April 12)" },
-  { Match: "HTX Kingwood 14G Gold 2-0 HTX Woodlands 14G Black (Bracket A, April 12)" },
-  { Match: "Inwood SC PSG South 1-0 Legacy Soccer 2015 Girls Green (Bracket A, April 12)" },
-];
-
-// Odds data
-const oddsData = [
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", ChanceToWinSemifinalAndAdvanceToState: "71.25%", SemifinalPosition: "A1" },
-  { Team: "HTX West 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-233", PreTournamentOddsToAdvancePercent: "70%", CurrentOddsToAdvance: "-9900", CurrentOddsToAdvancePercent: "99%", ChanceToWinSemifinalAndAdvanceToState: "34.65%", SemifinalPosition: "WC1" },
-  { Team: "HTX City 15 W (Bracket B)", PreTournamentOddsToAdvance: "-900", PreTournamentOddsToAdvancePercent: "90%", CurrentOddsToAdvance: "-1900", CurrentOddsToAdvancePercent: "95%", ChanceToWinSemifinalAndAdvanceToState: "61.75%", SemifinalPosition: "WC2" },
-  { Team: "HTX Woodlands 14G Black (Bracket A)", PreTournamentOddsToAdvance: "-3233", PreTournamentOddsToAdvancePercent: "97%", CurrentOddsToAdvance: "+150", CurrentOddsToAdvancePercent: "40%", ChanceToWinSemifinalAndAdvanceToState: "10%", SemifinalPosition: "WC3" },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", CurrentOddsToAdvance: "+233", CurrentOddsToAdvancePercent: "30%", ChanceToWinSemifinalAndAdvanceToState: "10%", SemifinalPosition: "" },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", PreTournamentOddsToAdvance: "+1900", PreTournamentOddsToAdvancePercent: "5%", CurrentOddsToAdvance: "+400", CurrentOddsToAdvancePercent: "20%", ChanceToWinSemifinalAndAdvanceToState: "5%", SemifinalPosition: "" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", PreTournamentOddsToAdvance: "-567", PreTournamentOddsToAdvancePercent: "85%", CurrentOddsToAdvance: "+900", CurrentOddsToAdvancePercent: "10%", ChanceToWinSemifinalAndAdvanceToState: "3%", SemifinalPosition: "" },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", PreTournamentOddsToAdvance: "+300", PreTournamentOddsToAdvancePercent: "25%", CurrentOddsToAdvance: "+1900", CurrentOddsToAdvancePercent: "5%", ChanceToWinSemifinalAndAdvanceToState: "1%", SemifinalPosition: "" },
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", PreTournamentOddsToAdvance: "+1900", PreTournamentOddsToAdvancePercent: "5%", CurrentOddsToAdvance: "+9900", CurrentOddsToAdvancePercent: "1%", ChanceToWinSemifinalAndAdvanceToState: "0.15%", SemifinalPosition: "" },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", PreTournamentOddsToAdvance: "+900", PreTournamentOddsToAdvancePercent: "10%", CurrentOddsToAdvance: "+19900", CurrentOddsToAdvancePercent: "0.5%", ChanceToWinSemifinalAndAdvanceToState: "0.075%", SemifinalPosition: "" },
-];
-
-// Projected points data (sorted by projected points)
-const pointsData = [
-  { Team: "HTX West 14G Gold (Bracket C)", ProjectedPoints: "8.25" },
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", ProjectedPoints: "6.5" },
-  { Team: "HTX City 15 W (Bracket B)", ProjectedPoints: "5.65" },
-  { Team: "HTX Woodlands 14G Black (Bracket A)", ProjectedPoints: "4.1" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", ProjectedPoints: "3.75" },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", ProjectedPoints: "3.45" },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", ProjectedPoints: "2.8" },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", ProjectedPoints: "2.4" },
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", ProjectedPoints: "1.25" },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", ProjectedPoints: "0.7" },
-];
-
-// Projected playoffs data (with date and location)
-const playoffData = [
-  {
-    Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
-    Team1: "HTX Kingwood 14G Gold (Bracket A)",
-    Team1Chance: "71.25%",
-    Team2: "HTX Woodlands 14G Black (Bracket A)",
-    Team2Chance: "10%",
-  },
-  {
-    Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
-    Team1: "HTX West 14G Gold (Bracket C)",
-    Team1Chance: "34.65%",
-    Team2: "HTX City 15 W (Bracket B)",
-    Team2Chance: "61.75%",
-  },
-];
-
-// Columns for standings table
-const standingsColumns = [
-  { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
-  { Header: 'MP', accessor: 'MP' },
-  { Header: 'W', accessor: 'W' },
-  { Header: 'L', accessor: 'L' },
-  { Header: 'D', accessor: 'D' },
-  { Header: 'GF', accessor: 'GF' },
-  { Header: 'GA', accessor: 'GA' },
-  { Header: 'GD', accessor: 'GD' },
-  { Header: 'PTS', accessor: 'PTS' },
-  { Header: 'PPG', accessor: 'PPG' },
-  { Header: 'Semifinal Position', accessor: 'SemifinalPosition' },
-];
-
-// Columns for game results list
-const gameResultsColumns = [
-  { Header: 'Match', accessor: 'Match', className: 'sticky-column' },
-];
-
-// Columns for odds table
-const oddsColumns = [
-  { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
-  { Header: 'Pre-Tournament Odds to Advance (American)', accessor: 'PreTournamentOddsToAdvance' },
-  { Header: 'Pre-Tournament Odds to Advance (%)', accessor: 'PreTournamentOddsToAdvancePercent' },
-  { Header: 'Current Odds to Advance (American)', accessor: 'CurrentOddsToAdvance' },
-  { Header: 'Current Odds to Advance (%)', accessor: 'CurrentOddsToAdvancePercent' },
-  { Header: 'Chance to Win Semifinal and Advance to State (%)', accessor: 'ChanceToWinSemifinalAndAdvanceToState' },
-  { Header: 'Semifinal Position', accessor: 'SemifinalPosition' },
-];
-
-// Columns for projected points table
-const pointsColumns = [
-  { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
-  { Header: 'Projected Points', accessor: 'ProjectedPoints' },
-];
-
-// Columns for projected playoffs table
-const playoffColumns = [
-  { Header: 'Matchup', accessor: 'Matchup', className: 'sticky-column' },
-  { Header: 'Team 1', accessor: 'Team1' },
-  { Header: 'Team 1 Chance to Win (%)', accessor: 'Team1Chance' },
-  { Header: 'Team 2', accessor: 'Team2' },
-  { Header: 'Team 2 Chance to Win (%)', accessor: 'Team2Chance' },
-];
-
-function App() {
-  // Standings table instance (no sorting for users)
-  const standingsTableInstance = useTable({
-    columns: standingsColumns,
-    data: standingsData,
-  });
-
-  const {
-    getTableProps: getStandingsTableProps,
-    getTableBodyProps: getStandingsTableBodyProps,
-    headerGroups: standingsHeaderGroups,
-    rows: standingsRows,
-    prepareRow: prepareStandingsRow,
-  } = standingsTableInstance;
-
-  // Game results table instance (no sorting for users)
-  const gameResultsTableInstance = useTable({
-    columns: gameResultsColumns,
-    data: gameResultsData,
-  });
-
-  const {
-    getTableProps: getGameResultsTableProps,
-    getTableBodyProps: getGameResultsTableBodyProps,
-    headerGroups: gameResultsHeaderGroups,
-    rows: gameResultsRows,
-    prepareRow: prepareGameResultsRow,
-  } = gameResultsTableInstance;
-
-  // Odds table instance (with sorting)
-  const oddsTableInstance = useTable(
-    {
-      columns: oddsColumns,
-      data: oddsData,
-    },
-    useSortBy
-  );
-
-  const {
-    getTableProps: getOddsTableProps,
-    getTableBodyProps: getOddsTableBodyProps,
-    headerGroups: oddsHeaderGroups,
-    rows: oddsRows,
-    prepareRow: prepareOddsRow,
-  } = oddsTableInstance;
-
-  // Points table instance (no sorting for users)
-  const pointsTableInstance = useTable({
-    columns: pointsColumns,
-    data: pointsData,
-  });
-
-  const {
-    getTableProps: getPointsTableProps,
-    getTableBodyProps: getPointsTableBodyProps,
-    headerGroups: pointsHeaderGroups,
-    rows: pointsRows,
-    prepareRow: preparePointsRow,
-  } = pointsTableInstance;
-
-  // Playoff table instance (no sorting for users)
-  const playoffTableInstance = useTable({
-    columns: playoffColumns,
-    data: playoffData,
-  });
-
-  const {
-    getTableProps: getPlayoffTableProps,
-    getTableBodyProps: getPlayoffTableBodyProps,
-    headerGroups: playoffHeaderGroups,
-    rows: playoffRows,
-    prepareRow: preparePlayoffRow,
-  } = playoffTableInstance;
-
-  return (
-    <div className="container mt-5">
-      <div className="header-image">
-        <img src="/presidents-cup-2025.png" alt="2025 President's Cup Logo" />
-      </div>
-      <h1 className="text-center mb-2">2025 President's Cup Tournament Odds</h1>
-      <h3 className="text-center subtitle mb-4">Female U11 - Eastern District Playoffs</h3>
-
-      {/* Standings Table */}
-      <h2 className="text-center mb-3">Current Standings</h2>
-      <div className="table-responsive">
-        <table {...getStandingsTableProps()} className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            {standingsHeaderGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()} className={column.className}>
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getStandingsTableBodyProps()}>
-            {standingsRows.map(row => {
-              prepareStandingsRow(row);
-              const isSemifinalist = row.original.SemifinalPosition !== "";
-              return (
-                <tr
-                  {...row.getRowProps()}
-                  className={isSemifinalist ? 'semifinalist-row' : ''}
-                >
-                  {row.cells.map(cell => (
-                    <td
-                      {...cell.getCellProps()}
-                      className={cell.column.className}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Game Results Table */}
-      <h2 className="text-center mb-3 mt-5">Game Results</h2>
-      <div className="table-responsive">
-        <table {...getGameResultsTableProps()} className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            {gameResultsHeaderGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()} className={column.className}>
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getGameResultsTableBodyProps()}>
-            {gameResultsRows.map(row => {
-              prepareGameResultsRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td
-                      {...cell.getCellProps()}
-                      className={cell.column.className}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Odds Table */}
-      <h2 className="text-center mb-3 mt-5">Tournament Odds</h2>
-      <div className="table-responsive">
-        <table {...getOddsTableProps()} className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            {oddsHeaderGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())} className={column.className}>
-                    {column.render('Header')}
-                    <span>
-                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getOddsTableBodyProps()}>
-            {oddsRows.map(row => {
-              prepareOddsRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td
-                      {...cell.getCellProps()}
-                      className={cell.column.className}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Projected Points Table */}
-      <h2 className="text-center mb-3 mt-5">Projected Points</h2>
-      <div className="table-responsive">
-        <table {...getPointsTableProps()} className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            {pointsHeaderGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()} className={column.className}>
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getPointsTableBodyProps()}>
-            {pointsRows.map(row => {
-              preparePointsRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td
-                      {...cell.getCellProps()}
-                      className={cell.column.className}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Projected District Playoffs Table */}
-      <h2 className="text-center mb-3 mt-5">Projected District Playoffs</h2>
-      <div className="table-responsive">
-        <table {...getPlayoffTableProps()} className="table table-striped table-bordered">
-          <thead className="thead-dark">
-            {playoffHeaderGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()} className={column.className}>
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getPlayoffTableBodyProps()}>
-            {playoffRows.map(row => {
-              preparePlayoffRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td
-                      {...cell.getCellProps()}
-                      className={cell.column.className}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+body {
+  background-color: #f8f9fa;
+  font-family: 'Arial', sans-serif;
 }
 
-export default App;
+h1 {
+  color: #343a40;
+  font-weight: bold;
+  font-size: 1.8rem; /* Smaller font size for mobile */
+}
+
+h2 {
+  color: #343a40;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+h3.subtitle {
+  color: #6c757d; /* Lighter gray color to differentiate from the main title */
+  font-weight: normal;
+  font-size: 1.2rem; /* Smaller than the main title */
+}
+
+.table {
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 100%;
+  table-layout: auto; /* Allow table to adjust column widths */
+}
+
+.thead-dark th {
+  background-color: #343a40;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  white-space: normal; /* Allow header text to wrap */
+  padding: 8px; /* Reduced padding for mobile */
+  font-size: 0.9rem; /* Smaller font size for headers */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f2f2f2;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+  text-align: center;
+  padding: 6px; /* Reduced padding for mobile */
+  font-size: 0.85rem; /* Smaller font size for cells */
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Ensure long words break */
+}
+
+.table th:hover {
+  background-color: #495057;
+  cursor: pointer;
+}
+
+.table-responsive {
+  margin-top: 20px;
+  overflow-x: auto; /* Ensure horizontal scrolling if needed */
+  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+}
+
+/* Styling for semifinalist rows */
+.semifinalist-row {
+  font-weight: bold; /* Make text bold for semifinalist rows */
+}
+
+/* Styling for sticky Team column */
+.sticky-column {
+  position: sticky;
+  left: 0;
+  z-index: 1; /* Ensure it stays above other columns */
+  border-right: 2px solid #dee2e6; /* Add a border to separate from other columns */
+}
+
+/* Ensure sticky column in header has the dark background */
+.thead-dark th.sticky-column {
+  background-color: #343a40;
+  color: #ffffff;
+  z-index: 2; /* Higher z-index for header to stay above body cells */
+}
+
+/* Ensure sticky column in table body has a solid white background */
+.table tbody td.sticky-column {
+  background-color: #ffffff; /* Solid white background to prevent scrolling text from showing through */
+  z-index: 1;
+}
+
+/* Styling for the header image */
+.header-image {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header-image img {
+  max-width: 300px; /* Default size for desktop */
+  height: auto;
+}
+
+/* Styling for the disclaimer footer */
+.disclaimer {
+  color: #6c757d; /* Lighter gray color for a subtle look */
+  font-size: 0.9rem; /* Smaller font size */
+  padding: 20px 0; /* Add padding for spacing */
+  border-top: 1px solid #dee2e6; /* Add a subtle separator line */
+}
+
+/* Ensure sticky behavior and background are enforced on mobile */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem; /* Even smaller font size for mobile */
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  h3.subtitle {
+    font-size: 1rem; /* Smaller subtitle on mobile */
+  }
+
+  .table td, .table th {
+    font-size: 0.75rem; /* Further reduce font size on mobile */
+    padding: 4px; /* Further reduce padding */
+  }
+
+  .thead-dark th {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  .container {
+    padding: 10px; /* Reduce padding on mobile */
+  }
+
+  /* Ensure table fits within the screen width */
+  .table {
+    min-width: 100%;
+  }
+
+  /* Adjust column widths for better readability */
+  .table th, .table td {
+    max-width: 150px; /* Limit column width to prevent excessive stretching */
+  }
+
+  /* Ensure sticky column works on mobile */
+  .sticky-column {
+    position: sticky;
+    left: 0;
+    min-width: 150px; /* Ensure Team column has enough width */
+    border-right: 2px solid #dee2e6;
+  }
+
+  .thead-dark th.sticky-column {
+    background-color: #343a40;
+    color: #ffffff;
+  }
+
+  .table tbody td.sticky-column {
+    background-color: #ffffff; /* Solid white background on mobile */
+  }
+
+  /* Adjust header image size for mobile */
+  .header-image img {
+    max-width: 200px; /* Smaller size for mobile */
+  }
+
+  /* Adjust disclaimer font size for mobile */
+  .disclaimer {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  h3.subtitle {
+    font-size: 0.9rem; /* Even smaller subtitle on very small screens */
+  }
+
+  .table td, .table th {
+    font-size: 0.65rem;
+    padding: 3px;
+  }
+
+  .thead-dark th {
+    font-size: 0.7rem;
+    padding: 5px;
+  }
+
+  .table th, .table td {
+    max-width: 120px; /* Further reduce column width on very small screens */
+  }
+
+  .sticky-column {
+    min-width: 120px; /* Adjust for smaller screens */
+  }
+
+  /* Further adjust header image size for very small screens */
+  .header-image img {
+    max-width: 150px; /* Even smaller for very small screens */
+  }
+
+  /* Further adjust disclaimer font size for very small screens */
+  .disclaimer {
+    font-size: 0.7rem;
+  }
+}
