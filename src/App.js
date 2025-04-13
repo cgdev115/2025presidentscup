@@ -348,7 +348,7 @@ const playoffColumns = [
   { Header: 'Team 2 Chance to Win (%)', accessor: 'Team2Chance' },
 ];
 
-// Columns for team records table (summary, added GD column)
+// Columns for team records table (summary, with GD column)
 const teamRecordsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Total Games', accessor: 'TotalGames' },
@@ -357,12 +357,14 @@ const teamRecordsColumns = [
   { Header: 'Draws', accessor: 'Draws' },
   { Header: 'Goals For', accessor: 'GoalsFor' },
   { Header: 'Goals Against', accessor: 'GoalsAgainst' },
-  { Header: 'GD', accessor: 'GD' }, // New GD column
+  { Header: 'GD', accessor: 'GD' },
 ];
 
-// Columns for detailed games table (Fall 2024, Spring 2025)
+// Columns for detailed games table (Fall 2024, Spring 2025, updated to three columns)
 const detailedGamesColumns = [
-  { Header: 'Match', accessor: 'Match', className: 'sticky-column' },
+  { Header: 'Team Score', accessor: 'TeamScore', className: 'sticky-column' },
+  { Header: 'Opponent Score', accessor: 'OpponentScore' },
+  { Header: 'Opponent & Date', accessor: 'OpponentDate' },
 ];
 
 function App() {
@@ -461,7 +463,7 @@ function App() {
     const fall2024Games = historicalGamesData[teamName]?.fall2024 || [];
     const spring2025Games = historicalGamesData[teamName]?.spring2025 || [];
 
-    // Process games to remove team name and determine result
+    // Process games to split into three columns and determine result
     const processGames = (games) => {
       return games.map(game => {
         // Extract score and opponent (e.g., "HTX City 15 W 1-0 Inwood SC PSG South (Sept 10, 2024)")
@@ -473,8 +475,10 @@ function App() {
         const opponent = matchParts.slice(opponentStartIndex, opponentEndIndex).join(' '); // e.g., "Inwood SC PSG South"
         const date = matchParts.slice(opponentEndIndex).join(' '); // e.g., "(Sept 10, 2024)"
 
-        // Determine result (win, loss, draw) based on score
+        // Split the score into team score and opponent score
         const [teamScore, opponentScore] = score.split('-').map(Number);
+
+        // Determine result (win, loss, draw) based on score
         let result;
         if (teamScore > opponentScore) {
           result = 'win';
@@ -484,8 +488,13 @@ function App() {
           result = 'draw';
         }
 
+        // Debug: Log the result to confirm it's being set correctly
+        console.log(`Team: ${teamName}, Match: ${game.Match}, Result: ${result}`);
+
         return {
-          Match: `${score} ${opponent} ${date}`, // e.g., "1-0 Inwood SC PSG South (Sept 10, 2024)"
+          TeamScore: teamScore,
+          OpponentScore: opponentScore,
+          OpponentDate: `${opponent} ${date}`,
           Result: result,
         };
       });
@@ -743,13 +752,19 @@ function App() {
                             <table className="table table-striped table-bordered">
                               <thead className="thead-dark">
                                 <tr>
-                                  <th className="sticky-column">Match</th>
+                                  {detailedGamesColumns.map(column => (
+                                    <th key={column.Header} className={column.className}>
+                                      {column.Header}
+                                    </th>
+                                  ))}
                                 </tr>
                               </thead>
                               <tbody>
                                 {teamGames.fall2024.map((game, index) => (
                                   <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
-                                    <td className="sticky-column">{game.Match}</td>
+                                    <td className="sticky-column">{game.TeamScore}</td>
+                                    <td>{game.OpponentScore}</td>
+                                    <td>{game.OpponentDate}</td>
                                   </tr>
                                 ))}
                               </tbody>
@@ -759,13 +774,19 @@ function App() {
                             <table className="table table-striped table-bordered">
                               <thead className="thead-dark">
                                 <tr>
-                                  <th className="sticky-column">Match</th>
+                                  {detailedGamesColumns.map(column => (
+                                    <th key={column.Header} className={column.className}>
+                                      {column.Header}
+                                    </th>
+                                  ))}
                                 </tr>
                               </thead>
                               <tbody>
                                 {teamGames.spring2025.map((game, index) => (
                                   <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
-                                    <td className="sticky-column">{game.Match}</td>
+                                    <td className="sticky-column">{game.TeamScore}</td>
+                                    <td>{game.OpponentScore}</td>
+                                    <td>{game.OpponentDate}</td>
                                   </tr>
                                 ))}
                               </tbody>
