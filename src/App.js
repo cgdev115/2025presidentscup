@@ -701,7 +701,7 @@ function App() {
           </table>
         </div>
 
-       {/* Team Records Table with Expandable Details */}
+       {/* Team Records Table with Expandable Details 
 <h2 className="text-center mb-3 mt-5">Team Records</h2>
 <div className="table-responsive">
   <table {...getTeamRecordsTableProps()} className="table table-striped table-bordered">
@@ -819,7 +819,7 @@ function App() {
       })}
     </tbody>
   </table>
-</div>
+</div> */}
 
         {/* Humorous Disclaimer */}
         <footer className="text-center mt-5 mb-3 disclaimer">
