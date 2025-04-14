@@ -730,13 +730,14 @@ function App() {
         prepareTeamRecordsRow(row);
         const teamName = row.original.Team;
         const isExpanded = expandedTeam === teamName;
-        const teamGames = getTeamGames(teamName);
+        const teamGames = getTeamGames(teamName) || { fall2024: [], spring2025: [] }; // Fallback for safety
 
         return (
           <React.Fragment key={row.id}>
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => (
                 <td
+                  key={cell.getCellProps().key}
                   {...cell.getCellProps()}
                   className={cell.column.className}
                   onClick={() => cell.column.Header === 'Team' && toggleTeamDetails(teamName)}
@@ -768,9 +769,12 @@ function App() {
                         </tr>
                       </thead>
                       <tbody>
-                        {teamGames.fall2024.length > 0 ? (
+                        {teamGames.fall2024.length ? (
                           teamGames.fall2024.map((game, index) => (
-                            <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
+                            <tr
+                              key={`${teamName}-fall-${index}`}
+                              className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}
+                            >
                               <td className="sticky-column">{game.TeamA}</td>
                               <td>{game.ScoreTeamA}</td>
                               <td>{game.ScoreTeamB}</td>
@@ -797,9 +801,12 @@ function App() {
                         </tr>
                       </thead>
                       <tbody>
-                        {teamGames.spring2025.length > 0 ? (
+                        {teamGames.spring2025.length ? (
                           teamGames.spring2025.map((game, index) => (
-                            <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
+                            <tr
+                              key={`${teamName}-spring-${index}`}
+                              className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}
+                            >
                               <td className="sticky-column">{game.TeamA}</td>
                               <td>{game.ScoreTeamA}</td>
                               <td>{game.ScoreTeamB}</td>
