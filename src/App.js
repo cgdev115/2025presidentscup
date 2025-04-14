@@ -18,15 +18,17 @@ const standingsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 0, W: 0, L: 0, D: 0, GF: 0, GA: 0, GD: 0, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
 ];
 
-// Game results data (current tournament)
+// Game results data (updated with new tournament stats up to April 13, 2025)
 const gameResultsData = [
-  { Match: "HTX Woodlands 14G Black 2-0 Inwood SC PSG South (Bracket A, April 5)" },
-  { Match: "HTX City 15 W 1-0 HTX Tomball 14G Gold (Bracket B/C, April 5)" },
-  { Match: "Inwood SC PSG East 1-1 GFI Academy (Bracket B/C, April 5)" },
-  { Match: "HTX West 14G Gold 1-0 HTX City 15 W (Bracket B/C, April 12)" },
-  { Match: "HTX Tomball 14G Gold 0-0 GFI Academy (Bracket B/C, April 12)" },
+  { Match: "HTX Woodlands 14G Black 2-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A, April 05)" },
+  { Match: "HTX City 15 W 1-0 HTX Tomball 14G Gold (Bracket B/C, April 05)" },
+  { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 1-1 GFI Academy GFI 2014 Girls DPL Next (Bracket B/C, April 05)" },
   { Match: "HTX Kingwood 14G Gold 2-0 HTX Woodlands 14G Black (Bracket A, April 12)" },
-  { Match: "Inwood SC PSG South 1-0 Legacy Soccer 2015 Girls Green (Bracket A, April 12)" },
+  { Match: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL 1-0 Legacy Soccer Legacy 2015 Girls Green (Bracket A, April 12)" },
+  { Match: "Legacy Soccer Legacy 2014 Girls White 0-1 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket B/C, April 12)" },
+  { Match: "HTX West 14G Gold 1-0 HTX City 15 W (Bracket B/C, April 12)" },
+  { Match: "HTX Tomball 14G Gold 0-0 GFI Academy GFI 2014 Girls DPL Next (Bracket B/C, April 12)" },
+  { Match: "Legacy Soccer Legacy 2015 Girls Green 1-0 HTX Kingwood 14G Gold (Bracket A, April 13)" },
 ];
 
 // Odds data
@@ -360,7 +362,7 @@ const teamRecordsColumns = [
   { Header: 'GD', accessor: 'GD' },
 ];
 
-// Columns for detailed games table (Fall 2024, Spring 2025, updated to three columns)
+// Columns for detailed games table (Fall 2024, Spring 2025, three columns)
 const detailedGamesColumns = [
   { Header: 'Team Score', accessor: 'TeamScore', className: 'sticky-column' },
   { Header: 'Opponent Score', accessor: 'OpponentScore' },
@@ -749,7 +751,7 @@ function App() {
                         <td colSpan={teamRecordsColumns.length} className="expanded-details">
                           <div className="expanded-section">
                             <h4 className="text-center mb-3">Fall 2024 Games</h4>
-                            <table className="table table-striped table-bordered">
+                            <table className="table table-bordered">
                               <thead className="thead-dark">
                                 <tr>
                                   {detailedGamesColumns.map(column => (
@@ -771,7 +773,7 @@ function App() {
                             </table>
 
                             <h4 className="text-center mb-3 mt-4">Spring 2025 Games</h4>
-                            <table className="table table-striped table-bordered">
+                            <table className="table table-bordered">
                               <thead className="thead-dark">
                                 <tr>
                                   {detailedGamesColumns.map(column => (
