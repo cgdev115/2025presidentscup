@@ -102,6 +102,7 @@ const historicalGamesData = {
       { Match: "HTX Tomball 14G Gold 6-0 HTX Kingwood 14G Gold (Oct 05, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
       { Match: "HTX Kingwood 14G Gold 0-3 HTX Woodlands 14G Black (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
       { Match: "HTX West 14G Gold 1-0 HTX Kingwood 14G Gold (Oct 19, 2024)", HomeTeam: "HTX West 14G Gold" },
+      { Match: "HTX Kingwood 14G Gold 2-0 Legacy Soccer Legacy 2014 Girls White (Oct 26, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
       { Match: "HTX Kingwood 14G Gold 3-0 GFI Academy GFI 2015 Girls DPL Next (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
       { Match: "HTX Woodlands 14G White 0-0 HTX Kingwood 14G Gold (Nov 16, 2024)", HomeTeam: "HTX Woodlands 14G White" },
       { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Kingwood 14G Gold (Nov 23, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
@@ -142,9 +143,9 @@ const historicalGamesData = {
       { Match: "HTX Woodlands 14G Black 0-0 HTX City 15 W (Sept 08, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
       { Match: "HTX Woodlands 14G White 0-7 HTX Woodlands 14G Black (Sept 14, 2024)", HomeTeam: "HTX Woodlands 14G White" },
       { Match: "HTX South 14G Gold 0-3 HTX Woodlands 14G Black (Sept 28, 2024)", HomeTeam: "HTX South 14G Gold" },
-      { Match: "HTX Woodlands 14G Black 6-0 HTX Kingwood 14G Black (Oct 06, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
       { Match: "HTX Kingwood 14G Gold 0-3 HTX Woodlands 14G Black (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
       { Match: "Legacy Soccer Legacy 2014 Girls White 0-3 HTX Woodlands 14G Black (Oct 20, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
+      { Match: "HTX Woodlands 14G Black 6-0 HTX Kingwood 14G Black (Oct 27, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
       { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Woodlands 14G Black (Nov 03, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
       { Match: "HTX Woodlands 14G Black 1-0 HTX West 14G Gold (Nov 09, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
       { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Woodlands 14G Black (Nov 23, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
@@ -168,7 +169,7 @@ const historicalGamesData = {
       { Match: "HTX City 15 W 0-2 HTX Tomball 14G Gold (Oct 12, 2024)", HomeTeam: "HTX City 15 W" },
       { Match: "HTX City 15 W 3-1 HTX West 14G Gold (Oct 26, 2024)", HomeTeam: "HTX City 15 W" },
       { Match: "HTX City 15 W 8-1 Inwood SC ID PSG Academy Houston East 14G White (Nov 09, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 2-1 HTX City 15 W (Nov 15, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
+      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 2-1 HTX City 15 W (Nov 16, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
       { Match: "HTX City 15 W 10-0 HTX Kingwood 14G Black (Nov 21, 2024)", HomeTeam: "HTX City 15 W" },
     ],
     spring2025: [
@@ -181,16 +182,17 @@ const historicalGamesData = {
   },
   "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)": {
     fall2024: [
-      { Match: "HTX Woodlands 14G Black 1-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Sept 07, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
+      { Match: "HTX Woodlands 14G Black 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 07, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
       { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-0 HTX Kingwood 14G Gold (Sept 15, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
       { Match: "Legacy Soccer Legacy 2014 Girls White 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 21, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
+      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-3 HTX Tomball 14G Gold (Sept 28, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
       { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 0-0 HTX West 14G Gold (Oct 12, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
       { Match: "GFI Academy GFI 2015 Girls DPL Next 0-4 Inwood SC ID PSG Academy Houston South 14G Blue (Oct 13, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
       { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 4-1 Inwood SC ID PSG Academy Houston East 14G White (Oct 26, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
+      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-2 HTX South 14G Gold (Nov 02, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
       { Match: "HTX Kingwood 14G Black 0-2 Inwood SC ID PSG Academy Houston South 14G Blue (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
       { Match: "HTX Woodlands 14G White 4-4 Inwood SC ID PSG Academy Houston South 14G Blue (Nov 10, 2024)", HomeTeam: "HTX Woodlands 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 2-1 HTX City 15 W (Nov 15, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-2 HTX South 14G Gold (Nov 16, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
+      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 2-1 HTX City 15 W (Nov 16, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
     ],
     spring2025: [
       { Match: "HTX Kingwood 14G Gold 1-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Feb 08, 2025)", HomeTeam: "HTX Kingwood 14G Gold" },
@@ -202,14 +204,16 @@ const historicalGamesData = {
   },
   "GFI Academy GFI 2014 Girls DPL Next (Bracket B)": {
     fall2024: [
-      { Match: "HTX West 14G Gold 5-0 GFI Academy GFI 2014 Girls DPL Next (Sept 08, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 0-2 Legacy Soccer Legacy 2014 Girls White (Sept 14, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 3-2 Inwood SC ID PSG Academy Houston East 14G White (Sept 21, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "HTX Kingwood 14G Black 3-0 GFI Academy GFI 2014 Girls DPL Next (Sept 28, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 0-7 HTX Tomball 14G Gold (Sept 29, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 0-4 Inwood SC ID PSG Academy Houston South 14G Blue (Oct 13, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "HTX Kingwood 14G Gold 3-0 GFI Academy GFI 2014 Girls DPL Next (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 0-7 HTX Woodlands 14G Black (Nov 23, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
+      { Match: "HTX West 14G Gold 5-0 GFI Academy GFI 2015 Girls DPL Next (Sept 08, 2024)", HomeTeam: "HTX West 14G Gold" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 1-5 HTX City 15 W (Sept 15, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 3-2 Inwood SC ID PSG Academy Houston East 14G White (Sept 21, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
+      { Match: "HTX Kingwood 14G Black 3-0 GFI Academy GFI 2015 Girls DPL Next (Sept 28, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Tomball 14G Gold (Sept 29, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-4 Inwood SC ID PSG Academy Houston South 14G Blue (Oct 13, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
+      { Match: "HTX Woodlands 14G White 3-0 GFI Academy GFI 2015 Girls DPL Next (Oct 12, 2024)", HomeTeam: "HTX Woodlands 14G White" },
+      { Match: "HTX South 14G Gold 3-0 GFI Academy GFI 2015 Girls DPL Next (Oct 27, 2024)", HomeTeam: "HTX South 14G Gold" },
+      { Match: "HTX Kingwood 14G Gold 3-0 GFI Academy GFI 2015 Girls DPL Next (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Woodlands 14G Black (Nov 23, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
     ],
     spring2025: [
       { Match: "GFI Academy GFI 2014 Girls DPL Next 5-0 Legacy Soccer Legacy 2015 Girls Green (Mar 02, 2025)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
@@ -221,16 +225,16 @@ const historicalGamesData = {
   },
   "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)": {
     fall2024: [
-      { Match: "Legacy Soccer Legacy 2014 Girls White 6-0 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 3-2 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Sept 21, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 0-3 HTX Tomball 14G Gold (Sept 22, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 2-4 HTX West 14G Gold (Oct 06, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "HTX Kingwood 14G Black 5-2 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 4-1 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Oct 26, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 0-4 HTX Woodlands 14G Black (Nov 03, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "HTX City 15 W 8-1 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Nov 09, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 1-4 HTX South 14G Gold (Nov 16, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 1-4 HTX South 14G Gold (Nov 17, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
+      { Match: "Legacy Soccer Legacy 2014 Girls White 6-0 Inwood SC ID PSG Academy Houston East 14G White (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 3-2 Inwood SC ID PSG Academy Houston East 14G White (Sept 21, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
+      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-3 HTX Tomball 14G Gold (Sept 22, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
+      { Match: "Inwood SC ID PSG Academy Houston East 14G White 2-4 HTX West 14G Gold (Oct 06, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
+      { Match: "HTX Kingwood 14G Black 5-2 Inwood SC ID PSG Academy Houston East 14G White (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
+      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 4-1 Inwood SC ID PSG Academy Houston East 14G White (Oct 26, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
+      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Woodlands 14G Black (Nov 03, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
+      { Match: "HTX City 15 W 8-1 Inwood SC ID PSG Academy Houston East 14G White (Nov 09, 2024)", HomeTeam: "HTX City 15 W" },
+      { Match: "Inwood SC ID PSG Academy Houston East 14G White 1-4 HTX South 14G Gold (Nov 17, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
+      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Kingwood 14G Gold (Nov 23, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
     ],
     spring2025: [
       { Match: "HTX City 15 W 4-2 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Mar 01, 2025)", HomeTeam: "HTX City 15 W" },
@@ -242,13 +246,15 @@ const historicalGamesData = {
   "HTX Tomball 14G Gold (Bracket C)": {
     fall2024: [
       { Match: "HTX Tomball 14G Gold 7-0 HTX Woodlands 14G White (Sept 07, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-1 HTX Tomball 14G Gold (Sept 08, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
       { Match: "HTX Tomball 14G Gold 7-1 HTX South 14G Gold (Sept 21, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 0-3 HTX Tomball 14G Gold (Sept 22, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
+      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-3 HTX Tomball 14G Gold (Sept 22, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
       { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-3 HTX Tomball 14G Gold (Sept 28, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Tomball 14G Gold (Sept 29, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
       { Match: "HTX Tomball 14G Gold 6-0 HTX Kingwood 14G Gold (Oct 05, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
       { Match: "HTX City 15 W 0-2 HTX Tomball 14G Gold (Oct 12, 2024)", HomeTeam: "HTX City 15 W" },
       { Match: "HTX Tomball 14G Gold 4-1 HTX Kingwood 14G Black (Oct 19, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
+      { Match: "HTX Woodlands 14G Black 0-1 HTX Tomball 14G Gold (Oct 26, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
+      { Match: "HTX Tomball 14G Gold 5-1 Legacy Soccer Legacy 2014 Girls White (Nov 09, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
       { Match: "HTX West 14G Gold 3-2 HTX Tomball 14G Gold (Nov 19, 2024)", HomeTeam: "HTX West 14G Gold" },
     ],
     spring2025: [
@@ -260,31 +266,20 @@ const historicalGamesData = {
     ],
   },
   "Legacy Soccer Legacy 2015 Girls Green (Bracket A)": {
-    fall2024: [
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-1 HTX Tomball 14G Gold (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-0 HTX Woodlands 14G Black (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 15, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 0-0 HTX Woodlands 14G Black (Sept 21, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 0-2 Inwood SC ID PSG Academy Houston East 14G White (Sept 28, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-2 HTX City 15 W (Oct 05, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 0-4 Legacy Soccer Legacy 2014 Girls White (Oct 12, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 0-2 Legacy Soccer Legacy 2014 Girls White (Oct 26, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 8-1 HTX Kingwood 14G Black (Nov 03, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 8-1 HTX Kingwood 14G Black (Nov 17, 2024)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-    ],
+    fall2024: [], // No Fall 2024 games in Super 2 division
     spring2025: [
       { Match: "Legacy Soccer Legacy 2015 Girls Green 1-1 HTX Tomball 14G Gold (Feb 01, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
       { Match: "GFI Academy GFI 2014 Girls DPL Next 5-0 Legacy Soccer Legacy 2015 Girls Green (Mar 02, 2025)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
       { Match: "HTX Woodlands 14G Black 0-1 Legacy Soccer Legacy 2015 Girls Green (Mar 08, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
       { Match: "HTX City 15 E 1-5 Legacy Soccer Legacy 2015 Girls Green (Mar 09, 2025)", HomeTeam: "HTX City 15 E" },
       { Match: "Legacy Soccer Legacy 2015 Girls Green 3-1 HTX City 15 E (Mar 22, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 8-2 The ACDMY The ACDMY 14G (Mar 26, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
+      { Match: "Legacy Soccer Legacy 2015 Girls Green 8-2 The ACDMY The ACDMY 14G (Mar 30, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
     ],
   },
   "Legacy Soccer Legacy 2014 Girls White (Bracket B)": {
     fall2024: [
       { Match: "Legacy Soccer Legacy 2014 Girls White 6-0 Inwood SC ID PSG Academy Houston East 14G White (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 0-2 Legacy Soccer Legacy 2014 Girls White (Sept 14, 2024)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
+      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-2 Legacy Soccer Legacy 2014 Girls White (Sept 14, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
       { Match: "Legacy Soccer Legacy 2014 Girls White 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 21, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
       { Match: "HTX Woodlands 14G White 0-2 Legacy Soccer Legacy 2014 Girls White (Sept 29, 2024)", HomeTeam: "HTX Woodlands 14G White" },
       { Match: "Legacy Soccer Legacy 2014 Girls White 0-5 HTX City 15 W (Oct 05, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
@@ -292,7 +287,7 @@ const historicalGamesData = {
       { Match: "Legacy Soccer Legacy 2014 Girls White 0-3 HTX Woodlands 14G Black (Oct 20, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
       { Match: "HTX Kingwood 14G Gold 2-0 Legacy Soccer Legacy 2014 Girls White (Oct 26, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
       { Match: "Legacy Soccer Legacy 2014 Girls White 2-0 HTX West 14G Gold (Nov 03, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX Woodlands 14G White 4-4 Inwood SC ID PSG Academy Houston South 14G Blue (Nov 10, 2024)", HomeTeam: "HTX Woodlands 14G White" }, // Not a match for this team
+      { Match: "HTX Tomball 14G Gold 5-1 Legacy Soccer Legacy 2014 Girls White (Nov 09, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
       { Match: "Legacy Soccer Legacy 2014 Girls White 8-1 HTX Kingwood 14G Black (Nov 17, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
     ],
     spring2025: [
@@ -364,7 +359,7 @@ const teamRecordsColumns = [
 
 // Columns for detailed games table (Fall 2024, Spring 2025, updated to four columns)
 const detailedGamesColumns = [
-  { Header: 'Team A', accessor: 'TeamA', className: 'sticky-column' },
+  { Header: 'Team A', accessor: 'TeamA' }, // Removed className: 'sticky-column'
   { Header: 'Score Team A', accessor: 'ScoreTeamA' },
   { Header: 'Score Team B', accessor: 'ScoreTeamB' },
   { Header: 'Team B', accessor: 'TeamB' },
@@ -463,56 +458,52 @@ function App() {
 
   // Function to get games for a specific team and determine match result
   const getTeamGames = (teamName) => {
-    const fall2024Games = historicalGamesData[teamName]?.fall2024 || [];
-    const spring2025Games = historicalGamesData[teamName]?.spring2025 || [];
+  const fall2024Games = historicalGamesData[teamName]?.fall2024 || [];
+  const spring2025Games = historicalGamesData[teamName]?.spring2025 || [];
 
-    // Process games to split into four columns and determine result
-    const processGames = (games) => {
-      return games.map(game => {
-        // Extract score and teams
-        const matchParts = game.Match.split(' ');
-        const scoreIndex = matchParts.findIndex(part => part.includes('-')); // Find index of score (e.g., "1-0")
-        const score = matchParts[scoreIndex]; // e.g., "1-0"
-        const dateStartIndex = matchParts.findIndex(part => part.startsWith('('));
-        const date = matchParts.slice(dateStartIndex).join(' '); // e.g., "(Sept 10, 2024)"
+  const processGames = (games) => {
+    return games.map(game => {
+      // Extract score and teams
+      const matchParts = game.Match.split(' ');
+      const scoreIndex = matchParts.findIndex(part => part.includes('-'));
+      const score = matchParts[scoreIndex]; // e.g., "1-0"
+      const dateStartIndex = matchParts.findIndex(part => part.startsWith('('));
+      const date = matchParts.slice(dateStartIndex).join(' ');
 
-        // Split the score into home and away scores
-        const [scoreTeamA, scoreTeamB] = score.split('-').map(Number);
+      // Split score
+      const [scoreTeamA, scoreTeamB] = score.split('-').map(Number);
 
-        // Team A is the home team, Team B is the away team
-        const teamA = game.HomeTeam;
-        const teamB = teamA === teamName
-          ? matchParts.slice(scoreIndex + 1, dateStartIndex).join(' ') // Opponent is Team B if teamName is home
-          : teamName; // teamName is Team B if not home
+      // Determine teams
+      const teamA = game.HomeTeam;
+      const teamB = teamA === teamName
+        ? matchParts.slice(scoreIndex + 1, dateStartIndex).join(' ')
+        : matchParts.slice(0, scoreIndex).join(' ');
 
-        // Determine the result from the expanded team's perspective
-        let result;
-        const teamAScore = scoreTeamA;
-        const teamBScore = scoreTeamB;
+      // Determine result from expanded team's perspective
+      let result;
+      if (scoreTeamA > scoreTeamB) {
+        result = teamName === teamA ? 'win' : 'loss';
+      } else if (scoreTeamA < scoreTeamB) {
+        result = teamName === teamB ? 'win' : 'loss';
+      } else {
+        result = 'draw';
+      }
 
-        if (teamAScore > teamBScore) {
-          result = teamName === teamA ? 'win' : 'loss';
-        } else if (teamAScore < teamBScore) {
-          result = teamName === teamB ? 'win' : 'loss';
-        } else {
-          result = 'draw';
-        }
-
-        return {
-          TeamA: teamA,
-          ScoreTeamA: scoreTeamA,
-          ScoreTeamB: scoreTeamB,
-          TeamB: teamB,
-          Result: result,
-        };
-      });
-    };
-
-    return {
-      fall2024: processGames(fall2024Games),
-      spring2025: processGames(spring2025Games),
-    };
+      return {
+        TeamA: teamA,
+        ScoreTeamA: scoreTeamA,
+        ScoreTeamB: scoreTeamB,
+        TeamB: teamB,
+        Result: result,
+      };
+    });
   };
+
+  return {
+    fall2024: processGames(fall2024Games),
+    spring2025: processGames(spring2025Games),
+  };
+};
 
   // Function to toggle expanded team
   const toggleTeamDetails = (teamName) => {
@@ -730,14 +721,13 @@ function App() {
         prepareTeamRecordsRow(row);
         const teamName = row.original.Team;
         const isExpanded = expandedTeam === teamName;
-        const teamGames = getTeamGames(teamName) || { fall2024: [], spring2025: [] }; // Fallback for safety
+        const teamGames = getTeamGames(teamName);
 
         return (
           <React.Fragment key={row.id}>
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => (
                 <td
-                  key={cell.getCellProps().key}
                   {...cell.getCellProps()}
                   className={cell.column.className}
                   onClick={() => cell.column.Header === 'Team' && toggleTeamDetails(teamName)}
@@ -762,20 +752,20 @@ function App() {
                       <thead className="thead-dark">
                         <tr>
                           {detailedGamesColumns.map(column => (
-                            <th key={column.Header} className={column.className}>
+                            <th key={column.Header}>
                               {column.Header}
                             </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {teamGames.fall2024.length ? (
+                        {teamGames.fall2024.length > 0 ? (
                           teamGames.fall2024.map((game, index) => (
                             <tr
-                              key={`${teamName}-fall-${index}`}
+                              key={`fall-${teamName}-${index}`}
                               className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}
                             >
-                              <td className="sticky-column">{game.TeamA}</td>
+                              <td>{game.TeamA}</td>
                               <td>{game.ScoreTeamA}</td>
                               <td>{game.ScoreTeamB}</td>
                               <td>{game.TeamB}</td>
@@ -794,20 +784,20 @@ function App() {
                       <thead className="thead-dark">
                         <tr>
                           {detailedGamesColumns.map(column => (
-                            <th key={column.Header} className={column.className}>
+                            <th key={column.Header}>
                               {column.Header}
                             </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
-                        {teamGames.spring2025.length ? (
+                        {teamGames.spring2025.length > 0 ? (
                           teamGames.spring2025.map((game, index) => (
                             <tr
-                              key={`${teamName}-spring-${index}`}
+                              key={`spring-${teamName}-${index}`}
                               className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}
                             >
-                              <td className="sticky-column">{game.TeamA}</td>
+                              <td>{game.TeamA}</td>
                               <td>{game.ScoreTeamA}</td>
                               <td>{game.ScoreTeamB}</td>
                               <td>{game.TeamB}</td>
