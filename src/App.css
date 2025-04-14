@@ -126,6 +126,13 @@ h4 {
   max-width: 100%;
 }
 
+.win-row {
+  background-color: #e8f5e9; /* Green for wins */
+}
+.loss-row {
+  background-color: #ffebee; /* Red for losses */
+}
+
 /* Simplified highlighting for match results */
 tr.win-row {
   background-color: #e6f4e6 !important; /* Light green for wins */
