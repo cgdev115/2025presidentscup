@@ -1,13 +1,13 @@
 body {
   background-color: #f8f9fa;
   font-family: 'Arial', sans-serif;
-  min-height: 100vh; /* Ensure the body takes up the full viewport height */
+  min-height: 100vh;
 }
 
 h1 {
   color: #343a40;
   font-weight: bold;
-  font-size: 1.8rem; /* Smaller font size for mobile */
+  font-size: 1.8rem;
 }
 
 h2 {
@@ -17,9 +17,9 @@ h2 {
 }
 
 h3.subtitle {
-  color: #6c757d; /* Lighter gray color to differentiate from the main title */
+  color: #6c757d;
   font-weight: normal;
-  font-size: 1.2rem; /* Smaller than the main title */
+  font-size: 1.2rem;
 }
 
 h4 {
@@ -32,7 +32,7 @@ h4 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   width: 100%;
-  table-layout: auto; /* Allow table to adjust column widths */
+  table-layout: auto;
 }
 
 .thead-dark th {
@@ -40,22 +40,23 @@ h4 {
   color: #ffffff;
   font-weight: bold;
   text-align: center;
-  white-space: normal; /* Allow header text to wrap */
-  padding: 8px; /* Reduced padding for mobile */
-  font-size: 0.9rem; /* Smaller font size for headers */
+  white-space: normal;
+  padding: 8px;
+  font-size: 0.9rem;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
   background-color: #f2f2f2;
 }
 
-.table td, .table th {
+.table td,
+.table th {
   vertical-align: middle;
   text-align: center;
-  padding: 6px; /* Reduced padding for mobile */
-  font-size: 0.85rem; /* Smaller font size for cells */
-  white-space: normal; /* Allow text to wrap */
-  word-wrap: break-word; /* Ensure long words break */
+  padding: 6px;
+  font-size: 0.85rem;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .table th:hover {
@@ -65,57 +66,47 @@ h4 {
 
 .table-responsive {
   margin-top: 20px;
-  overflow-x: auto; /* Ensure horizontal scrolling if needed */
-  -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Styling for semifinalist rows */
 .semifinalist-row {
-  font-weight: bold; /* Make text bold for semifinalist rows */
+  font-weight: bold;
 }
 
-/* Styling for sticky Team column */
+/* Sticky column for main tables only */
 .sticky-column {
   position: sticky;
   left: 0;
-  z-index: 1; /* Ensure it stays above other columns */
-  border-right: 2px solid #dee2e6; /* Add a border to separate from other columns */
+  z-index: 1;
+  background-color: #ffffff;
+  border-right: 2px solid #dee2e6;
 }
 
-/* Ensure sticky column in header has the dark background */
 .thead-dark th.sticky-column {
   background-color: #343a40;
   color: #ffffff;
-  z-index: 2; /* Higher z-index for header to stay above body cells */
+  z-index: 2;
 }
 
-/* Ensure sticky column in table body has a solid white background */
-.table tbody td.sticky-column {
-  background-color: #ffffff; /* Solid white background to prevent scrolling text from showing through */
-  z-index: 1;
-}
-
-/* Styling for the header image */
 .header-image {
   text-align: center;
   margin-bottom: 20px;
 }
 
 .header-image img {
-  max-width: 300px; /* Default size for desktop */
+  max-width: 300px;
   height: auto;
 }
 
-/* Styling for the disclaimer footer */
 .disclaimer {
-  color: #6c757d; /* Lighter gray color for a subtle look */
-  font-size: 0.9rem; /* Smaller font size */
-  padding: 20px 0; /* Add padding for spacing */
-  border-top: 1px solid #dee2e6; /* Add a subtle separator line */
-  visibility: visible !important; /* Ensure the disclaimer is visible */
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 20px 0;
+  border-top: 1px solid #dee2e6;
+  visibility: visible !important;
 }
 
-/* Styling for the expanded details section */
 .expanded-details {
   padding: 10px 0;
   background-color: #f8f9fa;
@@ -129,38 +120,33 @@ h4 {
 .win-row {
   background-color: #e8f5e9; /* Green for wins */
 }
+
 .loss-row {
   background-color: #ffebee; /* Red for losses */
 }
 
-/* Simplified highlighting for match results */
-tr.win-row {
-  background-color: #e6f4e6 !important; /* Light green for wins */
-}
-
-tr.loss-row {
-  background-color: #f4e6e6 !important; /* Light red for losses */
-}
-
-/* Fallback to ensure highlighting applies to cells */
+/* Ensure highlighting applies consistently */
+tr.win-row,
 tr.win-row td {
-  background-color: #e6f4e6 !important; /* Light green for wins */
+  background-color: #e8f5e9 !important;
 }
 
+tr.loss-row,
 tr.loss-row td {
-  background-color: #f4e6e6 !important; /* Light red for losses */
+  background-color: #ffebee !important;
 }
 
-/* Ensure sticky column retains its background */
-tr.win-row td.sticky-column,
-tr.loss-row td.sticky-column {
-  background-color: #ffffff !important; /* Keep sticky column white */
+/* Override sticky-column for detailed games tables */
+.expanded-section .table td,
+.expanded-section .table th {
+  position: static; /* Remove sticky behavior */
+  z-index: 0;
+  background-color: inherit; /* Use table's default background */
 }
 
-/* Ensure sticky behavior and background are enforced on mobile */
 @media (max-width: 768px) {
   h1 {
-    font-size: 1.5rem; /* Even smaller font size for mobile */
+    font-size: 1.5rem;
   }
 
   h2 {
@@ -168,16 +154,17 @@ tr.loss-row td.sticky-column {
   }
 
   h3.subtitle {
-    font-size: 1rem; /* Smaller subtitle on mobile */
+    font-size: 1rem;
   }
 
   h4 {
     font-size: 1rem;
   }
 
-  .table td, .table th {
-    font-size: 0.75rem; /* Further reduce font size on mobile */
-    padding: 4px; /* Further reduce padding */
+  .table td,
+  .table th {
+    font-size: 0.75rem;
+    padding: 4px;
   }
 
   .thead-dark th {
@@ -186,24 +173,22 @@ tr.loss-row td.sticky-column {
   }
 
   .container {
-    padding: 10px; /* Reduce padding on mobile */
+    padding: 10px;
   }
 
-  /* Ensure table fits within the screen width */
   .table {
     min-width: 100%;
   }
 
-  /* Adjust column widths for better readability */
-  .table th, .table td {
-    max-width: 150px; /* Limit column width to prevent excessive stretching */
+  .table th,
+  .table td {
+    max-width: 150px;
   }
 
-  /* Ensure sticky column works on mobile */
   .sticky-column {
     position: sticky;
     left: 0;
-    min-width: 150px; /* Ensure Team column has enough width */
+    min-width: 150px;
     border-right: 2px solid #dee2e6;
   }
 
@@ -212,16 +197,10 @@ tr.loss-row td.sticky-column {
     color: #ffffff;
   }
 
-  .table tbody td.sticky-column {
-    background-color: #ffffff; /* Solid white background on mobile */
-  }
-
-  /* Adjust header image size for mobile */
   .header-image img {
-    max-width: 200px; /* Smaller size for mobile */
+    max-width: 200px;
   }
 
-  /* Adjust disclaimer font size for mobile */
   .disclaimer {
     font-size: 0.8rem;
   }
@@ -237,14 +216,15 @@ tr.loss-row td.sticky-column {
   }
 
   h3.subtitle {
-    font-size: 0.9rem; /* Even smaller subtitle on very small screens */
+    font-size: 0.9rem;
   }
 
   h4 {
     font-size: 0.9rem;
   }
 
-  .table td, .table th {
+  .table td,
+  .table th {
     font-size: 0.65rem;
     padding: 3px;
   }
@@ -254,20 +234,19 @@ tr.loss-row td.sticky-column {
     padding: 5px;
   }
 
-  .table th, .table td {
-    max-width: 120px; /* Further reduce column width on very small screens */
+  .table th,
+  .table td {
+    max-width: 120px;
   }
 
   .sticky-column {
-    min-width: 120px; /* Adjust for smaller screens */
+    min-width: 120px;
   }
 
-  /* Further adjust header image size for very small screens */
   .header-image img {
-    max-width: 150px; /* Even smaller for very small screens */
+    max-width: 150px;
   }
 
-  /* Further adjust disclaimer font size for very small screens */
   .disclaimer {
     font-size: 0.7rem;
   }
