@@ -710,107 +710,119 @@ function App() {
           </table>
         </div>
 
-        {/* Team Records Table with Expandable Details */}
-        <h2 className="text-center mb-3 mt-5">Team Records</h2>
-        <div className="table-responsive">
-          <table {...getTeamRecordsTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {teamRecordsHeaderGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()} className={column.className}>
-                      {column.render('Header')}
-                    </th>
-                  ))}
-                </tr>
+       {/* Team Records Table with Expandable Details */}
+<h2 className="text-center mb-3 mt-5">Team Records</h2>
+<div className="table-responsive">
+  <table {...getTeamRecordsTableProps()} className="table table-striped table-bordered">
+    <thead className="thead-dark">
+      {teamRecordsHeaderGroups.map(headerGroup => (
+        <tr {...headerGroup.getHeaderGroupProps()}>
+          {headerGroup.headers.map(column => (
+            <th {...column.getHeaderProps()} className={column.className}>
+              {column.render('Header')}
+            </th>
+          ))}
+        </tr>
+      ))}
+    </thead>
+    <tbody {...getTeamRecordsTableBodyProps()}>
+      {teamRecordsRows.map(row => {
+        prepareTeamRecordsRow(row);
+        const teamName = row.original.Team;
+        const isExpanded = expandedTeam === teamName;
+        const teamGames = getTeamGames(teamName);
+
+        return (
+          <React.Fragment key={row.id}>
+            <tr {...row.getRowProps()}>
+              {row.cells.map(cell => (
+                <td
+                  {...cell.getCellProps()}
+                  className={cell.column.className}
+                  onClick={() => cell.column.Header === 'Team' && toggleTeamDetails(teamName)}
+                  style={cell.column.Header === 'Team' ? { cursor: 'pointer' } : {}}
+                >
+                  {cell.column.Header === 'Team' ? (
+                    <span>
+                      {cell.render('Cell')} {isExpanded ? '▼' : '▶'}
+                    </span>
+                  ) : (
+                    cell.render('Cell')
+                  )}
+                </td>
               ))}
-            </thead>
-            <tbody {...getTeamRecordsTableBodyProps()}>
-              {teamRecordsRows.map(row => {
-                prepareTeamRecordsRow(row);
-                const teamName = row.original.Team;
-                const isExpanded = expandedTeam === teamName;
-                const teamGames = getTeamGames(teamName);
+            </tr>
+            {isExpanded && (
+              <tr>
+                <td colSpan={teamRecordsColumns.length} className="expanded-details">
+                  <div className="expanded-section">
+                    <h4 className="text-center mb-3">Fall 2024 Games</h4>
+                    <table className="table table-bordered">
+                      <thead className="thead-dark">
+                        <tr>
+                          {detailedGamesColumns.map(column => (
+                            <th key={column.Header} className={column.className}>
+                              {column.Header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {teamGames.fall2024.length > 0 ? (
+                          teamGames.fall2024.map((game, index) => (
+                            <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
+                              <td className="sticky-column">{game.TeamA}</td>
+                              <td>{game.ScoreTeamA}</td>
+                              <td>{game.ScoreTeamB}</td>
+                              <td>{game.TeamB}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4}>No games available</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
 
-                return (
-                  <React.Fragment key={row.id}>
-                    <tr {...row.getRowProps()}>
-                      {row.cells.map(cell => (
-                        <td
-                          {...cell.getCellProps()}
-                          className={cell.column.className}
-                          onClick={() => cell.column.Header === 'Team' && toggleTeamDetails(teamName)}
-                          style={cell.column.Header === 'Team' ? { cursor: 'pointer' } : {}}
-                        >
-                          {cell.column.Header === 'Team' ? (
-                            <span>
-                              {cell.render('Cell')} {isExpanded ? '▼' : '▶'}
-                            </span>
-                          ) : (
-                            cell.render('Cell')
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                    {isExpanded && (
-                      <tr>
-                        <td colSpan={teamRecordsColumns.length} className="expanded-details">
-                          <div className="expanded-section">
-                            <h4 className="text-center mb-3">Fall 2024 Games</h4>
-                            <table className="table table-bordered">
-                              <thead className="thead-dark">
-                                <tr>
-                                  {detailedGamesColumns.map(column => (
-                                    <th key={column.Header} className={column.className}>
-                                      {column.Header}
-                                    </th>
-                                  ))}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {teamGames.fall2024.map((game, index) => (
-                                  <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
-                                    <td className="sticky-column">{game.TeamA}</td>
-                                    <td>{game.ScoreTeamA}</td>
-                                    <td>{game.ScoreTeamB}</td>
-                                    <td>{game.TeamB}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-
-                            <h4 className="text-center mb-3 mt-4">Spring 2025 Games</h4>
-                            <table className="table table-bordered">
-                              <thead className="thead-dark">
-                                <tr>
-                                  {detailedGamesColumns.map(column => (
-                                    <th key={column.Header} className={column.className}>
-                                      {column.Header}
-                                    </th>
-                                  ))}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {teamGames.spring2025.map((game, index) => (
-                                  <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
-                                    <td className="sticky-column">{game.TeamA}</td>
-                                    <td>{game.ScoreTeamA}</td>
-                                    <td>{game.ScoreTeamB}</td>
-                                    <td>{game.TeamB}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                    <h4 className="text-center mb-3 mt-4">Spring 2025 Games</h4>
+                    <table className="table table-bordered">
+                      <thead className="thead-dark">
+                        <tr>
+                          {detailedGamesColumns.map(column => (
+                            <th key={column.Header} className={column.className}>
+                              {column.Header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {teamGames.spring2025.length > 0 ? (
+                          teamGames.spring2025.map((game, index) => (
+                            <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
+                              <td className="sticky-column">{game.TeamA}</td>
+                              <td>{game.ScoreTeamA}</td>
+                              <td>{game.ScoreTeamB}</td>
+                              <td>{game.TeamB}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4}>No games available</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            )}
+          </React.Fragment>
+        );
+      })}
+    </tbody>
+  </table>
+</div>
 
         {/* Humorous Disclaimer */}
         <footer className="text-center mt-5 mb-3 disclaimer">
