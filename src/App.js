@@ -764,7 +764,7 @@ function App() {
                               <tbody>
                                 {teamGames.fall2024.map((game, index) => (
                                   <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
-                                    <td className="sticky-column">{game.TeamScore}</td>
+                                    <td>{game.TeamScore}</td>
                                     <td>{game.OpponentScore}</td>
                                     <td>{game.OpponentDate}</td>
                                   </tr>
@@ -786,7 +786,7 @@ function App() {
                               <tbody>
                                 {teamGames.spring2025.map((game, index) => (
                                   <tr key={index} className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}>
-                                    <td className="sticky-column">{game.TeamScore}</td>
+                                    <td>{game.TeamScore}</td>
                                     <td>{game.OpponentScore}</td>
                                     <td>{game.OpponentDate}</td>
                                   </tr>
