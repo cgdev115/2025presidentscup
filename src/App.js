@@ -79,14 +79,14 @@ const remainingTournamentGames = [
   },
 ];
 
-// Initial playoff data (will be updated dynamically)
+// Initial playoff data (updated probabilities for A1 vs. W3)
 const initialPlayoffData = [
   {
     Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
     Team1: "HTX Kingwood 14G Gold (Bracket A)",
-    Team1Chance: "71.25%",
+    Team1Chance: "30%", // Updated probability
     Team2: "HTX Woodlands 14G Black (Bracket A)",
-    Team2Chance: "10%",
+    Team2Chance: "70%", // Updated probability
   },
   {
     Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
@@ -326,9 +326,9 @@ function App() {
       {
         Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
         Team1: a1Team.Team,
-        Team1Chance: a1Team.SemifinalPosition ? "71.25%" : "TBD",
+        Team1Chance: a1Team.SemifinalPosition ? "30%" : "TBD",
         Team2: w3Team.Team,
-        Team2Chance: w3Team.SemifinalPosition ? "10%" : "TBD",
+        Team2Chance: w3Team.SemifinalPosition ? "70%" : "TBD",
       },
       {
         Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
