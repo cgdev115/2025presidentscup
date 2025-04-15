@@ -84,9 +84,9 @@ const initialPlayoffData = [
   {
     Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
     Team1: "HTX Kingwood 14G Gold (Bracket A)",
-    Team1Chance: "30%", // Updated probability
+    Team1Chance: "30%",
     Team2: "HTX Woodlands 14G Black (Bracket A)",
-    Team2Chance: "70%", // Updated probability
+    Team2Chance: "70%",
   },
   {
     Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
@@ -282,13 +282,7 @@ function App() {
       }
     });
 
-    // Sort standings by PTS (descending), then GD (descending)
-    newStandings.sort((a, b) => {
-      if (b.PTS !== a.PTS) return b.PTS - a.PTS;
-      return b.GD - a.GD;
-    });
-
-    // Determine new semifinal positions
+    // Determine semifinal positions
     // A1: Top team in Bracket A
     const bracketATeams = newStandings.filter(team => team.Bracket === "A");
     bracketATeams.sort((a, b) => {
@@ -296,8 +290,7 @@ function App() {
       return b.GD - a.GD;
     });
     if (bracketATeams.length > 0) {
-      const a1Team = bracketATeams[0];
-      a1Team.SemifinalPosition = "A1";
+      bracketATeams[0].SemifinalPosition = "A1";
     }
 
     // W1, W2, W3: Top 3 teams in Brackets B and C
@@ -315,6 +308,12 @@ function App() {
         bracketBCTeams[2].SemifinalPosition = "W3";
       }
     }
+
+    // Sort standings by PTS (descending), then GD (descending) for display
+    newStandings.sort((a, b) => {
+      if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+      return b.GD - a.GD;
+    });
 
     // Update playoff data with new teams
     const a1Team = newStandings.find(team => team.SemifinalPosition === "A1") || { Team: "TBD" };
@@ -438,38 +437,51 @@ function App() {
       <h3 className="text-center subtitle mb-4">Female U11 - Eastern District Playoffs</h3>
 
       {/* Standings Table with Input Form for Remaining Tournament Games */}
-      <h2 className="text-center mb-3">Current Standings</h2>
-      <h4 className="text-center mb-3">Enter Scores for Remaining Group Play Games</h4>
-      <div className="mb-4">
+      <h2 className="text-center mb-4">Enter Scores for Remaining Group Play Games</h2>
+      <div className="game-entry-container">
         {remainingTournamentGames.map(game => (
-          <div key={game.id} className="mb-3">
-            <p>
-              {game.date}: {game.matchup} ({game.homeTeam} vs {game.awayTeam})
-            </p>
-            <div className="d-flex align-items-center justify-content-center">
-              <input
-                type="number"
-                className="form-control w-25 mx-2"
-                placeholder="Home Score"
-                value={gameScores[game.id].homeScore}
-                onChange={(e) => handleScoreChange(game.id, 'homeScore', e.target.value)}
-                min="0"
-                step="1"
-              />
-              <span> - </span>
-              <input
-                type="number"
-                className="form-control w-25 mx-2"
-                placeholder="Away Score"
-                value={gameScores[game.id].awayScore}
-                onChange={(e) => handleScoreChange(game.id, 'awayScore', e.target.value)}
-                min="0"
-                step="1"
-              />
+          <div key={game.id} className="game-entry-card">
+            <div className="game-entry-header">
+              <span className="game-date">{game.date}</span>
+              <span className="game-matchup">{game.matchup}</span>
+            </div>
+            <div className="game-teams">
+              <span className="team-name">{game.homeTeam}</span>
+              <span className="vs-label">vs</span>
+              <span className="team-name">{game.awayTeam}</span>
+            </div>
+            <div className="score-input-group">
+              <div className="score-input">
+                <label className="score-label">Home</label>
+                <input
+                  type="number"
+                  className="form-control score-field"
+                  placeholder="0"
+                  value={gameScores[game.id].homeScore}
+                  onChange={(e) => handleScoreChange(game.id, 'homeScore', e.target.value)}
+                  min="0"
+                  step="1"
+                />
+              </div>
+              <span className="score-divider">-</span>
+              <div className="score-input">
+                <label className="score-label">Away</label>
+                <input
+                  type="number"
+                  className="form-control score-field"
+                  placeholder="0"
+                  value={gameScores[game.id].awayScore}
+                  onChange={(e) => handleScoreChange(game.id, 'awayScore', e.target.value)}
+                  min="0"
+                  step="1"
+                />
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      <h2 className="text-center mb-3 mt-5">Current Standings</h2>
       <div className="table-responsive">
         <table {...getStandingsTableProps()} className="table table-striped table-bordered">
           <thead className="thead-dark">
