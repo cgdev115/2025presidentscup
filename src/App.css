@@ -74,7 +74,6 @@ h4 {
   font-weight: bold;
 }
 
-/* Sticky column for main tables only */
 .sticky-column {
   position: sticky;
   left: 0;
@@ -107,41 +106,21 @@ h4 {
   visibility: visible !important;
 }
 
-.expanded-details {
-  padding: 10px 0;
-  background-color: #f8f9fa;
+.form-control {
+  width: 80px;
+  display: inline-block;
+  text-align: center;
 }
 
-.expanded-section {
-  margin: 0 auto;
-  max-width: 100%;
+/* Remove up/down arrows on number inputs */
+.form-control[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
 }
 
-.win-row {
-  background-color: #e8f5e9; /* Green for wins */
-}
-
-.loss-row {
-  background-color: #ffebee; /* Red for losses */
-}
-
-/* Ensure highlighting applies consistently */
-tr.win-row,
-tr.win-row td {
-  background-color: #e8f5e9 !important;
-}
-
-tr.loss-row,
-tr.loss-row td {
-  background-color: #ffebee !important;
-}
-
-/* Override sticky-column for detailed games tables */
-.expanded-section .table td,
-.expanded-section .table th {
-  position: static; /* Remove sticky behavior */
-  z-index: 0;
-  background-color: inherit; /* Use table's default background */
+.form-control[type="number"]::-webkit-inner-spin-button,
+.form-control[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  margin: 0;
 }
 
 @media (max-width: 768px) {
@@ -204,6 +183,10 @@ tr.loss-row td {
   .disclaimer {
     font-size: 0.8rem;
   }
+
+  .form-control {
+    width: 60px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -249,5 +232,9 @@ tr.loss-row td {
 
   .disclaimer {
     font-size: 0.7rem;
+  }
+
+  .form-control {
+    width: 50px;
   }
 }
