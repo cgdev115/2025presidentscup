@@ -6,16 +6,16 @@ import './App.css';
 
 // Initial standings data (as of April 13, 2025)
 const initialStandingsData = [
-  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 2, W: 1, L: 0, D: 1, GF: 2, GA: 1, GD: 1, PTS: 4, PPG: "2.0", SemifinalPosition: "W1" },
-  { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0", SemifinalPosition: "W2" },
-  { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "W3" },
-  { Team: "HTX City 15 W (Bracket B)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "" },
-  { Team: "HTX Kingwood 14G Gold (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 1, GD: 1, PTS: 3, PPG: "1.5", SemifinalPosition: "A1" },
-  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 2, GD: -1, PTS: 3, PPG: "1.5", SemifinalPosition: "" },
-  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "" },
-  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", MP: 2, W: 0, L: 0, D: 2, GF: 1, GA: 1, GD: 0, PTS: 2, PPG: "1.0", SemifinalPosition: "" },
-  { Team: "HTX Tomball 14G Gold (Bracket C)", MP: 2, W: 0, L: 1, D: 1, GF: 0, GA: 1, GD: -1, PTS: 1, PPG: "0.5", SemifinalPosition: "" },
-  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 1, GD: -1, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
+  { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 2, W: 1, L: 0, D: 1, GF: 2, GA: 1, GD: 1, PTS: 4, PPG: "2.0", SemifinalPosition: "W1", Bracket: "C" },
+  { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0", SemifinalPosition: "W2", Bracket: "C" },
+  { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "W3", Bracket: "A" },
+  { Team: "HTX City 15 W (Bracket B)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "", Bracket: "B" },
+  { Team: "HTX Kingwood 14G Gold (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 1, GD: 1, PTS: 3, PPG: "1.5", SemifinalPosition: "A1", Bracket: "A" },
+  { Team: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 2, GD: -1, PTS: 3, PPG: "1.5", SemifinalPosition: "", Bracket: "A" },
+  { Team: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 1, GA: 1, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "", Bracket: "A" },
+  { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", MP: 2, W: 0, L: 0, D: 2, GF: 1, GA: 1, GD: 0, PTS: 2, PPG: "1.0", SemifinalPosition: "", Bracket: "B" },
+  { Team: "HTX Tomball 14G Gold (Bracket C)", MP: 2, W: 0, L: 1, D: 1, GF: 0, GA: 1, GD: -1, PTS: 1, PPG: "0.5", SemifinalPosition: "", Bracket: "C" },
+  { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 1, GD: -1, PTS: 0, PPG: "0.0", SemifinalPosition: "", Bracket: "B" },
 ];
 
 // Game results data (tournament games up to April 13, 2025)
@@ -77,20 +77,38 @@ const remainingTournamentGames = [
     awayTeam: "HTX West 14G Gold (Bracket C)",
     matchup: "Group Play - Bracket B/C",
   },
-  // Semifinals
+  // Semifinals (teams will be updated dynamically)
   {
     id: 7,
     date: "May 03, 2025",
-    homeTeam: "HTX Kingwood 14G Gold (Bracket A)",
-    awayTeam: "HTX Woodlands 14G Black (Bracket A)",
+    homeTeam: "HTX Kingwood 14G Gold (Bracket A)", // A1 (to be updated)
+    awayTeam: "HTX Woodlands 14G Black (Bracket A)", // W3 (to be updated)
     matchup: "A1 vs. Wildcard #3",
   },
   {
     id: 8,
     date: "May 03, 2025",
-    homeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)",
-    awayTeam: "HTX West 14G Gold (Bracket C)",
+    homeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", // W1 (to be updated)
+    awayTeam: "HTX West 14G Gold (Bracket C)", // W2 (to be updated)
     matchup: "Wildcard #1 vs. Wildcard #2",
+  },
+];
+
+// Initial playoff data (will be updated dynamically)
+const initialPlayoffData = [
+  {
+    Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
+    Team1: "HTX Kingwood 14G Gold (Bracket A)",
+    Team1Chance: "71.25%",
+    Team2: "HTX Woodlands 14G Black (Bracket A)",
+    Team2Chance: "10%",
+  },
+  {
+    Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
+    Team1: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)",
+    Team1Chance: "34.65%",
+    Team2: "HTX West 14G Gold (Bracket C)",
+    Team2Chance: "61.75%",
   },
 ];
 
@@ -120,24 +138,6 @@ const pointsData = [
   { Team: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)", ProjectedPoints: "3.0" },
   { Team: "HTX Tomball 14G Gold (Bracket C)", ProjectedPoints: "1.5" },
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", ProjectedPoints: "0.0" },
-];
-
-// Projected playoffs data (for reference, not editable)
-const playoffData = [
-  {
-    Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
-    Team1: "HTX Kingwood 14G Gold (Bracket A)",
-    Team1Chance: "71.25%",
-    Team2: "HTX Woodlands 14G Black (Bracket A)",
-    Team2Chance: "10%",
-  },
-  {
-    Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
-    Team1: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)",
-    Team1Chance: "34.65%",
-    Team2: "HTX West 14G Gold (Bracket C)",
-    Team2Chance: "61.75%",
-  },
 ];
 
 // Team records data
@@ -215,6 +215,8 @@ const teamRecordsColumns = [
 function App() {
   // State for standings (dynamic)
   const [standings, setStandings] = useState(initialStandingsData);
+  // State for playoff data (dynamic)
+  const [playoffData, setPlayoffData] = useState(initialPlayoffData);
   // State for user-entered scores
   const [gameScores, setGameScores] = useState(
     remainingTournamentGames.reduce((acc, game) => {
@@ -237,10 +239,16 @@ function App() {
     }
   };
 
-  // Function to update standings based on user-entered scores
+  // Function to update standings and semifinal positions
   useEffect(() => {
     let newStandings = [...initialStandingsData].map(team => ({ ...team }));
 
+    // Reset SemifinalPosition for all teams
+    newStandings.forEach(team => {
+      team.SemifinalPosition = "";
+    });
+
+    // Update standings based on user-entered scores
     remainingTournamentGames.forEach(game => {
       const scores = gameScores[game.id];
       const homeScore = Number(scores.homeScore);
@@ -295,7 +303,59 @@ function App() {
       return b.GD - a.GD;
     });
 
+    // Determine new semifinal positions
+    // A1: Top team in Bracket A
+    const bracketATeams = newStandings.filter(team => team.Bracket === "A");
+    bracketATeams.sort((a, b) => {
+      if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+      return b.GD - a.GD;
+    });
+    if (bracketATeams.length > 0) {
+      const a1Team = bracketATeams[0];
+      a1Team.SemifinalPosition = "A1";
+    }
+
+    // W1, W2, W3: Top 3 teams in Brackets B and C
+    const bracketBCTeams = newStandings.filter(team => team.Bracket === "B" || team.Bracket === "C");
+    bracketBCTeams.sort((a, b) => {
+      if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+      return b.GD - a.GD;
+    });
+    if (bracketBCTeams.length > 0) {
+      bracketBCTeams[0].SemifinalPosition = "W1";
+      if (bracketBCTeams.length > 1) {
+        bracketBCTeams[1].SemifinalPosition = "W2";
+      }
+      if (bracketBCTeams.length > 2) {
+        bracketBCTeams[2].SemifinalPosition = "W3";
+      }
+    }
+
+    // Update playoff data with new teams
+    const a1Team = newStandings.find(team => team.SemifinalPosition === "A1") || { Team: "TBD" };
+    const w1Team = newStandings.find(team => team.SemifinalPosition === "W1") || { Team: "TBD" };
+    const w2Team = newStandings.find(team => team.SemifinalPosition === "W2") || { Team: "TBD" };
+    const w3Team = newStandings.find(team => team.SemifinalPosition === "W3") || { Team: "TBD" };
+
+    const newPlayoffData = [
+      {
+        Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
+        Team1: a1Team.Team,
+        Team1Chance: a1Team.SemifinalPosition ? "71.25%" : "TBD",
+        Team2: w3Team.Team,
+        Team2Chance: w3Team.SemifinalPosition ? "10%" : "TBD",
+      },
+      {
+        Matchup: "Wildcard #1 vs. Wildcard #2 (Saturday, May 03, 2025 at Bear Creek Park - Field 23S)",
+        Team1: w1Team.Team,
+        Team1Chance: w1Team.SemifinalPosition ? "34.65%" : "TBD",
+        Team2: w2Team.Team,
+        Team2Chance: w2Team.SemifinalPosition ? "61.75%" : "TBD",
+      },
+    ];
+
     setStandings(newStandings);
+    setPlayoffData(newPlayoffData);
   }, [gameScores]);
 
   // Table instances
