@@ -31,7 +31,7 @@ const gameResultsData = [
   { Match: "Legacy Soccer Legacy 2015 Girls Green 1-0 HTX Kingwood 14G Gold (Bracket A, April 13)" },
 ];
 
-// Remaining tournament games (group play and semifinals)
+// Remaining tournament games (group play only)
 const remainingTournamentGames = [
   // Group Play - Bracket A
   {
@@ -76,21 +76,6 @@ const remainingTournamentGames = [
     homeTeam: "Legacy Soccer Legacy 2014 Girls White (Bracket B)",
     awayTeam: "HTX West 14G Gold (Bracket C)",
     matchup: "Group Play - Bracket B/C",
-  },
-  // Semifinals (teams will be updated dynamically)
-  {
-    id: 7,
-    date: "May 03, 2025",
-    homeTeam: "HTX Kingwood 14G Gold (Bracket A)", // A1 (to be updated)
-    awayTeam: "HTX Woodlands 14G Black (Bracket A)", // W3 (to be updated)
-    matchup: "A1 vs. Wildcard #3",
-  },
-  {
-    id: 8,
-    date: "May 03, 2025",
-    homeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", // W1 (to be updated)
-    awayTeam: "HTX West 14G Gold (Bracket C)", // W2 (to be updated)
-    matchup: "Wildcard #1 vs. Wildcard #2",
   },
 ];
 
@@ -454,7 +439,7 @@ function App() {
 
       {/* Standings Table with Input Form for Remaining Tournament Games */}
       <h2 className="text-center mb-3">Current Standings</h2>
-      <h4 className="text-center mb-3">Enter Scores for Remaining Tournament Games</h4>
+      <h4 className="text-center mb-3">Enter Scores for Remaining Group Play Games</h4>
       <div className="mb-4">
         {remainingTournamentGames.map(game => (
           <div key={game.id} className="mb-3">
@@ -603,7 +588,7 @@ function App() {
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
-                    <td {...cell.getCellProps()} className={cell.column.className}>
+                    <td {...cell.getCellProps()} className={column.className}>
                       {cell.render('Cell')}
                     </td>
                   ))}
