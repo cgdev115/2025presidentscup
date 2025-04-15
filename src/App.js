@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTable, useSortBy } from 'react-table';
-import { Analytics } from '@vercel/analytics/react'; // Import Vercel Analytics
+import { Analytics } from '@vercel/analytics/react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-// Standings data (sorted by PTS, then GD, with actual current Semifinal Position)
-const standingsData = [
+// Initial standings data (as of April 13, 2025)
+const initialStandingsData = [
   { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", MP: 2, W: 1, L: 0, D: 1, GF: 2, GA: 1, GD: 1, PTS: 4, PPG: "2.0", SemifinalPosition: "W1" },
   { Team: "HTX West 14G Gold (Bracket C)", MP: 1, W: 1, L: 0, D: 0, GF: 1, GA: 0, GD: 1, PTS: 3, PPG: "3.0", SemifinalPosition: "W2" },
   { Team: "HTX Woodlands 14G Black (Bracket A)", MP: 2, W: 1, L: 1, D: 0, GF: 2, GA: 2, GD: 0, PTS: 3, PPG: "1.5", SemifinalPosition: "W3" },
@@ -18,7 +18,7 @@ const standingsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", MP: 1, W: 0, L: 1, D: 0, GF: 0, GA: 1, GD: -1, PTS: 0, PPG: "0.0", SemifinalPosition: "" },
 ];
 
-// Game results data (updated with new tournament stats up to April 13, 2025)
+// Game results data (tournament games up to April 13, 2025)
 const gameResultsData = [
   { Match: "HTX Woodlands 14G Black 2-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A, April 05)" },
   { Match: "HTX City 15 W 1-0 HTX Tomball 14G Gold (Bracket B/C, April 05)" },
@@ -29,6 +29,69 @@ const gameResultsData = [
   { Match: "HTX West 14G Gold 1-0 HTX City 15 W (Bracket B/C, April 12)" },
   { Match: "HTX Tomball 14G Gold 0-0 GFI Academy GFI 2014 Girls DPL Next (Bracket B/C, April 12)" },
   { Match: "Legacy Soccer Legacy 2015 Girls Green 1-0 HTX Kingwood 14G Gold (Bracket A, April 13)" },
+];
+
+// Remaining tournament games (group play and semifinals)
+const remainingTournamentGames = [
+  // Group Play - Bracket A
+  {
+    id: 1,
+    date: "April 26, 2025",
+    homeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)",
+    awayTeam: "HTX Kingwood 14G Gold (Bracket A)",
+    matchup: "Group Play - Bracket A",
+  },
+  {
+    id: 2,
+    date: "April 26, 2025",
+    homeTeam: "Legacy Soccer Legacy 2015 Girls Green (Bracket A)",
+    awayTeam: "HTX Woodlands 14G Black (Bracket A)",
+    matchup: "Group Play - Bracket A",
+  },
+  // Group Play - Bracket B/C
+  {
+    id: 3,
+    date: "April 26, 2025",
+    homeTeam: "GFI Academy GFI 2014 Girls DPL Next (Bracket B)",
+    awayTeam: "HTX West 14G Gold (Bracket C)",
+    matchup: "Group Play - Bracket B/C",
+  },
+  {
+    id: 4,
+    date: "April 26, 2025",
+    homeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)",
+    awayTeam: "HTX City 15 W (Bracket B)",
+    matchup: "Group Play - Bracket B/C",
+  },
+  {
+    id: 5,
+    date: "April 26, 2025",
+    homeTeam: "HTX Tomball 14G Gold (Bracket C)",
+    awayTeam: "Legacy Soccer Legacy 2014 Girls White (Bracket B)",
+    matchup: "Group Play - Bracket B/C",
+  },
+  {
+    id: 6,
+    date: "April 27, 2025",
+    homeTeam: "Legacy Soccer Legacy 2014 Girls White (Bracket B)",
+    awayTeam: "HTX West 14G Gold (Bracket C)",
+    matchup: "Group Play - Bracket B/C",
+  },
+  // Semifinals
+  {
+    id: 7,
+    date: "May 03, 2025",
+    homeTeam: "HTX Kingwood 14G Gold (Bracket A)",
+    awayTeam: "HTX Woodlands 14G Black (Bracket A)",
+    matchup: "A1 vs. Wildcard #3",
+  },
+  {
+    id: 8,
+    date: "May 03, 2025",
+    homeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)",
+    awayTeam: "HTX West 14G Gold (Bracket C)",
+    matchup: "Wildcard #1 vs. Wildcard #2",
+  },
 ];
 
 // Odds data
@@ -45,7 +108,7 @@ const oddsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", PreTournamentOddsToAdvance: "+900", PreTournamentOddsToAdvancePercent: "10%", CurrentOddsToAdvance: "+19900", CurrentOddsToAdvancePercent: "0.5%", ChanceToWinSemifinalAndAdvanceToState: "0.075%", SemifinalPosition: "" },
 ];
 
-// Projected points data (sorted by projected points)
+// Projected points data
 const pointsData = [
   { Team: "HTX West 14G Gold (Bracket C)", ProjectedPoints: "9.0" },
   { Team: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)", ProjectedPoints: "6.0" },
@@ -59,7 +122,7 @@ const pointsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", ProjectedPoints: "0.0" },
 ];
 
-// Projected playoffs data (with date and location)
+// Projected playoffs data (for reference, not editable)
 const playoffData = [
   {
     Matchup: "A1 vs. Wildcard #3 (Saturday, May 03, 2025 at Meyer Park - Meyer Park #24W)",
@@ -77,7 +140,7 @@ const playoffData = [
   },
 ];
 
-// Team records data (summary for main table, updated with actual stats from PDFs and added GD)
+// Team records data
 const teamRecordsData = [
   { Team: "HTX Kingwood 14G Gold (Bracket A)", TotalGames: 15, Wins: 5, Losses: 8, Draws: 2, GoalsFor: 29, GoalsAgainst: 22, GD: 7 },
   { Team: "HTX West 14G Gold (Bracket C)", TotalGames: 16, Wins: 9, Losses: 4, Draws: 3, GoalsFor: 37, GoalsAgainst: 16, GD: 21 },
@@ -91,215 +154,7 @@ const teamRecordsData = [
   { Team: "Legacy Soccer Legacy 2014 Girls White (Bracket B)", TotalGames: 15, Wins: 3, Losses: 9, Draws: 3, GoalsFor: 15, GoalsAgainst: 34, GD: -19 },
 ];
 
-// Historical games data (Fall 2024 and Spring 2025, updated with actual data from PDFs)
-const historicalGamesData = {
-  "HTX Kingwood 14G Gold (Bracket A)": {
-    fall2024: [
-      { Match: "HTX Kingwood 14G Gold 3-0 HTX South 14G Gold (Sept 07, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-0 HTX Kingwood 14G Gold (Sept 15, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "HTX Kingwood 14G Gold 6-0 HTX Kingwood 14G Black (Sept 21, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "HTX City 15 W 4-2 HTX Kingwood 14G Gold (Sept 28, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX Tomball 14G Gold 6-0 HTX Kingwood 14G Gold (Oct 05, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "HTX Kingwood 14G Gold 0-3 HTX Woodlands 14G Black (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "HTX West 14G Gold 1-0 HTX Kingwood 14G Gold (Oct 19, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "HTX Kingwood 14G Gold 2-0 Legacy Soccer Legacy 2014 Girls White (Oct 26, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "HTX Kingwood 14G Gold 3-0 GFI Academy GFI 2015 Girls DPL Next (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "HTX Woodlands 14G White 0-0 HTX Kingwood 14G Gold (Nov 16, 2024)", HomeTeam: "HTX Woodlands 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Kingwood 14G Gold (Nov 23, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-    ],
-    spring2025: [
-      { Match: "HTX Kingwood 14G Gold 1-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Feb 08, 2025)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "HTX Kingwood 14G Gold 2-0 Legacy Soccer Legacy 2014 Girls White (Mar 01, 2025)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 3-0 HTX Kingwood 14G Gold (Mar 08, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "HTX City 15 W 5-1 HTX Kingwood 14G Gold (Mar 29, 2025)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX West 14G Gold 3-2 HTX Kingwood 14G Gold (Mar 30, 2025)", HomeTeam: "HTX West 14G Gold" },
-    ],
-  },
-  "HTX West 14G Gold (Bracket C)": {
-    fall2024: [
-      { Match: "HTX West 14G Gold 5-0 GFI Academy GFI 2015 Girls DPL Next (Sept 08, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "HTX Kingwood 14G Black 0-8 HTX West 14G Gold (Sept 15, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
-      { Match: "HTX West 14G Gold 4-1 HTX Woodlands 14G White (Sept 22, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "HTX West 14G Gold 0-0 HTX South 14G Gold (Oct 05, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 2-4 HTX West 14G Gold (Oct 06, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 0-0 HTX West 14G Gold (Oct 12, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "HTX West 14G Gold 1-0 HTX Kingwood 14G Gold (Oct 19, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "HTX City 15 W 3-1 HTX West 14G Gold (Oct 26, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 2-0 HTX West 14G Gold (Nov 03, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX Woodlands 14G Black 1-0 HTX West 14G Gold (Nov 09, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX West 14G Gold 3-2 HTX Tomball 14G Gold (Nov 19, 2024)", HomeTeam: "HTX West 14G Gold" },
-    ],
-    spring2025: [
-      { Match: "HTX West 14G Gold 1-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Mar 01, 2025)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "HTX West 14G Gold 2-4 HTX City 15 W (Mar 22, 2025)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 0-4 HTX West 14G Gold (Mar 22, 2025)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 0-1 HTX West 14G Gold (Mar 29, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "HTX West 14G Gold 3-2 HTX Kingwood 14G Gold (Mar 30, 2025)", HomeTeam: "HTX West 14G Gold" },
-    ],
-  },
-  "HTX Woodlands 14G Black (Bracket A)": {
-    fall2024: [
-      { Match: "HTX Woodlands 14G Black 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 07, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX Woodlands 14G Black 0-0 HTX City 15 W (Sept 08, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX Woodlands 14G White 0-7 HTX Woodlands 14G Black (Sept 14, 2024)", HomeTeam: "HTX Woodlands 14G White" },
-      { Match: "HTX South 14G Gold 0-3 HTX Woodlands 14G Black (Sept 28, 2024)", HomeTeam: "HTX South 14G Gold" },
-      { Match: "HTX Kingwood 14G Gold 0-3 HTX Woodlands 14G Black (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 0-3 HTX Woodlands 14G Black (Oct 20, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX Woodlands 14G Black 6-0 HTX Kingwood 14G Black (Oct 27, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Woodlands 14G Black (Nov 03, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "HTX Woodlands 14G Black 1-0 HTX West 14G Gold (Nov 09, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Woodlands 14G Black (Nov 23, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-    ],
-    spring2025: [
-      { Match: "The ACDMY The ACDMY 14G 2-9 HTX Woodlands 14G Black (Feb 01, 2025)", HomeTeam: "The ACDMY The ACDMY 14G" },
-      { Match: "HTX Tomball 14G Gold 1-0 HTX Woodlands 14G Black (Feb 02, 2025)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "HTX City 15 E 1-1 HTX Woodlands 14G Black (Mar 07, 2025)", HomeTeam: "HTX City 15 E" },
-      { Match: "HTX Woodlands 14G Black 0-1 Legacy Soccer Legacy 2015 Girls Green (Mar 08, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX Woodlands 14G Black 0-2 HTX Tomball 14G Gold (Mar 22, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX Woodlands 14G Black 1-0 GFI Academy GFI 2014 Girls DPL Next (Mar 30, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
-    ],
-  },
-  "HTX City 15 W (Bracket B)": {
-    fall2024: [
-      { Match: "HTX Woodlands 14G Black 0-0 HTX City 15 W (Sept 08, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX South 14G Gold 3-5 HTX City 15 W (Sept 14, 2024)", HomeTeam: "HTX South 14G Gold" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 1-5 HTX City 15 W (Sept 15, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "HTX City 15 W 4-2 HTX Kingwood 14G Gold (Sept 28, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 0-5 HTX City 15 W (Oct 05, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX City 15 W 0-2 HTX Tomball 14G Gold (Oct 12, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX City 15 W 3-1 HTX West 14G Gold (Oct 26, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX City 15 W 8-1 Inwood SC ID PSG Academy Houston East 14G White (Nov 09, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 2-1 HTX City 15 W (Nov 16, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "HTX City 15 W 10-0 HTX Kingwood 14G Black (Nov 21, 2024)", HomeTeam: "HTX City 15 W" },
-    ],
-    spring2025: [
-      { Match: "HTX City 15 W 3-0 Legacy Soccer Legacy 2014 Girls White (Feb 02, 2025)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX City 15 W 4-2 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Mar 01, 2025)", HomeTeam: "HTX City 15 W" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL 1-7 HTX City 15 W (Mar 08, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL" },
-      { Match: "HTX West 14G Gold 2-4 HTX City 15 W (Mar 22, 2025)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "HTX City 15 W 5-1 HTX Kingwood 14G Gold (Mar 29, 2025)", HomeTeam: "HTX City 15 W" },
-    ],
-  },
-  "Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Bracket A)": {
-    fall2024: [
-      { Match: "HTX Woodlands 14G Black 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 07, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-0 HTX Kingwood 14G Gold (Sept 15, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 21, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-3 HTX Tomball 14G Gold (Sept 28, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 0-0 HTX West 14G Gold (Oct 12, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-4 Inwood SC ID PSG Academy Houston South 14G Blue (Oct 13, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 4-1 Inwood SC ID PSG Academy Houston East 14G White (Oct 26, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-2 HTX South 14G Gold (Nov 02, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "HTX Kingwood 14G Black 0-2 Inwood SC ID PSG Academy Houston South 14G Blue (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
-      { Match: "HTX Woodlands 14G White 4-4 Inwood SC ID PSG Academy Houston South 14G Blue (Nov 10, 2024)", HomeTeam: "HTX Woodlands 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 2-1 HTX City 15 W (Nov 16, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-    ],
-    spring2025: [
-      { Match: "HTX Kingwood 14G Gold 1-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Feb 08, 2025)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "HTX West 14G Gold 1-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Mar 01, 2025)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL 1-7 HTX City 15 W (Mar 08, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 6-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Mar 22, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL 0-3 Legacy Soccer Legacy 2014 Girls White (Mar 23, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL" },
-    ],
-  },
-  "GFI Academy GFI 2014 Girls DPL Next (Bracket B)": {
-    fall2024: [
-      { Match: "HTX West 14G Gold 5-0 GFI Academy GFI 2015 Girls DPL Next (Sept 08, 2024)", HomeTeam: "HTX West 14G Gold" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 1-5 HTX City 15 W (Sept 15, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 3-2 Inwood SC ID PSG Academy Houston East 14G White (Sept 21, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "HTX Kingwood 14G Black 3-0 GFI Academy GFI 2015 Girls DPL Next (Sept 28, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Tomball 14G Gold (Sept 29, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-4 Inwood SC ID PSG Academy Houston South 14G Blue (Oct 13, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "HTX Woodlands 14G White 3-0 GFI Academy GFI 2015 Girls DPL Next (Oct 12, 2024)", HomeTeam: "HTX Woodlands 14G White" },
-      { Match: "HTX South 14G Gold 3-0 GFI Academy GFI 2015 Girls DPL Next (Oct 27, 2024)", HomeTeam: "HTX South 14G Gold" },
-      { Match: "HTX Kingwood 14G Gold 3-0 GFI Academy GFI 2015 Girls DPL Next (Nov 09, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Woodlands 14G Black (Nov 23, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-    ],
-    spring2025: [
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 5-0 Legacy Soccer Legacy 2015 Girls Green (Mar 02, 2025)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 3-2 The ACDMY The ACDMY 14G (Mar 22, 2025)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 5-1 HTX City 15 E (Mar 29, 2025)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "The ACDMY The ACDMY 14G 0-3 GFI Academy GFI 2014 Girls DPL Next (Mar 29, 2025)", HomeTeam: "The ACDMY The ACDMY 14G" },
-      { Match: "HTX Woodlands 14G Black 1-0 GFI Academy GFI 2014 Girls DPL Next (Mar 30, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
-    ],
-  },
-  "Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Bracket C)": {
-    fall2024: [
-      { Match: "Legacy Soccer Legacy 2014 Girls White 6-0 Inwood SC ID PSG Academy Houston East 14G White (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 3-2 Inwood SC ID PSG Academy Houston East 14G White (Sept 21, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-3 HTX Tomball 14G Gold (Sept 22, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 2-4 HTX West 14G Gold (Oct 06, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "HTX Kingwood 14G Black 5-2 Inwood SC ID PSG Academy Houston East 14G White (Oct 12, 2024)", HomeTeam: "HTX Kingwood 14G Black" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 4-1 Inwood SC ID PSG Academy Houston East 14G White (Oct 26, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Woodlands 14G Black (Nov 03, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "HTX City 15 W 8-1 Inwood SC ID PSG Academy Houston East 14G White (Nov 09, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 1-4 HTX South 14G Gold (Nov 17, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-4 HTX Kingwood 14G Gold (Nov 23, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-    ],
-    spring2025: [
-      { Match: "HTX City 15 W 4-2 Inwood SC ID PSG Academy Houston East 14G Blue EDPL (Mar 01, 2025)", HomeTeam: "HTX City 15 W" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 3-0 HTX Kingwood 14G Gold (Mar 08, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 6-0 Inwood SC ID PSG Academy Houston South 14G Blue EDPL (Mar 22, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL 0-1 HTX West 14G Gold (Mar 29, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G Blue EDPL" },
-    ],
-  },
-  "HTX Tomball 14G Gold (Bracket C)": {
-    fall2024: [
-      { Match: "HTX Tomball 14G Gold 7-0 HTX Woodlands 14G White (Sept 07, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "HTX Tomball 14G Gold 7-1 HTX South 14G Gold (Sept 21, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "Inwood SC ID PSG Academy Houston East 14G White 0-3 HTX Tomball 14G Gold (Sept 22, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston East 14G White" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue 1-3 HTX Tomball 14G Gold (Sept 28, 2024)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-7 HTX Tomball 14G Gold (Sept 29, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "HTX Tomball 14G Gold 6-0 HTX Kingwood 14G Gold (Oct 05, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "HTX City 15 W 0-2 HTX Tomball 14G Gold (Oct 12, 2024)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX Tomball 14G Gold 4-1 HTX Kingwood 14G Black (Oct 19, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "HTX Woodlands 14G Black 0-1 HTX Tomball 14G Gold (Oct 26, 2024)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX Tomball 14G Gold 5-1 Legacy Soccer Legacy 2014 Girls White (Nov 09, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "HTX West 14G Gold 3-2 HTX Tomball 14G Gold (Nov 19, 2024)", HomeTeam: "HTX West 14G Gold" },
-    ],
-    spring2025: [
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-1 HTX Tomball 14G Gold (Feb 01, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "HTX Tomball 14G Gold 1-0 HTX Woodlands 14G Black (Feb 02, 2025)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "The ACDMY The ACDMY 14G 2-4 HTX Tomball 14G Gold (Mar 02, 2025)", HomeTeam: "The ACDMY The ACDMY 14G" },
-      { Match: "HTX Woodlands 14G Black 0-2 HTX Tomball 14G Gold (Mar 22, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX Tomball 14G Gold 5-1 HTX City 15 E (Mar 24, 2025)", HomeTeam: "HTX Tomball 14G Gold" },
-    ],
-  },
-  "Legacy Soccer Legacy 2015 Girls Green (Bracket A)": {
-    fall2024: [], // No Fall 2024 games in Super 2 division
-    spring2025: [
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 1-1 HTX Tomball 14G Gold (Feb 01, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "GFI Academy GFI 2014 Girls DPL Next 5-0 Legacy Soccer Legacy 2015 Girls Green (Mar 02, 2025)", HomeTeam: "GFI Academy GFI 2014 Girls DPL Next" },
-      { Match: "HTX Woodlands 14G Black 0-1 Legacy Soccer Legacy 2015 Girls Green (Mar 08, 2025)", HomeTeam: "HTX Woodlands 14G Black" },
-      { Match: "HTX City 15 E 1-5 Legacy Soccer Legacy 2015 Girls Green (Mar 09, 2025)", HomeTeam: "HTX City 15 E" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 3-1 HTX City 15 E (Mar 22, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-      { Match: "Legacy Soccer Legacy 2015 Girls Green 8-2 The ACDMY The ACDMY 14G (Mar 30, 2025)", HomeTeam: "Legacy Soccer Legacy 2015 Girls Green" },
-    ],
-  },
-  "Legacy Soccer Legacy 2014 Girls White (Bracket B)": {
-    fall2024: [
-      { Match: "Legacy Soccer Legacy 2014 Girls White 6-0 Inwood SC ID PSG Academy Houston East 14G White (Sept 07, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "GFI Academy GFI 2015 Girls DPL Next 0-2 Legacy Soccer Legacy 2014 Girls White (Sept 14, 2024)", HomeTeam: "GFI Academy GFI 2015 Girls DPL Next" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 1-0 Inwood SC ID PSG Academy Houston South 14G Blue (Sept 21, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX Woodlands 14G White 0-2 Legacy Soccer Legacy 2014 Girls White (Sept 29, 2024)", HomeTeam: "HTX Woodlands 14G White" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 0-5 HTX City 15 W (Oct 05, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX South 14G Gold 1-0 Legacy Soccer Legacy 2014 Girls White (Oct 12, 2024)", HomeTeam: "HTX South 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 0-3 HTX Woodlands 14G Black (Oct 20, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX Kingwood 14G Gold 2-0 Legacy Soccer Legacy 2014 Girls White (Oct 26, 2024)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 2-0 HTX West 14G Gold (Nov 03, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "HTX Tomball 14G Gold 5-1 Legacy Soccer Legacy 2014 Girls White (Nov 09, 2024)", HomeTeam: "HTX Tomball 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 8-1 HTX Kingwood 14G Black (Nov 17, 2024)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-    ],
-    spring2025: [
-      { Match: "HTX City 15 W 3-0 Legacy Soccer Legacy 2014 Girls White (Feb 02, 2025)", HomeTeam: "HTX City 15 W" },
-      { Match: "HTX Kingwood 14G Gold 2-0 Legacy Soccer Legacy 2014 Girls White (Mar 01, 2025)", HomeTeam: "HTX Kingwood 14G Gold" },
-      { Match: "Legacy Soccer Legacy 2014 Girls White 0-4 HTX West 14G Gold (Mar 22, 2025)", HomeTeam: "Legacy Soccer Legacy 2014 Girls White" },
-      { Match: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL 0-3 Legacy Soccer Legacy 2014 Girls White (Mar 23, 2025)", HomeTeam: "Inwood SC ID PSG Academy Houston South 14G Blue EDPL" },
-    ],
-  },
-};
-
-// Columns for standings table
+// Columns for standings table (with sorting)
 const standingsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'MP', accessor: 'MP' },
@@ -345,7 +200,7 @@ const playoffColumns = [
   { Header: 'Team 2 Chance to Win (%)', accessor: 'Team2Chance' },
 ];
 
-// Columns for team records table (summary, with GD column)
+// Columns for team records table
 const teamRecordsColumns = [
   { Header: 'Team', accessor: 'Team', className: 'sticky-column' },
   { Header: 'Total Games', accessor: 'TotalGames' },
@@ -357,22 +212,128 @@ const teamRecordsColumns = [
   { Header: 'GD', accessor: 'GD' },
 ];
 
-// Columns for detailed games table (Fall 2024, Spring 2025, updated to four columns)
-const detailedGamesColumns = [
-  { Header: 'Team A', accessor: 'TeamA' }, // Removed className: 'sticky-column'
-  { Header: 'Score Team A', accessor: 'ScoreTeamA' },
-  { Header: 'Score Team B', accessor: 'ScoreTeamB' },
-  { Header: 'Team B', accessor: 'TeamB' },
-];
-
 function App() {
-  // State to manage which team's detailed records are expanded
-  const [expandedTeam, setExpandedTeam] = useState(null);
+  // State for standings (dynamic)
+  const [standings, setStandings] = useState(initialStandingsData);
+  // State for user-entered scores
+  const [gameScores, setGameScores] = useState(
+    remainingTournamentGames.reduce((acc, game) => {
+      acc[game.id] = { homeScore: '', awayScore: '' };
+      return acc;
+    }, {})
+  );
 
-  // Standings table instance (no sorting for users)
-  const standingsTableInstance = useTable({
-    columns: standingsColumns,
-    data: standingsData,
+  // Function to handle score input changes
+  const handleScoreChange = (gameId, field, value) => {
+    // Ensure only non-negative integers
+    if (value === '' || (Number.isInteger(Number(value)) && Number(value) >= 0)) {
+      setGameScores(prev => ({
+        ...prev,
+        [gameId]: {
+          ...prev[gameId],
+          [field]: value,
+        },
+      }));
+    }
+  };
+
+  // Function to update standings based on user-entered scores
+  useEffect(() => {
+    let newStandings = [...initialStandingsData].map(team => ({ ...team }));
+
+    remainingTournamentGames.forEach(game => {
+      const scores = gameScores[game.id];
+      const homeScore = Number(scores.homeScore);
+      const awayScore = Number(scores.awayScore);
+
+      // Only update if both scores are valid numbers
+      if (scores.homeScore !== '' && scores.awayScore !== '' && !isNaN(homeScore) && !isNaN(awayScore)) {
+        const homeTeam = newStandings.find(team => team.Team === game.homeTeam);
+        const awayTeam = newStandings.find(team => team.Team === game.awayTeam);
+
+        if (homeTeam && awayTeam) {
+          // Increment matches played
+          homeTeam.MP += 1;
+          awayTeam.MP += 1;
+
+          // Update goals
+          homeTeam.GF += homeScore;
+          homeTeam.GA += awayScore;
+          awayTeam.GF += awayScore;
+          awayTeam.GA += homeScore;
+
+          // Update goal difference
+          homeTeam.GD = homeTeam.GF - homeTeam.GA;
+          awayTeam.GD = awayTeam.GF - awayTeam.GA;
+
+          // Determine match outcome
+          if (homeScore > awayScore) {
+            homeTeam.W += 1;
+            homeTeam.PTS += 3;
+            awayTeam.L += 1;
+          } else if (awayScore > homeScore) {
+            awayTeam.W += 1;
+            awayTeam.PTS += 3;
+            homeTeam.L += 1;
+          } else {
+            homeTeam.D += 1;
+            awayTeam.D += 1;
+            homeTeam.PTS += 1;
+            awayTeam.PTS += 1;
+          }
+
+          // Update PPG
+          homeTeam.PPG = (homeTeam.PTS / homeTeam.MP).toFixed(1);
+          awayTeam.PPG = (awayTeam.PTS / awayTeam.MP).toFixed(1);
+        }
+      }
+    });
+
+    // Sort standings by PTS (descending), then GD (descending)
+    newStandings.sort((a, b) => {
+      if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+      return b.GD - a.GD;
+    });
+
+    setStandings(newStandings);
+  }, [gameScores]);
+
+  // Table instances
+  const standingsTableInstance = useTable(
+    {
+      columns: standingsColumns,
+      data: standings,
+      initialState: { sortBy: [{ id: 'PTS', desc: true }, { id: 'GD', desc: true }] },
+    },
+    useSortBy
+  );
+
+  const gameResultsTableInstance = useTable({
+    columns: gameResultsColumns,
+    data: gameResultsData,
+  });
+
+  const oddsTableInstance = useTable(
+    {
+      columns: oddsColumns,
+      data: oddsData,
+    },
+    useSortBy
+  );
+
+  const pointsTableInstance = useTable({
+    columns: pointsColumns,
+    data: pointsData,
+  });
+
+  const playoffTableInstance = useTable({
+    columns: playoffColumns,
+    data: playoffData,
+  });
+
+  const teamRecordsTableInstance = useTable({
+    columns: teamRecordsColumns,
+    data: teamRecordsData,
   });
 
   const {
@@ -383,12 +344,6 @@ function App() {
     prepareRow: prepareStandingsRow,
   } = standingsTableInstance;
 
-  // Game results table instance (no sorting for users)
-  const gameResultsTableInstance = useTable({
-    columns: gameResultsColumns,
-    data: gameResultsData,
-  });
-
   const {
     getTableProps: getGameResultsTableProps,
     getTableBodyProps: getGameResultsTableBodyProps,
@@ -396,15 +351,6 @@ function App() {
     rows: gameResultsRows,
     prepareRow: prepareGameResultsRow,
   } = gameResultsTableInstance;
-
-  // Odds table instance (with sorting)
-  const oddsTableInstance = useTable(
-    {
-      columns: oddsColumns,
-      data: oddsData,
-    },
-    useSortBy
-  );
 
   const {
     getTableProps: getOddsTableProps,
@@ -414,12 +360,6 @@ function App() {
     prepareRow: prepareOddsRow,
   } = oddsTableInstance;
 
-  // Points table instance (no sorting for users)
-  const pointsTableInstance = useTable({
-    columns: pointsColumns,
-    data: pointsData,
-  });
-
   const {
     getTableProps: getPointsTableProps,
     getTableBodyProps: getPointsTableBodyProps,
@@ -427,12 +367,6 @@ function App() {
     rows: pointsRows,
     prepareRow: preparePointsRow,
   } = pointsTableInstance;
-
-  // Playoff table instance (no sorting for users)
-  const playoffTableInstance = useTable({
-    columns: playoffColumns,
-    data: playoffData,
-  });
 
   const {
     getTableProps: getPlayoffTableProps,
@@ -442,12 +376,6 @@ function App() {
     prepareRow: preparePlayoffRow,
   } = playoffTableInstance;
 
-  // Team records table instance (no sorting for users)
-  const teamRecordsTableInstance = useTable({
-    columns: teamRecordsColumns,
-    data: teamRecordsData,
-  });
-
   const {
     getTableProps: getTeamRecordsTableProps,
     getTableBodyProps: getTeamRecordsTableBodyProps,
@@ -456,380 +384,247 @@ function App() {
     prepareRow: prepareTeamRecordsRow,
   } = teamRecordsTableInstance;
 
-  // Function to get games for a specific team and determine match result
-  const getTeamGames = (teamName) => {
-  const fall2024Games = historicalGamesData[teamName]?.fall2024 || [];
-  const spring2025Games = historicalGamesData[teamName]?.spring2025 || [];
-
-  const processGames = (games) => {
-    return games.map(game => {
-      // Extract score and teams
-      const matchParts = game.Match.split(' ');
-      const scoreIndex = matchParts.findIndex(part => part.includes('-'));
-      const score = matchParts[scoreIndex]; // e.g., "1-0"
-      const dateStartIndex = matchParts.findIndex(part => part.startsWith('('));
-      const date = matchParts.slice(dateStartIndex).join(' ');
-
-      // Split score
-      const [scoreTeamA, scoreTeamB] = score.split('-').map(Number);
-
-      // Determine teams
-      const teamA = game.HomeTeam;
-      const teamB = teamA === teamName
-        ? matchParts.slice(scoreIndex + 1, dateStartIndex).join(' ')
-        : matchParts.slice(0, scoreIndex).join(' ');
-
-      // Determine result from expanded team's perspective
-      let result;
-      if (scoreTeamA > scoreTeamB) {
-        result = teamName === teamA ? 'win' : 'loss';
-      } else if (scoreTeamA < scoreTeamB) {
-        result = teamName === teamB ? 'win' : 'loss';
-      } else {
-        result = 'draw';
-      }
-
-      return {
-        TeamA: teamA,
-        ScoreTeamA: scoreTeamA,
-        ScoreTeamB: scoreTeamB,
-        TeamB: teamB,
-        Result: result,
-      };
-    });
-  };
-
-  return {
-    fall2024: processGames(fall2024Games),
-    spring2025: processGames(spring2025Games),
-  };
-};
-
-  // Function to toggle expanded team
-  const toggleTeamDetails = (teamName) => {
-    setExpandedTeam(expandedTeam === teamName ? null : teamName);
-  };
-
   return (
-    <>
-      <div className="container mt-5">
-        <div className="header-image">
-          <img src="/presidents-cup-2025.png" alt="2025 President's Cup Logo" />
-        </div>
-        <h1 className="text-center mb-2">2025 President's Cup Tournament Odds</h1>
-        <h3 className="text-center subtitle mb-4">Female U11 - Eastern District Playoffs</h3>
-
-        {/* Standings Table */}
-        <h2 className="text-center mb-3">Current Standings</h2>
-        <div className="table-responsive">
-          <table {...getStandingsTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {standingsHeaderGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()} className={column.className}>
-                      {column.render('Header')}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getStandingsTableBodyProps()}>
-              {standingsRows.map(row => {
-                prepareStandingsRow(row);
-                const isSemifinalist = row.original.SemifinalPosition !== "";
-                return (
-                  <tr
-                    {...row.getRowProps()}
-                    className={isSemifinalist ? 'semifinalist-row' : ''}
-                  >
-                    {row.cells.map(cell => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={cell.column.className}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Game Results Table */}
-        <h2 className="text-center mb-3 mt-5">Game Results</h2>
-        <div className="table-responsive">
-          <table {...getGameResultsTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {gameResultsHeaderGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()} className={column.className}>
-                      {column.render('Header')}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getGameResultsTableBodyProps()}>
-              {gameResultsRows.map(row => {
-                prepareGameResultsRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={cell.column.className}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Odds Table */}
-        <h2 className="text-center mb-3 mt-5">Tournament Odds</h2>
-        <div className="table-responsive">
-          <table {...getOddsTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {oddsHeaderGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps(column.getSortByToggleProps())} className={column.className}>
-                      {column.render('Header')}
-                      <span>
-                        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                      </span>
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getOddsTableBodyProps()}>
-              {oddsRows.map(row => {
-                prepareOddsRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={cell.column.className}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Projected Points Table */}
-        <h2 className="text-center mb-3 mt-5">Projected Points</h2>
-        <div className="table-responsive">
-          <table {...getPointsTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {pointsHeaderGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()} className={column.className}>
-                      {column.render('Header')}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getPointsTableBodyProps()}>
-              {pointsRows.map(row => {
-                preparePointsRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={cell.column.className}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Projected District Playoffs Table */}
-        <h2 className="text-center mb-3 mt-5">Projected District Playoffs</h2>
-        <div className="table-responsive">
-          <table {...getPlayoffTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {playoffHeaderGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()} className={column.className}>
-                      {column.render('Header')}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getPlayoffTableBodyProps()}>
-              {playoffRows.map(row => {
-                preparePlayoffRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => (
-                      <td
-                        {...cell.getCellProps()}
-                        className={cell.column.className}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-
-       {/* Team Records Table with Expandable Details 
-<h2 className="text-center mb-3 mt-5">Team Records</h2>
-<div className="table-responsive">
-  <table {...getTeamRecordsTableProps()} className="table table-striped table-bordered">
-    <thead className="thead-dark">
-      {teamRecordsHeaderGroups.map(headerGroup => (
-        <tr {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map(column => (
-            <th {...column.getHeaderProps()} className={column.className}>
-              {column.render('Header')}
-            </th>
-          ))}
-        </tr>
-      ))}
-    </thead>
-    <tbody {...getTeamRecordsTableBodyProps()}>
-      {teamRecordsRows.map(row => {
-        prepareTeamRecordsRow(row);
-        const teamName = row.original.Team;
-        const isExpanded = expandedTeam === teamName;
-        const teamGames = getTeamGames(teamName);
-
-        return (
-          <React.Fragment key={row.id}>
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => (
-                <td
-                  {...cell.getCellProps()}
-                  className={cell.column.className}
-                  onClick={() => cell.column.Header === 'Team' && toggleTeamDetails(teamName)}
-                  style={cell.column.Header === 'Team' ? { cursor: 'pointer' } : {}}
-                >
-                  {cell.column.Header === 'Team' ? (
-                    <span>
-                      {cell.render('Cell')} {isExpanded ? '▼' : '▶'}
-                    </span>
-                  ) : (
-                    cell.render('Cell')
-                  )}
-                </td>
-              ))}
-            </tr>
-            {isExpanded && (
-              <tr>
-                <td colSpan={teamRecordsColumns.length} className="expanded-details">
-                  <div className="expanded-section">
-                    <h4 className="text-center mb-3">Fall 2024 Games</h4>
-                    <table className="table table-bordered">
-                      <thead className="thead-dark">
-                        <tr>
-                          {detailedGamesColumns.map(column => (
-                            <th key={column.Header}>
-                              {column.Header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {teamGames.fall2024.length > 0 ? (
-                          teamGames.fall2024.map((game, index) => (
-                            <tr
-                              key={`fall-${teamName}-${index}`}
-                              className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}
-                            >
-                              <td>{game.TeamA}</td>
-                              <td>{game.ScoreTeamA}</td>
-                              <td>{game.ScoreTeamB}</td>
-                              <td>{game.TeamB}</td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={4}>No games available</td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-
-                    <h4 className="text-center mb-3 mt-4">Spring 2025 Games</h4>
-                    <table className="table table-bordered">
-                      <thead className="thead-dark">
-                        <tr>
-                          {detailedGamesColumns.map(column => (
-                            <th key={column.Header}>
-                              {column.Header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {teamGames.spring2025.length > 0 ? (
-                          teamGames.spring2025.map((game, index) => (
-                            <tr
-                              key={`spring-${teamName}-${index}`}
-                              className={game.Result === 'win' ? 'win-row' : game.Result === 'loss' ? 'loss-row' : ''}
-                            >
-                              <td>{game.TeamA}</td>
-                              <td>{game.ScoreTeamA}</td>
-                              <td>{game.ScoreTeamB}</td>
-                              <td>{game.TeamB}</td>
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={4}>No games available</td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                </td>
-              </tr>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </tbody>
-  </table>
-</div> */}
-
-        {/* Humorous Disclaimer */}
-        <footer className="text-center mt-5 mb-3 disclaimer">
-          <p>
-            Disclaimer: These predictions are based on past performance and do not guarantee future outcomes. Think of it like predicting the weather—sometimes it’s sunny, sometimes it rains soccer balls! ⚽🌦️
-          </p>
-        </footer>
+    <div className="container mt-5">
+      <div className="header-image">
+        <img src="/presidents-cup-2025.png" alt="2025 President's Cup Logo" />
       </div>
-      <Analytics /> {/* Add Vercel Analytics component */}
-    </>
+      <h1 className="text-center mb-2">2025 President's Cup Tournament Odds</h1>
+      <h3 className="text-center subtitle mb-4">Female U11 - Eastern District Playoffs</h3>
+
+      {/* Standings Table with Input Form for Remaining Tournament Games */}
+      <h2 className="text-center mb-3">Current Standings</h2>
+      <h4 className="text-center mb-3">Enter Scores for Remaining Tournament Games</h4>
+      <div className="mb-4">
+        {remainingTournamentGames.map(game => (
+          <div key={game.id} className="mb-3">
+            <p>
+              {game.date}: {game.matchup} ({game.homeTeam} vs {game.awayTeam})
+            </p>
+            <div className="d-flex align-items-center justify-content-center">
+              <input
+                type="number"
+                className="form-control w-25 mx-2"
+                placeholder="Home Score"
+                value={gameScores[game.id].homeScore}
+                onChange={(e) => handleScoreChange(game.id, 'homeScore', e.target.value)}
+                min="0"
+                step="1"
+              />
+              <span> - </span>
+              <input
+                type="number"
+                className="form-control w-25 mx-2"
+                placeholder="Away Score"
+                value={gameScores[game.id].awayScore}
+                onChange={(e) => handleScoreChange(game.id, 'awayScore', e.target.value)}
+                min="0"
+                step="1"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="table-responsive">
+        <table {...getStandingsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {standingsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())} className={column.className}>
+                    {column.render('Header')}
+                    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getStandingsTableBodyProps()}>
+            {standingsRows.map(row => {
+              prepareStandingsRow(row);
+              const isSemifinalist = row.original.SemifinalPosition !== "";
+              return (
+                <tr {...row.getRowProps()} className={isSemifinalist ? 'semifinalist-row' : ''}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className={cell.column.className}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Game Results Table */}
+      <h2 className="text-center mb-3 mt-5">Game Results</h2>
+      <div className="table-responsive">
+        <table {...getGameResultsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {gameResultsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()} className={column.className}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getGameResultsTableBodyProps()}>
+            {gameResultsRows.map(row => {
+              prepareGameResultsRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className={cell.column.className}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Odds Table */}
+      <h2 className="text-center mb-3 mt-5">Tournament Odds</h2>
+      <div className="table-responsive">
+        <table {...getOddsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {oddsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())} className={column.className}>
+                    {column.render('Header')}
+                    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getOddsTableBodyProps()}>
+            {oddsRows.map(row => {
+              prepareOddsRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className={cell.column.className}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Projected Points Table */}
+      <h2 className="text-center mb-3 mt-5">Projected Points</h2>
+      <div className="table-responsive">
+        <table {...getPointsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {pointsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()} className={column.className}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getPointsTableBodyProps()}>
+            {pointsRows.map(row => {
+              preparePointsRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className={cell.column.className}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Projected District Playoffs Table */}
+      <h2 className="text-center mb-3 mt-5">Projected District Playoffs</h2>
+      <div className="table-responsive">
+        <table {...getPlayoffTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {playoffHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()} className={column.className}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getPlayoffTableBodyProps()}>
+            {playoffRows.map(row => {
+              preparePlayoffRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className={cell.column.className}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Team Records Table (Summary Only) */}
+      <h2 className="text-center mb-3 mt-5">Team Records</h2>
+      <div className="table-responsive">
+        <table {...getTeamRecordsTableProps()} className="table table-striped table-bordered">
+          <thead className="thead-dark">
+            {teamRecordsHeaderGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()} className={column.className}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTeamRecordsTableBodyProps()}>
+            {teamRecordsRows.map(row => {
+              prepareTeamRecordsRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()} className={cell.column.className}>
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <footer className="text-center mt-5 mb-3 disclaimer">
+        <p>
+          Disclaimer: These predictions are based on past performance and do not guarantee future outcomes. Think of it like predicting the weather—sometimes it’s sunny, sometimes it rains soccer balls! ⚽🌦️
+        </p>
+      </footer>
+      <Analytics />
+    </div>
   );
 }
 
