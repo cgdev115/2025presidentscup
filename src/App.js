@@ -588,7 +588,7 @@ function App() {
               return (
                 <tr {...row.getRowProps()}>
                   {row.cells.map(cell => (
-                    <td {...cell.getCellProps()} className={column.className}>
+                    <td {...cell.getCellProps()} className={cell.column.className}>
                       {cell.render('Cell')}
                     </td>
                   ))}
