@@ -123,6 +123,114 @@ h4 {
   margin: 0;
 }
 
+/* Game Entry Section Styles */
+.game-entry-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.game-entry-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-entry-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.game-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.game-date {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.game-matchup {
+  font-size: 1rem;
+  color: #343a40;
+  font-weight: 600;
+}
+
+.game-teams {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.team-name {
+  font-size: 0.95rem;
+  color: #343a40;
+  font-weight: 500;
+  flex: 1;
+  text-align: center;
+}
+
+.vs-label {
+  font-size: 1rem;
+  color: #6c757d;
+  font-weight: 600;
+  margin: 0 10px;
+}
+
+.score-input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+.score-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+}
+
+.score-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.score-field {
+  width: 100%;
+  height: 40px;
+  font-size: 1rem;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.score-field:focus {
+  border-color: #343a40;
+  box-shadow: 0 0 0 3px rgba(52, 58, 64, 0.1);
+  outline: none;
+}
+
+.score-divider {
+  font-size: 1.2rem;
+  color: #343a40;
+  font-weight: 600;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   h1 {
     font-size: 1.5rem;
@@ -187,6 +295,39 @@ h4 {
   .form-control {
     width: 60px;
   }
+
+  .game-entry-card {
+    padding: 15px;
+  }
+
+  .game-entry-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .game-teams {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .team-name {
+    font-size: 0.9rem;
+  }
+
+  .vs-label {
+    margin: 5px 0;
+  }
+
+  .score-input {
+    width: 80px;
+  }
+
+  .score-field {
+    height: 36px;
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -236,5 +377,31 @@ h4 {
 
   .form-control {
     width: 50px;
+  }
+
+  .game-entry-card {
+    padding: 12px;
+  }
+
+  .game-date,
+  .game-matchup {
+    font-size: 0.85rem;
+  }
+
+  .team-name {
+    font-size: 0.85rem;
+  }
+
+  .score-input {
+    width: 70px;
+  }
+
+  .score-field {
+    height: 34px;
+    font-size: 0.9rem;
+  }
+
+  .score-label {
+    font-size: 0.8rem;
   }
 }
