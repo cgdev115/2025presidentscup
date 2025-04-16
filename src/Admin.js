@@ -96,7 +96,50 @@ const Admin = () => {
     }
   }, [isLoggedIn]);
 
-  // Define columns at the top level (outside conditionals)
+  const handleUpdateScore = async (gameId, isFutureGame, homeScore, awayScore) => {
+    console.log('handleUpdateScore called, gameId:', gameId, 'isFutureGame:', isFutureGame, 'homeScore:', homeScore, 'awayScore:', awayScore);
+    try {
+      const response = await fetch('/api/update-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: gameId, homeScore: parseInt(homeScore), awayScore: parseInt(awayScore), isFutureGame }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update game');
+      }
+
+      console.log('Score updated successfully, refreshing games');
+      await fetchGames();
+    } catch (err) {
+      console.error('handleUpdateScore error:', err);
+      setError(err.message);
+    }
+  };
+
+  const handleValidateGame = async (gameId) => {
+    console.log('handleValidateGame called, gameId:', gameId);
+    try {
+      const response = await fetch('/api/validate-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: gameId }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to validate game');
+      }
+
+      console.log('Game validated successfully, refreshing games');
+      await fetchGames();
+    } catch (err) {
+      console.error('handleValidateGame error:', err);
+      setError(err.message);
+    }
+  };
+
   const columns = useMemo(
     () => [
       { Header: 'Match', accessor: 'match' },
@@ -104,32 +147,50 @@ const Admin = () => {
         Header: 'Home Score',
         accessor: 'homeScore',
         Cell: ({ row }) => (
-          row.original.isFutureGame
-            ? row.original.homeScore || 'Not set'
-            : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[0] || 'N/A'
+          row.original.isFutureGame ? (
+            <input
+              type="number"
+              value={row.original.homeScore || ''}
+              onChange={(e) => handleUpdateScore(row.original.id, true, e.target.value, row.original.awayScore || 0)}
+              min="0"
+              className="score-field"
+            />
+          ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[0] || 'N/A'
         ),
       },
       {
         Header: 'Away Score',
         accessor: 'awayScore',
         Cell: ({ row }) => (
-          row.original.isFutureGame
-            ? row.original.awayScore || 'Not set'
-            : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[1] || 'N/A'
+          row.original.isFutureGame ? (
+            <input
+              type="number"
+              value={row.original.awayScore || ''}
+              onChange={(e) => handleUpdateScore(row.original.id, true, row.original.homeScore || 0, e.target.value)}
+              min="0"
+              className="score-field"
+            />
+          ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[1] || 'N/A'
         ),
       },
       {
-        Header: 'Validated',
-        accessor: 'validated',
+        Header: 'Actions',
         Cell: ({ row }) => (
-          row.original.isFutureGame ? (row.original.validated ? 'Yes' : 'No') : 'N/A'
+          row.original.isFutureGame && (
+            <button
+              onClick={() => handleValidateGame(row.original.id)}
+              disabled={row.original.validated || row.original.homeScore === null || row.original.awayScore === null}
+              className="validate-button"
+            >
+              {row.original.validated ? 'Validated' : 'Validate'}
+            </button>
+          )
         ),
       },
     ],
-    []
+    [] // No dependencies, as handleUpdateScore and handleValidateGame are stable
   );
 
-  // Initialize tableData and useTable at the top level
   const tableData = useMemo(() => [...pastGames, ...futureGames], [pastGames, futureGames]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
     columns,
