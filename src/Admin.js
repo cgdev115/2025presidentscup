@@ -40,7 +40,7 @@ const Admin = () => {
     }
   };
 
-  const fetchGames = async () => {
+  const fetchGames = useCallback(async () => {
     console.log('fetchGames called');
     setLoading(true);
     try {
@@ -87,14 +87,14 @@ const Admin = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [setPastGames, setFutureGames, setError, setLoading]);
 
   useEffect(() => {
     console.log('useEffect triggered, isLoggedIn:', isLoggedIn);
     if (isLoggedIn) {
       fetchGames();
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, fetchGames]);
 
   const handleUpdateScore = useCallback(async (gameId, isFutureGame, homeScore, awayScore) => {
     console.log('handleUpdateScore called, gameId:', gameId, 'isFutureGame:', isFutureGame, 'homeScore:', homeScore, 'awayScore:', awayScore);
