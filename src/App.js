@@ -127,7 +127,7 @@ function App() {
   // State for standings (fetched from API)
   const [standings, setStandings] = useState([]);
   // State for playoff data (dynamic)
-  const [playoffData, setPlayoffData] = useState(initialPlayoffData);
+  const [playoffData] = useState(initialPlayoffData);
   // State for user-entered scores
   const [gameScores, setGameScores] = useState({});
   // State for game results data (fetched from API)
@@ -148,19 +148,28 @@ function App() {
 
         // Fetch game results
         const gameResultsResponse = await fetch('/api/game-results');
-        if (!gameResultsResponse.ok) throw new Error('Failed to fetch game results');
+        if (!gameResultsResponse.ok) {
+          const gameResultsError = await gameResultsResponse.json();
+          throw new Error(`Failed to fetch game results: ${gameResultsError.error}`);
+        }
         const gameResults = await gameResultsResponse.json();
         setGameResultsData(gameResults);
 
         // Fetch future games
         const futureGamesResponse = await fetch('/api/future-games');
-        if (!futureGamesResponse.ok) throw new Error('Failed to fetch future games');
+        if (!futureGamesResponse.ok) {
+          const futureGamesError = await futureGamesResponse.json();
+          throw new Error(`Failed to fetch future games: ${futureGamesError.error}`);
+        }
         const futureGames = await futureGamesResponse.json();
         setRemainingTournamentGames(futureGames);
 
         // Fetch standings
         const standingsResponse = await fetch('/api/standings');
-        if (!standingsResponse.ok) throw new Error('Failed to fetch standings');
+        if (!standingsResponse.ok) {
+          const standingsError = await standingsResponse.json();
+          throw new Error(`Failed to fetch standings: ${standingsError.error}`);
+        }
         const standingsData = await standingsResponse.json();
         setStandings(standingsData);
 
@@ -174,7 +183,7 @@ function App() {
         setError(null);
       } catch (err) {
         console.error('Error fetching initial data:', err);
-        setError('Failed to load data. Please try again later.');
+        setError(`Failed to load data: ${err.message}. Please try again later.`);
       } finally {
         setLoading(false);
       }
@@ -195,8 +204,6 @@ function App() {
         },
       }));
 
-      // Update the game score via API
-      const game = remainingTournamentGames.find(g => g.id === gameId);
       const homeScore = field === 'homeScore' ? value : gameScores[gameId].homeScore;
       const awayScore = field === 'awayScore' ? value : gameScores[gameId].awayScore;
 
@@ -218,7 +225,6 @@ function App() {
             throw new Error(data.error || 'Failed to update game');
           }
 
-          // Fetch updated standings
           const standingsResponse = await fetch('/api/standings');
           if (!standingsResponse.ok) throw new Error('Failed to fetch updated standings');
           const updatedStandings = await standingsResponse.json();
