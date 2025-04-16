@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTable } from 'react-table';
 import './Admin.css';
 
-const Admin = () => {
+const Admin = ({ onGameScoresUpdate }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -10,6 +10,7 @@ const Admin = () => {
   const [pastGames, setPastGames] = useState([]);
   const [futureGames, setFutureGames] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [gameScores, setGameScores] = useState({}); // New state to store user-input scores
 
   console.log('Rendering Admin component, isLoggedIn:', isLoggedIn, 'username:', username, 'error:', error);
 
@@ -62,7 +63,7 @@ const Admin = () => {
       const pastData = await fetchWithErrorHandling('/api/game-results', 'Failed to fetch past games');
       const futureData = await fetchWithErrorHandling('/api/future-games', 'Failed to fetch future games');
 
-      console.log('Fetched games, past:', pastData.length, 'future:', futureData.length);
+      console.log('Fetched games, past:', pastData.length, 'future:', pastData.length);
       setPastGames(pastData.map((game, index) => ({
         id: game.id,
         match: game.Match,
@@ -78,6 +79,15 @@ const Admin = () => {
         isFutureGame: true,
         index: pastData.length + index,
       })));
+
+      // Initialize gameScores with fetched scores
+      const initialScores = futureData.reduce((acc, game) => {
+        acc[game.id] = { homeScore: game.home_score || '', awayScore: game.away_score || '' };
+        return acc;
+      }, {});
+      setGameScores(initialScores);
+      onGameScoresUpdate(initialScores); // Pass initial scores to parent
+
       setError(null);
     } catch (err) {
       console.error('fetchGames error:', err);
@@ -87,7 +97,7 @@ const Admin = () => {
     } finally {
       setLoading(false);
     }
-  }, [setPastGames, setFutureGames, setError, setLoading]);
+  }, [onGameScoresUpdate]);
 
   useEffect(() => {
     console.log('useEffect triggered, isLoggedIn:', isLoggedIn);
@@ -98,6 +108,17 @@ const Admin = () => {
 
   const handleUpdateScore = useCallback(async (gameId, isFutureGame, homeScore, awayScore) => {
     console.log('handleUpdateScore called, gameId:', gameId, 'isFutureGame:', isFutureGame, 'homeScore:', homeScore, 'awayScore:', awayScore);
+    
+    // Update local gameScores state
+    setGameScores(prevScores => {
+      const updatedScores = {
+        ...prevScores,
+        [gameId]: { homeScore, awayScore }
+      };
+      onGameScoresUpdate(updatedScores); // Pass updated scores to parent
+      return updatedScores;
+    });
+
     try {
       const response = await fetch('/api/update-game', {
         method: 'POST',
@@ -116,7 +137,7 @@ const Admin = () => {
       console.error('handleUpdateScore error:', err);
       setError(err.message);
     }
-  }, [fetchGames]);
+  }, [fetchGames, onGameScoresUpdate]);
 
   const handleValidateGame = useCallback(async (gameId) => {
     console.log('handleValidateGame called, gameId:', gameId);
@@ -150,8 +171,8 @@ const Admin = () => {
           row.original.isFutureGame ? (
             <input
               type="number"
-              value={row.original.homeScore || ''}
-              onChange={(e) => handleUpdateScore(row.original.id, true, e.target.value, row.original.awayScore || 0)}
+              value={gameScores[row.original.id]?.homeScore || ''}
+              onChange={(e) => handleUpdateScore(row.original.id, true, e.target.value, gameScores[row.original.id]?.awayScore || 0)}
               min="0"
               className="score-field"
             />
@@ -165,8 +186,8 @@ const Admin = () => {
           row.original.isFutureGame ? (
             <input
               type="number"
-              value={row.original.awayScore || ''}
-              onChange={(e) => handleUpdateScore(row.original.id, true, row.original.homeScore || 0, e.target.value)}
+              value={gameScores[row.original.id]?.awayScore || ''}
+              onChange={(e) => handleUpdateScore(row.original.id, true, gameScores[row.original.id]?.homeScore || 0, e.target.value)}
               min="0"
               className="score-field"
             />
@@ -179,7 +200,7 @@ const Admin = () => {
           row.original.isFutureGame && (
             <button
               onClick={() => handleValidateGame(row.original.id)}
-              disabled={row.original.validated || row.original.homeScore === null || row.original.awayScore === null}
+              disabled={row.original.validated || gameScores[row.original.id]?.homeScore === '' || gameScores[row.original.id]?.awayScore === ''}
               className="validate-button"
             >
               {row.original.validated ? 'Validated' : 'Validate'}
@@ -188,7 +209,7 @@ const Admin = () => {
         ),
       },
     ],
-    [handleUpdateScore, handleValidateGame]
+    [gameScores, handleUpdateScore, handleValidateGame]
   );
 
   const tableData = useMemo(() => [...pastGames, ...futureGames], [pastGames, futureGames]);
