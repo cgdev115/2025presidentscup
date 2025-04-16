@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTable } from 'react-table';
 import './Admin.css';
 
 const Admin = () => {
@@ -136,6 +137,44 @@ const Admin = () => {
     );
   }
 
+  const columns = useMemo(
+    () => [
+      { Header: 'Match', accessor: 'match' },
+      {
+        Header: 'Home Score',
+        accessor: 'homeScore',
+        Cell: ({ row }) => (
+          row.original.isFutureGame
+            ? row.original.homeScore || 'Not set'
+            : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[0] || 'N/A'
+        ),
+      },
+      {
+        Header: 'Away Score',
+        accessor: 'awayScore',
+        Cell: ({ row }) => (
+          row.original.isFutureGame
+            ? row.original.awayScore || 'Not set'
+            : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[1] || 'N/A'
+        ),
+      },
+      {
+        Header: 'Validated',
+        accessor: 'validated',
+        Cell: ({ row }) => (
+          row.original.isFutureGame ? (row.original.validated ? 'Yes' : 'No') : 'N/A'
+        ),
+      },
+    ],
+    []
+  );
+
+  const tableData = useMemo(() => [...pastGames, ...futureGames], [pastGames, futureGames]);
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data: tableData,
+  });
+
   console.log('Rendering dashboard, loading:', loading, 'error:', error, 'pastGames:', pastGames.length, 'futureGames:', futureGames.length);
   return (
     <div className="admin-container">
@@ -147,19 +186,30 @@ const Admin = () => {
       ) : pastGames.length === 0 && futureGames.length === 0 ? (
         <div className="text-center">No games available to display.</div>
       ) : (
-        <div>
-          <h3>Past Games</h3>
-          <ul>
-            {pastGames.map(game => (
-              <li key={game.id}>{game.match}</li>
-            ))}
-          </ul>
-          <h3>Future Games</h3>
-          <ul>
-            {futureGames.map(game => (
-              <li key={game.id}>{game.match}</li>
-            ))}
-          </ul>
+        <div className="table-responsive">
+          <table {...getTableProps()} className="table table-striped table-bordered">
+            <thead className="thead-dark">
+              {headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map(row => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map(cell => (
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
