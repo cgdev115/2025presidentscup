@@ -9,7 +9,8 @@ const Admin = () => {
 
   console.log('Rendering Admin component, isLoggedIn:', isLoggedIn, 'username:', username, 'error:', error);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     console.log('handleLogin called, username:', username, 'password:', password);
     setError(null);
 
@@ -48,7 +49,7 @@ const Admin = () => {
   return (
     <div className="admin-login-container">
       <h2 className="text-center mb-4">Admin Login</h2>
-      <div className="admin-login-form">
+      <form onSubmit={handleLogin} className="admin-login-form">
         <div className="form-group">
           <label>Username</label>
           <input
@@ -78,8 +79,8 @@ const Admin = () => {
           />
         </div>
         {error && <p className="text-danger text-center">{error}</p>}
-        <button onClick={handleLogin} className="btn btn-primary w-100">Login</button>
-      </div>
+        <button type="submit" className="btn btn-primary w-100">Login</button>
+      </form>
     </div>
   );
 };
