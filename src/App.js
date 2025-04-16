@@ -9,7 +9,7 @@ function App() {
   const [gameScores, setGameScores] = useState({});
   const [gameResultsData, setGameResultsData] = useState([]);
   const [remainingTournamentGames, setRemainingTournamentGames] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Ensure loading is true initially
   const [error, setError] = useState(null);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showTheoreticalStandings, setShowTheoreticalStandings] = useState(false);
@@ -40,7 +40,6 @@ function App() {
         setGameResultsData(gameResults);
 
         const futureGames = await fetchWithErrorHandling('/api/future-games', 'Failed to fetch future games');
-        // Transform futureGames to include the match property and filter invalid entries
         const validFutureGames = futureGames
           .filter(game => game && game.id && game.home_team && game.away_team && game.matchup && game.date)
           .map(game => ({
@@ -57,7 +56,6 @@ function App() {
         setRemainingTournamentGames(validFutureGames);
 
         const standingsData = await fetchWithErrorHandling('/api/standings', 'Failed to fetch standings');
-        // Filter invalid standings entries
         const validStandings = standingsData.filter(team => team && team.team && typeof team.team === 'string');
         setStandings(validStandings);
 
@@ -80,8 +78,23 @@ function App() {
   }, []);
 
   const calculateTheoreticalStandings = useMemo(() => {
+    if (loading || !standings || !remainingTournamentGames) {
+      return []; // Return empty array if data is not ready
+    }
+
     // Start with a deep copy of the official standings
-    const theoreticalStandings = standings.map(team => ({ ...team }));
+    const theoreticalStandings = standings.map(team => ({
+      ...team,
+      MP: team.MP || 0,
+      W: team.W || 0,
+      L: team.L || 0,
+      D: team.D || 0,
+      GF: team.GF || 0,
+      GA: team.GA || 0,
+      GD: team.GD || 0,
+      PTS: team.PTS || 0,
+      PPG: team.PPG || 0,
+    }));
 
     // Process each future game with user-input scores
     remainingTournamentGames.forEach(game => {
@@ -147,23 +160,29 @@ function App() {
       awayTeamData.PPG = awayTeamData.PTS / awayTeamData.MP;
     });
 
-    // Sort by PTS, GD, and GF, then assign semifinal positions
-    return theoreticalStandings
-      .sort((a, b) => {
-        if (b.PTS !== a.PTS) return b.PTS - a.PTS;
-        if (b.GD !== a.GD) return b.GD - a.GD;
-        return b.GF - a.GF;
-      })
-      .map((team, index) => {
-        if (!team || !team.team) {
-          return team; // Skip invalid entries
-        }
-        return {
-          ...team,
-          'Semifinal Position': assignSemifinalPosition(index, team.team)
-        };
-      });
-  }, [standings, remainingTournamentGames, gameScores]);
+    // Sort by PTS, GD, and GF
+    return theoreticalStandings.sort((a, b) => {
+      if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+      if (b.GD !== a.GD) return b.GD - a.GD;
+      return b.GF - a.GF;
+    });
+  }, [standings, remainingTournamentGames, gameScores, loading]);
+
+  // Assign semifinal positions separately to avoid minification issues
+  const theoreticalStandingsWithPositions = useMemo(() => {
+    if (!calculateTheoreticalStandings || calculateTheoreticalStandings.length === 0) {
+      return [];
+    }
+    return calculateTheoreticalStandings.map((team, index) => {
+      if (!team || !team.team) {
+        return team; // Skip invalid entries
+      }
+      return {
+        ...team,
+        'Semifinal Position': assignSemifinalPosition(index, team.team)
+      };
+    });
+  }, [calculateTheoreticalStandings]);
 
   const assignSemifinalPosition = (index, teamName) => {
     if (!teamName || typeof teamName !== 'string') {
@@ -195,7 +214,7 @@ function App() {
   );
 
   const officialTableData = useMemo(() => standings, [standings]);
-  const theoreticalTableData = useMemo(() => calculateTheoreticalStandings, [calculateTheoreticalStandings]);
+  const theoreticalTableData = useMemo(() => theoreticalStandingsWithPositions, [theoreticalStandingsWithPositions]);
 
   const { getTableProps: getOfficialTableProps, getTableBodyProps: getOfficialTableBodyProps, headerGroups: officialHeaderGroups, rows: officialRows, prepareRow: prepareOfficialRow } = useTable({
     columns,
