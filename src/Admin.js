@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTable } from 'react-table';
 import './Admin.css';
 
 const Admin = () => {
@@ -95,6 +96,104 @@ const Admin = () => {
     }
   }, [isLoggedIn]);
 
+  const handleUpdateScore = async (gameId, isFutureGame, homeScore, awayScore) => {
+    console.log('handleUpdateScore called, gameId:', gameId, 'isFutureGame:', isFutureGame, 'homeScore:', homeScore, 'awayScore:', awayScore);
+    try {
+      const response = await fetch('/api/update-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: gameId, homeScore: parseInt(homeScore), awayScore: parseInt(awayScore), isFutureGame }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update game');
+      }
+
+      console.log('Score updated successfully, refreshing games');
+      await fetchGames();
+    } catch (err) {
+      console.error('handleUpdateScore error:', err);
+      setError(err.message);
+    }
+  };
+
+  const handleValidateGame = async (gameId) => {
+    console.log('handleValidateGame called, gameId:', gameId);
+    try {
+      const response = await fetch('/api/validate-game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: gameId }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to validate game');
+      }
+
+      console.log('Game validated successfully, refreshing games');
+      await fetchGames();
+    } catch (err) {
+      console.error('handleValidateGame error:', err);
+      setError(err.message);
+    }
+  };
+
+  const columns = [
+    { Header: 'Match', accessor: 'match' },
+    {
+      Header: 'Home Score',
+      accessor: 'homeScore',
+      Cell: ({ row }) => (
+        row.original.isFutureGame ? (
+          <input
+            type="number"
+            value={row.original.homeScore || ''}
+            onChange={(e) => handleUpdateScore(row.original.id, true, e.target.value, row.original.awayScore || 0)}
+            min="0"
+            className="score-field"
+          />
+        ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[0] || 'N/A'
+      ),
+    },
+    {
+      Header: 'Away Score',
+      accessor: 'awayScore',
+      Cell: ({ row }) => (
+        row.original.isFutureGame ? (
+          <input
+            type="number"
+            value={row.original.awayScore || ''}
+            onChange={(e) => handleUpdateScore(row.original.id, true, row.original.homeScore || 0, e.target.value)}
+            min="0"
+            className="score-field"
+          />
+        ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[1] || 'N/A'
+      ),
+    },
+    {
+      Header: 'Actions',
+      Cell: ({ row }) => (
+        row.original.isFutureGame && (
+          <button
+            onClick={() => handleValidateGame(row.original.id)}
+            disabled={row.original.validated || row.original.homeScore === null || row.original.awayScore === null}
+            className="validate-button"
+          >
+            {row.original.validated ? 'Validated' : 'Validate'}
+          </button>
+        )
+      ),
+    },
+  ];
+
+  const tableData = useMemo(() => [...pastGames, ...futureGames], [pastGames, futureGames]);
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data: tableData,
+  });
+
   if (!isLoggedIn) {
     console.log('Rendering login form, error:', error, 'username:', username);
     return (
@@ -144,22 +243,33 @@ const Admin = () => {
         <div className="text-center">Loading games...</div>
       ) : error ? (
         <div className="text-center text-danger">{error}</div>
-      ) : pastGames.length === 0 && pastGames.length === 0 ? (
+      ) : pastGames.length === 0 && futureGames.length === 0 ? (
         <div className="text-center">No games available to display.</div>
       ) : (
-        <div>
-          <h3>Past Games</h3>
-          <ul>
-            {pastGames.map(game => (
-              <li key={game.id}>{game.match}</li>
-            ))}
-          </ul>
-          <h3>Future Games</h3>
-          <ul>
-            {futureGames.map(game => (
-              <li key={game.id}>{game.match}</li>
-            ))}
-          </ul>
+        <div className="table-responsive">
+          <table {...getTableProps()} className="table table-striped table-bordered">
+            <thead className="thead-dark">
+              {headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map(row => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map(cell => (
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
