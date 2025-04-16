@@ -146,34 +146,30 @@ function App() {
       try {
         setLoading(true);
 
-        // Fetch game results
-        const gameResultsResponse = await fetch('/api/game-results');
-        if (!gameResultsResponse.ok) {
-          const gameResultsError = await gameResultsResponse.json();
-          throw new Error(`Failed to fetch game results: ${gameResultsError.error}`);
-        }
-        const gameResults = await gameResultsResponse.json();
+        const fetchWithErrorHandling = async (url, errorMessage) => {
+          const response = await fetch(url);
+          if (!response.ok) {
+            let errorData;
+            try {
+              errorData = await response.json();
+              throw new Error(`${errorMessage}: ${errorData.error || 'Unknown error'}`);
+            } catch (jsonError) {
+              const text = await response.text();
+              throw new Error(`${errorMessage}: ${text}`);
+            }
+          }
+          return response.json();
+        };
+
+        const gameResults = await fetchWithErrorHandling('/api/game-results', 'Failed to fetch game results');
         setGameResultsData(gameResults);
 
-        // Fetch future games
-        const futureGamesResponse = await fetch('/api/future-games');
-        if (!futureGamesResponse.ok) {
-          const futureGamesError = await futureGamesResponse.json();
-          throw new Error(`Failed to fetch future games: ${futureGamesError.error}`);
-        }
-        const futureGames = await futureGamesResponse.json();
+        const futureGames = await fetchWithErrorHandling('/api/future-games', 'Failed to fetch future games');
         setRemainingTournamentGames(futureGames);
 
-        // Fetch standings
-        const standingsResponse = await fetch('/api/standings');
-        if (!standingsResponse.ok) {
-          const standingsError = await standingsResponse.json();
-          throw new Error(`Failed to fetch standings: ${standingsError.error}`);
-        }
-        const standingsData = await standingsResponse.json();
+        const standingsData = await fetchWithErrorHandling('/api/standings', 'Failed to fetch standings');
         setStandings(standingsData);
 
-        // Initialize game scores state
         const initialScores = futureGames.reduce((acc, game) => {
           acc[game.id] = { homeScore: game.home_score || '', awayScore: game.away_score || '' };
           return acc;
