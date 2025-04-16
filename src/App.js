@@ -177,7 +177,7 @@ function App() {
 
     return sortedStandings.map((team, index) => {
       if (!team || !team.team) {
-        console.warn('Invalid team entry during position assignment:', TEAM);
+        console.warn('Invalid team entry during position assignment:', team);
         return team;
       }
       const assignSemifinalPosition = (idx, name) => {
