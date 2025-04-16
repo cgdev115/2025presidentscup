@@ -77,9 +77,9 @@ function App() {
     fetchInitialData();
   }, []);
 
-  const calculateTheoreticalStandings = useMemo(() => {
+  const theoreticalStandings = useMemo(() => {
     if (loading || !standings || !remainingTournamentGames) {
-      return []; // Return empty array if data is not ready
+      return [];
     }
 
     // Start with a deep copy of the official standings
@@ -161,40 +161,34 @@ function App() {
     });
 
     // Sort by PTS, GD, and GF
-    return theoreticalStandings.sort((a, b) => {
+    const sortedStandings = theoreticalStandings.sort((a, b) => {
       if (b.PTS !== a.PTS) return b.PTS - a.PTS;
       if (b.GD !== a.GD) return b.GD - a.GD;
       return b.GF - a.GF;
     });
-  }, [standings, remainingTournamentGames, gameScores, loading]);
 
-  // Assign semifinal positions separately to avoid minification issues
-  const theoreticalStandingsWithPositions = useMemo(() => {
-    if (!calculateTheoreticalStandings || calculateTheoreticalStandings.length === 0) {
-      return [];
-    }
-    return calculateTheoreticalStandings.map((team, index) => {
+    // Assign semifinal positions
+    return sortedStandings.map((team, index) => {
       if (!team || !team.team) {
         return team; // Skip invalid entries
       }
+      const assignSemifinalPosition = (idx, name) => {
+        if (!name || typeof name !== 'string') {
+          return ''; // Return empty string if name is invalid
+        }
+        if (idx === 0) return 'W1';
+        if (idx === 1) return 'W2';
+        if (idx === 2) return 'W3';
+        if (name.includes('Bracket A')) return 'A1';
+        if (name.includes('Bracket B')) return 'A2';
+        return '';
+      };
       return {
         ...team,
         'Semifinal Position': assignSemifinalPosition(index, team.team)
       };
     });
-  }, [calculateTheoreticalStandings]);
-
-  const assignSemifinalPosition = (index, teamName) => {
-    if (!teamName || typeof teamName !== 'string') {
-      return ''; // Return empty string if teamName is invalid
-    }
-    if (index === 0) return 'W1';
-    if (index === 1) return 'W2';
-    if (index === 2) return 'W3';
-    if (teamName.includes('Bracket A')) return 'A1';
-    if (teamName.includes('Bracket B')) return 'A2';
-    return '';
-  };
+  }, [standings, remainingTournamentGames, gameScores, loading]);
 
   const columns = useMemo(
     () => [
@@ -214,7 +208,7 @@ function App() {
   );
 
   const officialTableData = useMemo(() => standings, [standings]);
-  const theoreticalTableData = useMemo(() => theoreticalStandingsWithPositions, [theoreticalStandingsWithPositions]);
+  const theoreticalTableData = useMemo(() => theoreticalStandings, [theoreticalStandings]);
 
   const { getTableProps: getOfficialTableProps, getTableBodyProps: getOfficialTableBodyProps, headerGroups: officialHeaderGroups, rows: officialRows, prepareRow: prepareOfficialRow } = useTable({
     columns,
