@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Admin.css';
 
 const Admin = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -8,7 +9,8 @@ const Admin = () => {
 
   console.log('Rendering Admin component, isLoggedIn:', isLoggedIn, 'username:', username, 'error:', error);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     console.log('handleLogin called, username:', username, 'password:', password);
     setError(null);
 
@@ -45,10 +47,10 @@ const Admin = () => {
 
   console.log('Rendering login form, error:', error, 'username:', username);
   return (
-    <div>
-      <h2>Admin Login (Minimal + Password + Submit)</h2>
-      <div>
-        <div>
+    <div className="admin-login-container">
+      <h2 className="text-center mb-4">Admin Login</h2>
+      <form onSubmit={handleLogin} className="admin-login-form">
+        <div className="form-group">
           <label>Username</label>
           <input
             type="text"
@@ -58,9 +60,11 @@ const Admin = () => {
               console.log('Username input changed, new value:', newValue);
               setUsername(newValue);
             }}
+            className="form-control"
+            required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Password</label>
           <input
             type="password"
@@ -70,11 +74,13 @@ const Admin = () => {
               console.log('Password input changed, new value:', newValue);
               setPassword(newValue);
             }}
+            className="form-control"
+            required
           />
         </div>
-        {error && <p>{error}</p>}
-        <button onClick={handleLogin}>Login</button>
-      </div>
+        {error && <p className="text-danger text-center">{error}</p>}
+        <button type="submit" className="btn btn-primary w-100">Login</button>
+      </form>
     </div>
   );
 };
