@@ -1,17 +1,17 @@
-import { sql } from '@vercel/postgres';
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { id, homeScore, awayScore, isFutureGame } = req.body;
-
-  if (!id || homeScore === undefined || awayScore === undefined) {
-    return res.status(400).json({ error: 'Missing required fields' });
-  }
-
   try {
+    const { sql } = await import('@vercel/postgres');
+
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const { id, homeScore, awayScore, isFutureGame } = req.body;
+
+    if (!id || homeScore === undefined || awayScore === undefined) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
     // Update the game score
     if (isFutureGame) {
       await sql`
@@ -131,7 +131,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ message: 'Game updated successfully' });
   } catch (error) {
-    console.error('Error updating game:', error);
-    return res.status(500).json({ error: 'Failed to update game' });
+    console.error('Error in update-game handler:', error);
+    return res.status(500).json({ error: 'Failed to update game', details: error.message });
   }
 }
