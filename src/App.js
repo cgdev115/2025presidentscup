@@ -171,7 +171,7 @@ function App() {
     data: officialTableData,
   });
 
-  const { getTableProps: getTheoreticalTableProps, getTableBodyProps: getTheoreticalTableBodyProps, headerGroups: theoreticalHeaderGroups, rows: theoreticalRows, prepareTheoreticalRow: prepareTheoreticalRow } = useTable({
+  const { getTableProps: getTheoreticalTableProps, getTableBodyProps: getTheoreticalTableBodyProps, headerGroups: theoreticalHeaderGroups, rows: theoreticalRows, prepareRow: prepareTheoreticalRow } = useTable({
     columns,
     data: theoreticalTableData,
   });
