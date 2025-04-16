@@ -1,0 +1,96 @@
+.admin-login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #343a40;
+  font-weight: 500;
+}
+
+.form-group input {
+  height: 40px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: #343a40;
+  border-color: #343a40;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #495057;
+  border-color: #495057;
+}
+
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.validate-button {
+  padding: 6px 12px;
+  background-color: #28a745;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.validate-button:hover {
+  background-color: #218838;
+}
+
+.validate-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.score-field {
+  width: 60px;
+  height: 34px;
+  text-align: center;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .admin-login-container {
+    margin: 30px 15px;
+    padding: 15px;
+  }
+
+  .admin-container {
+    padding: 15px;
+  }
+
+  .score-field {
+    width: 50px;
+    height: 30px;
+    font-size: 0.85rem;
+  }
+}
