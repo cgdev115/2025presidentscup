@@ -17,136 +17,158 @@ function App() {
   console.log('Rendering App component, showAdmin:', showAdmin);
 
   useEffect(() => {
-  const fetchInitialData = async () => {
-    try {
-      setLoading(true);
+    const fetchInitialData = async () => {
+      try {
+        setLoading(true);
 
-      const fetchWithErrorHandling = async (url, errorMessage) => {
-        const response = await fetch(url);
-        if (!response.ok) {
-          let errorData;
-          try {
-            errorData = await response.json();
-            throw new Error(`${errorMessage}: ${errorData.error || 'Unknown error'}`);
-          } catch (jsonError) {
-            const text = await response.text();
-            throw new Error(`${errorMessage}: ${text}`);
+        const fetchWithErrorHandling = async (url, errorMessage) => {
+          const response = await fetch(url);
+          if (!response.ok) {
+            let errorData;
+            try {
+              errorData = await response.json();
+              throw new Error(`${errorMessage}: ${errorData.error || 'Unknown error'}`);
+            } catch (jsonError) {
+              const text = await response.text();
+              throw new Error(`${errorMessage}: ${text}`);
+            }
           }
+          return response.json();
+        };
+
+        const gameResults = await fetchWithErrorHandling('/api/game-results', 'Failed to fetch game results');
+        setGameResultsData(gameResults);
+
+        const futureGames = await fetchWithErrorHandling('/api/future-games', 'Failed to fetch future games');
+        // Transform futureGames to include the match property and filter invalid entries
+        const validFutureGames = futureGames
+          .filter(game => game && game.id && game.home_team && game.away_team && game.matchup && game.date)
+          .map(game => ({
+            id: game.id,
+            match: `${game.home_team} vs ${game.away_team} (${game.matchup}, ${game.date})`,
+            home_team: game.home_team,
+            away_team: game.away_team,
+            matchup: game.matchup,
+            date: game.date,
+            home_score: game.home_score,
+            away_score: game.away_score,
+            validated: game.validated,
+          }));
+        setRemainingTournamentGames(validFutureGames);
+
+        const standingsData = await fetchWithErrorHandling('/api/standings', 'Failed to fetch standings');
+        // Filter invalid standings entries
+        const validStandings = standingsData.filter(team => team && team.team && typeof team.team === 'string');
+        setStandings(validStandings);
+
+        const initialScores = validFutureGames.reduce((acc, game) => {
+          acc[game.id] = { homeScore: game.home_score || '', awayScore: game.away_score || '' };
+          return acc;
+        }, {});
+        setGameScores(initialScores);
+
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching initial data:', err);
+        setError(`Failed to load data: ${err.message}. Please try again later.`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  const calculateTheoreticalStandings = useMemo(() => {
+    // Start with a deep copy of the official standings
+    const theoreticalStandings = standings.map(team => ({ ...team }));
+
+    // Process each future game with user-input scores
+    remainingTournamentGames.forEach(game => {
+      if (!game || !game.match) {
+        return; // Skip invalid entries
+      }
+
+      const gameId = game.id;
+      const homeScore = parseInt(gameScores[gameId]?.homeScore) || 0;
+      const awayScore = parseInt(gameScores[gameId]?.awayScore) || 0;
+
+      // Skip if scores are not fully provided or game is already validated
+      if (game.validated || gameScores[gameId]?.homeScore === '' || gameScores[gameId]?.awayScore === '') {
+        return;
+      }
+
+      // Extract team names from the match string (e.g., "Team A vs Team B (Matchup, Date)")
+      const matchParts = game.match.match(/^(.*?)\svs\s(.*?)\s\(/);
+      if (!matchParts) {
+        return; // Skip if match format is invalid
+      }
+      const homeTeam = matchParts[1].trim();
+      const awayTeam = matchParts[2].trim();
+
+      // Find the teams in the standings
+      const homeTeamData = theoreticalStandings.find(team => team.team === homeTeam);
+      const awayTeamData = theoreticalStandings.find(team => team.team === awayTeam);
+
+      if (!homeTeamData || !awayTeamData) return;
+
+      // Update match played (MP)
+      homeTeamData.MP += 1;
+      awayTeamData.MP += 1;
+
+      // Update goals for (GF) and goals against (GA)
+      homeTeamData.GF += homeScore;
+      homeTeamData.GA += awayScore;
+      awayTeamData.GF += awayScore;
+      awayTeamData.GA += homeScore;
+
+      // Update goal difference (GD)
+      homeTeamData.GD = homeTeamData.GF - homeTeamData.GA;
+      awayTeamData.GD = awayTeamData.GF - awayTeamData.GA;
+
+      // Determine match outcome and update W, L, D, and PTS
+      if (homeScore > awayScore) {
+        homeTeamData.W += 1;
+        awayTeamData.L += 1;
+        homeTeamData.PTS += 3;
+      } else if (homeScore < awayScore) {
+        awayTeamData.W += 1;
+        homeTeamData.L += 1;
+        awayTeamData.PTS += 3;
+      } else {
+        homeTeamData.D += 1;
+        awayTeamData.D += 1;
+        homeTeamData.PTS += 1;
+        awayTeamData.PTS += 1;
+      }
+
+      // Update points per game (PPG)
+      homeTeamData.PPG = homeTeamData.PTS / homeTeamData.MP;
+      awayTeamData.PPG = awayTeamData.PTS / awayTeamData.MP;
+    });
+
+    // Sort by PTS, GD, and GF, then assign semifinal positions
+    return theoreticalStandings
+      .sort((a, b) => {
+        if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+        if (b.GD !== a.GD) return b.GD - a.GD;
+        return b.GF - a.GF;
+      })
+      .map((team, index) => {
+        if (!team || !team.team) {
+          return team; // Skip invalid entries
         }
-        return response.json();
-      };
+        return {
+          ...team,
+          'Semifinal Position': assignSemifinalPosition(index, team.team)
+        };
+      });
+  }, [standings, remainingTournamentGames, gameScores]);
 
-      const gameResults = await fetchWithErrorHandling('/api/game-results', 'Failed to fetch game results');
-      setGameResultsData(gameResults);
-
-      const futureGames = await fetchWithErrorHandling('/api/future-games', 'Failed to fetch future games');
-      console.log('Fetched future games:', futureGames); // Debug log
-      setRemainingTournamentGames(futureGames);
-
-      const standingsData = await fetchWithErrorHandling('/api/standings', 'Failed to fetch standings');
-      setStandings(standingsData);
-
-      const initialScores = futureGames.reduce((acc, game) => {
-        acc[game.id] = { homeScore: game.home_score || '', awayScore: game.away_score || '' };
-        return acc;
-      }, {});
-      setGameScores(initialScores);
-
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching initial data:', err);
-      setError(`Failed to load data: ${err.message}. Please try again later.`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchInitialData();
-}, []);
-
-const calculateTheoreticalStandings = useMemo(() => {
-  console.log('remainingTournamentGames:', remainingTournamentGames); // Debug log
-  // Start with a deep copy of the official standings
-  const theoreticalStandings = standings.map(team => ({ ...team }));
-
-  // Process each future game with user-input scores
-  remainingTournamentGames.forEach(game => {
-    if (!game || !game.match) {
-      console.warn('Invalid game entry:', game); // Debug log
-      return;
-    }
-
-    const gameId = game.id;
-    const homeScore = parseInt(gameScores[gameId]?.homeScore) || 0;
-    const awayScore = parseInt(gameScores[gameId]?.awayScore) || 0;
-
-    // Skip if scores are not fully provided or game is already validated
-    if (game.validated || gameScores[gameId]?.homeScore === '' || gameScores[gameId]?.awayScore === '') {
-      return;
-    }
-
-    // Extract team names from the match string (e.g., "Team A vs Team B (Matchup, Date)")
-    const matchParts = game.match.match(/^(.*?)\svs\s(.*?)\s\(/);
-    if (!matchParts) {
-      console.warn('Invalid match format:', game.match); // Debug log
-      return;
-    }
-    const homeTeam = matchParts[1].trim();
-    const awayTeam = matchParts[2].trim();
-
-    // Find the teams in the standings
-    const homeTeamData = theoreticalStandings.find(team => team.team === homeTeam);
-    const awayTeamData = theoreticalStandings.find(team => team.team === awayTeam);
-
-    if (!homeTeamData || !awayTeamData) return;
-
-    // Update match played (MP)
-    homeTeamData.MP += 1;
-    awayTeamData.MP += 1;
-
-    // Update goals for (GF) and goals against (GA)
-    homeTeamData.GF += homeScore;
-    homeTeamData.GA += awayScore;
-    awayTeamData.GF += awayScore;
-    awayTeamData.GA += homeScore;
-
-    // Update goal difference (GD)
-    homeTeamData.GD = homeTeamData.GF - homeTeamData.GA;
-    awayTeamData.GD = awayTeamData.GF - awayTeamData.GA;
-
-    // Determine match outcome and update W, L, D, and PTS
-    if (homeScore > awayScore) {
-      homeTeamData.W += 1;
-      awayTeamData.L += 1;
-      homeTeamData.PTS += 3;
-    } else if (homeScore < awayScore) {
-      awayTeamData.W += 1;
-      homeTeamData.L += 1;
-      awayTeamData.PTS += 3;
-    } else {
-      homeTeamData.D += 1;
-      awayTeamData.D += 1;
-      homeTeamData.PTS += 1;
-      awayTeamData.PTS += 1;
-    }
-
-    // Update points per game (PPG)
-    homeTeamData.PPG = homeTeamData.PTS / homeTeamData.MP;
-    awayTeamData.PPG = awayTeamData.PTS / awayTeamData.MP;
-  });
-
-  // Sort by PTS, GD, and GF (as per the original sorting logic)
-  return theoreticalStandings.sort((a, b) => {
-    if (b.PTS !== a.PTS) return b.PTS - a.PTS;
-    if (b.GD !== a.GD) return b.GD - a.GD;
-    return b.GF - a.GF;
-  }).map((team, index) => ({
-    ...team,
-    'Semifinal Position': assignSemifinalPosition(index, team.team)
-  }));
-}, [standings, remainingTournamentGames, gameScores]);
   const assignSemifinalPosition = (index, teamName) => {
-    // Simplified logic for assigning positions (you can adjust based on your tournament rules)
+    if (!teamName || typeof teamName !== 'string') {
+      return ''; // Return empty string if teamName is invalid
+    }
     if (index === 0) return 'W1';
     if (index === 1) return 'W2';
     if (index === 2) return 'W3';
