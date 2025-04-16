@@ -11,7 +11,7 @@ const Admin = () => {
   const [futureGames, setFutureGames] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log('Rendering Admin component, isLoggedIn:', isLoggedIn);
+  console.log('Rendering Admin component, isLoggedIn:', isLoggedIn, 'username:', username, 'error:', error);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -44,17 +44,23 @@ const Admin = () => {
     console.log('fetchGames called');
     setLoading(true);
     try {
-      const pastResponse = await fetch('/api/game-results');
-      const futureResponse = await fetch('/api/future-games');
+      const fetchWithErrorHandling = async (url, errorMessage) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+          let errorData;
+          try {
+            errorData = await response.json();
+            throw new Error(`${errorMessage}: ${errorData.error || 'Unknown error'}`);
+          } catch (jsonError) {
+            const text = await response.text();
+            throw new Error(`${errorMessage}: ${text}`);
+          }
+        }
+        return response.json();
+      };
 
-      if (!pastResponse.ok || !futureResponse.ok) {
-        const pastError = pastResponse.ok ? null : await pastResponse.json();
-        const futureError = futureResponse.ok ? null : await futureResponse.json();
-        throw new Error(pastError?.error || futureError?.error || 'Failed to fetch games');
-      }
-
-      const pastData = await pastResponse.json();
-      const futureData = await futureResponse.json();
+      const pastData = await fetchWithErrorHandling('/api/game-results', 'Failed to fetch past games');
+      const futureData = await fetchWithErrorHandling('/api/future-games', 'Failed to fetch future games');
 
       console.log('Fetched games, past:', pastData.length, 'future:', futureData.length);
       setPastGames(pastData.map((game, index) => ({
@@ -72,9 +78,12 @@ const Admin = () => {
         isFutureGame: true,
         index: pastData.length + index,
       })));
+      setError(null);
     } catch (err) {
       console.error('fetchGames error:', err);
       setError(err.message);
+      setPastGames([]);
+      setFutureGames([]);
     } finally {
       setLoading(false);
     }
@@ -145,7 +154,7 @@ const Admin = () => {
             min="0"
             className="score-field"
           />
-        ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[0]
+        ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[0] || 'N/A'
       ),
     },
     {
@@ -160,7 +169,7 @@ const Admin = () => {
             min="0"
             className="score-field"
           />
-        ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[1]
+        ) : row.original.match.match(/\d+-\d+/)?.[0]?.split('-')[1] || 'N/A'
       ),
     },
     {
@@ -185,81 +194,107 @@ const Admin = () => {
   });
 
   if (!isLoggedIn) {
-    console.log('Rendering login form, error:', error);
-    return (
-      <div className="admin-login-container">
-        <h2 className="text-center mb-4">Admin Login</h2>
-        <form onSubmit={handleLogin} className="admin-login-form">
-          <div className="form-group">
-            <label>Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => {
-                console.log('Username input changed, new value:', e.target.value);
-                setUsername(e.target.value);
-              }}
-              className="form-control"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => {
-                console.log('Password input changed, new value:', e.target.value);
-                setPassword(e.target.value);
-              }}
-              className="form-control"
-              required
-            />
-          </div>
-          {error && <p className="text-danger text-center">{error}</p>}
-          <button type="submit" className="btn btn-primary w-100">Login</button>
-        </form>
-      </div>
-    );
+    console.log('Rendering login form, error:', error, 'username:', username);
+    try {
+      return (
+        <div className="admin-login-container">
+          <h2 className="text-center mb-4">Admin Login</h2>
+          <form
+            onSubmit={handleLogin}
+            className="admin-login-form"
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') e.preventDefault();
+            }}
+          >
+            <div className="form-group">
+              <label>Username</label>
+              <input
+                type="text"
+                value={username || ''}
+                onChange={(e) => {
+                  try {
+                    console.log('Username input changed, new value:', e.target.value);
+                    setUsername(e.target.value);
+                  } catch (err) {
+                    console.error('Error in username onChange:', err);
+                  }
+                }}
+                className="form-control"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                value={password || ''}
+                onChange={(e) => {
+                  try {
+                    console.log('Password input changed, new value:', e.target.value);
+                    setPassword(e.target.value);
+                  } catch (err) {
+                    console.error('Error in password onChange:', err);
+                  }
+                }}
+                className="form-control"
+                required
+              />
+            </div>
+            {error && <p className="text-danger text-center">{error}</p>}
+            <button type="submit" className="btn btn-primary w-100">Login</button>
+          </form>
+        </div>
+      );
+    } catch (renderError) {
+      console.error('Error rendering login form:', renderError);
+      return <div className="text-center text-danger">Error rendering login form: {renderError.message}</div>;
+    }
   }
 
-  console.log('Rendering dashboard, loading:', loading, 'error:', error);
-  return (
-    <div className="admin-container">
-      <h2 className="text-center mb-4">Admin Dashboard - Manage Games</h2>
-      {loading ? (
-        <div className="text-center">Loading games...</div>
-      ) : error ? (
-        <div className="text-center text-danger">{error}</div>
-      ) : (
-        <div className="table-responsive">
-          <table {...getTableProps()} className="table table-striped table-bordered">
-            <thead className="thead-dark">
-              {headerGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map(column => (
-                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-              {rows.map(row => {
-                prepareRow(row);
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map(cell => (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+  console.log('Rendering dashboard, loading:', loading, 'error:', error, 'pastGames:', pastGames.length, 'futureGames:', futureGames.length);
+  try {
+    return (
+      <div className="admin-container">
+        <h2 className="text-center mb-4">Admin Dashboard - Manage Games</h2>
+        {loading ? (
+          <div className="text-center">Loading games...</div>
+        ) : error ? (
+          <div className="text-center text-danger">{error}</div>
+        ) : pastGames.length === 0 && futureGames.length === 0 ? (
+          <div className="text-center">No games available to display.</div>
+        ) : (
+          <div className="table-responsive">
+            <table {...getTableProps()} className="table table-striped table-bordered">
+              <thead className="thead-dark">
+                {headerGroups.map(headerGroup => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map(column => (
+                      <th {...column.getHeaderProps()}>{column.render('Header')}</th>
                     ))}
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
-  );
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map(row => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map(cell => (
+                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    );
+  } catch (renderError) {
+    console.error('Error rendering dashboard:', renderError);
+    return <div className="text-center text-danger">Error rendering dashboard: {renderError.message}</div>;
+  }
 };
 
 export default Admin;
