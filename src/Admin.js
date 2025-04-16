@@ -11,8 +11,11 @@ const Admin = () => {
   const [futureGames, setFutureGames] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  console.log('Rendering Admin component, isLoggedIn:', isLoggedIn);
+
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log('handleLogin called, username:', username, 'password:', password);
     setError(null);
 
     try {
@@ -27,27 +30,33 @@ const Admin = () => {
         throw new Error(data.error || 'Login failed');
       }
 
+      console.log('Login successful, setting isLoggedIn to true');
       setIsLoggedIn(true);
       setUsername('');
       setPassword('');
     } catch (err) {
+      console.error('Login error:', err);
       setError(err.message);
     }
   };
 
   const fetchGames = async () => {
+    console.log('fetchGames called');
     setLoading(true);
     try {
       const pastResponse = await fetch('/api/game-results');
       const futureResponse = await fetch('/api/future-games');
 
       if (!pastResponse.ok || !futureResponse.ok) {
-        throw new Error('Failed to fetch games');
+        const pastError = pastResponse.ok ? null : await pastResponse.json();
+        const futureError = futureResponse.ok ? null : await futureResponse.json();
+        throw new Error(pastError?.error || futureError?.error || 'Failed to fetch games');
       }
 
       const pastData = await pastResponse.json();
       const futureData = await futureResponse.json();
 
+      console.log('Fetched games, past:', pastData.length, 'future:', futureData.length);
       setPastGames(pastData.map((game, index) => ({
         id: game.id,
         match: game.Match,
@@ -64,6 +73,7 @@ const Admin = () => {
         index: pastData.length + index,
       })));
     } catch (err) {
+      console.error('fetchGames error:', err);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -71,12 +81,14 @@ const Admin = () => {
   };
 
   useEffect(() => {
+    console.log('useEffect triggered, isLoggedIn:', isLoggedIn);
     if (isLoggedIn) {
       fetchGames();
     }
   }, [isLoggedIn]);
 
   const handleUpdateScore = async (gameId, isFutureGame, homeScore, awayScore) => {
+    console.log('handleUpdateScore called, gameId:', gameId, 'isFutureGame:', isFutureGame, 'homeScore:', homeScore, 'awayScore:', awayScore);
     try {
       const response = await fetch('/api/update-game', {
         method: 'POST',
@@ -89,13 +101,16 @@ const Admin = () => {
         throw new Error(data.error || 'Failed to update game');
       }
 
-      await fetchGames(); // Refresh games
+      console.log('Score updated successfully, refreshing games');
+      await fetchGames();
     } catch (err) {
+      console.error('handleUpdateScore error:', err);
       setError(err.message);
     }
   };
 
   const handleValidateGame = async (gameId) => {
+    console.log('handleValidateGame called, gameId:', gameId);
     try {
       const response = await fetch('/api/validate-game', {
         method: 'POST',
@@ -108,8 +123,10 @@ const Admin = () => {
         throw new Error(data.error || 'Failed to validate game');
       }
 
-      await fetchGames(); // Refresh games
+      console.log('Game validated successfully, refreshing games');
+      await fetchGames();
     } catch (err) {
+      console.error('handleValidateGame error:', err);
       setError(err.message);
     }
   };
@@ -168,6 +185,7 @@ const Admin = () => {
   });
 
   if (!isLoggedIn) {
+    console.log('Rendering login form, error:', error);
     return (
       <div className="admin-login-container">
         <h2 className="text-center mb-4">Admin Login</h2>
@@ -177,7 +195,10 @@ const Admin = () => {
             <input
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                console.log('Username input changed, new value:', e.target.value);
+                setUsername(e.target.value);
+              }}
               className="form-control"
               required
             />
@@ -187,7 +208,10 @@ const Admin = () => {
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                console.log('Password input changed, new value:', e.target.value);
+                setPassword(e.target.value);
+              }}
               className="form-control"
               required
             />
@@ -199,6 +223,7 @@ const Admin = () => {
     );
   }
 
+  console.log('Rendering dashboard, loading:', loading, 'error:', error);
   return (
     <div className="admin-container">
       <h2 className="text-center mb-4">Admin Dashboard - Manage Games</h2>
