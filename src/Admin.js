@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTable } from 'react-table';
 import './Admin.css';
 
@@ -96,7 +96,7 @@ const Admin = () => {
     }
   }, [isLoggedIn]);
 
-  const handleUpdateScore = async (gameId, isFutureGame, homeScore, awayScore) => {
+  const handleUpdateScore = useCallback(async (gameId, isFutureGame, homeScore, awayScore) => {
     console.log('handleUpdateScore called, gameId:', gameId, 'isFutureGame:', isFutureGame, 'homeScore:', homeScore, 'awayScore:', awayScore);
     try {
       const response = await fetch('/api/update-game', {
@@ -116,9 +116,9 @@ const Admin = () => {
       console.error('handleUpdateScore error:', err);
       setError(err.message);
     }
-  };
+  }, [fetchGames]);
 
-  const handleValidateGame = async (gameId) => {
+  const handleValidateGame = useCallback(async (gameId) => {
     console.log('handleValidateGame called, gameId:', gameId);
     try {
       const response = await fetch('/api/validate-game', {
@@ -138,7 +138,7 @@ const Admin = () => {
       console.error('handleValidateGame error:', err);
       setError(err.message);
     }
-  };
+  }, [fetchGames]);
 
   const columns = useMemo(
     () => [
@@ -188,7 +188,7 @@ const Admin = () => {
         ),
       },
     ],
-    [] // No dependencies, as handleUpdateScore and handleValidateGame are stable
+    [handleUpdateScore, handleValidateGame]
   );
 
   const tableData = useMemo(() => [...pastGames, ...futureGames], [pastGames, futureGames]);
